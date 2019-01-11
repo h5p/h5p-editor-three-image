@@ -1,10 +1,15 @@
 import React from 'react';
+import SceneSelector from "./SceneSelector";
 
 export default class ControlBar extends React.Component {
   render() {
     return (
       <div>
-        <div>Placeholder scene selector</div>
+        <SceneSelector
+          currentScene={this.props.currentScene}
+          scenes={this.props.params.scenes}
+          changeScene={this.props.changeScene}
+        />
         <button onClick={() => this.props.newScene()}>+ New scene</button>
         <div>Conditionally render set start position button</div>
       </div>

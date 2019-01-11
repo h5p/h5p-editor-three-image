@@ -17,27 +17,22 @@ export default class Scene extends React.Component {
 
 
   componentDidMount() {
-    console.log("scene component did mount");
-
     if (this.previewRef) {
       this.initializePreview();
     }
   }
 
   componentDidUpdate() {
-    console.log("scene component did update..");
-
     if (this.previewRef) {
       this.initializePreview();
     }
   }
 
   initializePreview() {
-    console.log("intialize preview ?");
     if (this.props.params.scenes.length <= 0) {
       return;
     }
-    console.log("running newRunnable!");
+
     while (this.previewRef.current.firstChild) {
       this.previewRef.current.removeChild(this.previewRef.current.firstChild);
     }
@@ -46,7 +41,6 @@ export default class Scene extends React.Component {
     if (this.props.forceStartScreen) {
       extras.forceStartScreen = this.props.forceStartScreen;
     }
-
 
     this.preview = H5P.newRunnable(
       {
@@ -61,9 +55,7 @@ export default class Scene extends React.Component {
   }
 
   render() {
-    console.log("rendering scene...");
     console.log("what is scenes ?", this.props.params.scenes);
-
     if (this.props.params.scenes.length <= 0) {
       return <NoScene/>;
     }

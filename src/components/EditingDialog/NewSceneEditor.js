@@ -14,20 +14,16 @@ export default class NewSceneEditor extends React.Component {
   }
 
   componentDidMount() {
-
     H5PEditor.processSemanticsChunk(
       this.props.sceneFields,
       this.newSceneParams,
       this.semanticsRef.current,
       this.semanticsParent
     );
-
-    console.log("what is semantics parent after processing semantics ?", this.semanticsParent);
   }
 
   handleDone() {
     // Validate children
-    console.log("running validation");
     let isInputsValid = true;
     this.semanticsParent.children.forEach(child => {
       // Special validation for scene image, since having a required image

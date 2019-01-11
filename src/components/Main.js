@@ -13,7 +13,7 @@ export default class Main extends React.Component {
     this.state = {
       editing: false,
       params: this.props.params,
-      currentScene: null,
+      currentScene: this.props.params.scenes.length ? 0 : null,
     };
   }
 
@@ -41,7 +41,6 @@ export default class Main extends React.Component {
       this.props.params.scenes = [];
     }
     this.props.params.scenes.push(params);
-    console.log("what is params now ?", this.props.params);
 
     // Set current scene
     this.setState({
@@ -49,6 +48,12 @@ export default class Main extends React.Component {
     });
 
     this.finalizeEditingDialog();
+  }
+
+  changeScene(sceneIndex) {
+    this.setState({
+      currentScene: sceneIndex,
+    });
   }
 
   handleAddingNewScene(params) {
@@ -64,7 +69,10 @@ export default class Main extends React.Component {
           forceStartScreen={this.state.currentScene}
         />
         <ControlBar
+          currentScene={this.state.currentScene}
+          params={this.props.params}
           newScene={this.editScene.bind(this)}
+          changeScene={this.changeScene.bind(this)}
         />
         {
           this.state.editing &&

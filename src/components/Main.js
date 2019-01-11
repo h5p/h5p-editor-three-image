@@ -2,6 +2,8 @@ import React from 'react';
 import Scene from "./Scene/Scene";
 import ControlBar from "./ControlBar/ControlBar";
 import NewSceneEditor from "./EditingDialog/NewSceneEditor";
+import InteractionsBar from "./InteractionsBar/InteractionsBar";
+import './Main.scss';
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -10,10 +12,14 @@ export default class Main extends React.Component {
     const sceneField = H5PEditor.findSemanticsField('scenes', this.props.field);
     this.sceneFields = sceneField.field.fields;
 
+    this.sceneRef = null;
+    this.sceneWrapperRef = React.createRef();
+
     this.state = {
       editing: false,
       params: this.props.params,
       currentScene: this.props.params.scenes.length ? 0 : null,
+      isSceneInitialized: false,
     };
   }
 
@@ -56,18 +62,38 @@ export default class Main extends React.Component {
     });
   }
 
+  sceneIsInitialized() {
+    this.setState({
+      isSceneInitialized: true,
+    });
+  }
+
   handleAddingNewScene(params) {
     this.addNewScene(params);
     this.finalizeEditingDialog();
   }
 
+  setSceneRef(ref) {
+    this.sceneRef = ref;
+  }
+
   render() {
     return (
       <div>
-        <Scene
-          params={this.props.params}
-          forceStartScreen={this.state.currentScene}
-        />
+        <div className='scene-editor' ref={this.sceneWrapperRef}>
+          <InteractionsBar
+            isSceneInitialized={this.state.isSceneInitialized}
+            sceneRef={this.sceneRef}
+            sceneWrapperRef={this.sceneWrapperRef}
+          />
+          <Scene
+            params={this.props.params}
+            isSceneInitialized={this.state.isSceneInitialized}
+            sceneIsInitialized={this.sceneIsInitialized.bind(this)}
+            setSceneRef={this.setSceneRef.bind(this)}
+            forceStartScreen={this.state.currentScene}
+          />
+        </div>
         <ControlBar
           currentScene={this.state.currentScene}
           params={this.props.params}

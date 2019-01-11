@@ -17,13 +17,13 @@ export default class Scene extends React.Component {
 
 
   componentDidMount() {
-    if (this.previewRef) {
+    if (!this.props.isSceneInitialized && this.previewRef) {
       this.initializePreview();
     }
   }
 
   componentDidUpdate() {
-    if (this.previewRef) {
+    if (!this.props.isSceneInitialized && this.previewRef) {
       this.initializePreview();
     }
   }
@@ -52,6 +52,9 @@ export default class Scene extends React.Component {
       undefined,
       extras
     );
+
+    this.props.setSceneRef(this.previewRef);
+    this.props.sceneIsInitialized();
   }
 
   render() {

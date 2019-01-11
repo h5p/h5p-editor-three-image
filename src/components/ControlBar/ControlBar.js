@@ -7,6 +7,7 @@ export default class ControlBar extends React.Component {
       <div>
         <SceneSelector
           currentScene={this.props.currentScene}
+          isSceneInitialized={this.props.isSceneInitialized}
           scenes={this.props.params.scenes}
           changeScene={this.props.changeScene}
         />

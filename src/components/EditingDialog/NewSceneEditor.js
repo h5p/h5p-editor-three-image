@@ -24,6 +24,8 @@ export default class NewSceneEditor extends React.Component {
 
   handleDone() {
     // Validate children
+    H5PEditor.Html.removeWysiwyg();
+
     let isInputsValid = true;
     this.semanticsParent.children.forEach(child => {
       // Special validation for scene image, since having a required image

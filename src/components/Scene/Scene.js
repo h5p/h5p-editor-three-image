@@ -37,7 +37,9 @@ export default class Scene extends React.Component {
       this.previewRef.current.removeChild(this.previewRef.current.firstChild);
     }
 
-    const extras = {};
+    const extras = {
+      isEditor: true,
+    };
     if (this.props.forceStartScreen) {
       extras.forceStartScreen = this.props.forceStartScreen;
     }

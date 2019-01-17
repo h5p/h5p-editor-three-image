@@ -26,6 +26,7 @@ export default class Main extends React.Component {
       isEditingNewScene: false,
       isEditingInteraction: false,
       editingLibrary: null,
+      editingInteractionIndex: null,
       currentScene: this.props.params.scenes.length ? 0 : null,
       isSceneInitialized: false,
     };
@@ -50,7 +51,6 @@ export default class Main extends React.Component {
   }
 
   addNewScene(params) {
-    H5PEditor.Html.removeWysiwyg();
     if (!this.props.params.scenes) {
       this.props.params.scenes = [];
     }
@@ -72,15 +72,23 @@ export default class Main extends React.Component {
     });
   }
 
-  addNewInteraction(params) {
+  addInteraction(params) {
     const scene = this.props.params.scenes[this.state.currentScene];
     if (!scene.interactions) {
       scene.interactions = [];
     }
-    scene.interactions.push(params);
+
+    if (this.state.editingInteractionIndex !== null) {
+      scene.interactions[this.state.editingInteractionIndex] = params;
+    }
+    else {
+      scene.interactions.push(params);
+    }
 
     this.setState({
       isEditingInteraction: false,
+      editingInteractionIndex: null,
+      editingLibrary: null,
       isSceneInitialized: false,
     });
   }
@@ -117,6 +125,14 @@ export default class Main extends React.Component {
 
   setScenePreview(scene) {
     this.scenePreview = scene;
+
+    this.scenePreview.on('doubleClickedInteraction', (e) => {
+      const interactionIndex = e.data;
+      this.setState({
+        isEditingInteraction: true,
+        editingInteractionIndex: interactionIndex,
+      });
+    });
   }
 
   render() {
@@ -160,10 +176,11 @@ export default class Main extends React.Component {
           this.state.isEditingInteraction &&
           <InteractionEditor
             removeAction={this.removeInteractionDialog.bind(this)}
-            doneAction={this.addNewInteraction.bind(this)}
+            doneAction={this.addInteraction.bind(this)}
             currentCamera={this.state.currentCamera}
             currentScene={this.state.currentScene}
             interactionsField={this.interactionsField}
+            editingInteractionIndex={this.state.editingInteractionIndex}
             library={this.state.editingLibrary}
             params={this.props.params}
             parent={this.props.parent}

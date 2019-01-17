@@ -1,39 +1,44 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
+import {H5PContext} from '../../context/H5PContext';
 
 export default class InteractionEditor extends React.Component {
   constructor(props) {
     super(props);
 
     this.semanticsRef = React.createRef();
-    this.libraryParams = {};
-
     this.interactionFields = this.props.interactionsField.field.fields;
-
-    this.semanticsParent = {
-      passReadies: false,
-      ready: () => true,
-    };
   }
 
-  componentDidMount() {
+  setupNewInteraction() {
     const camera = this.props.currentCamera;
     const yaw = camera.camera.yaw;
     const pitch = camera.camera.pitch;
 
-    this.params = {
+    return {
       interactionpos: yaw + ',' + pitch,
       action: {
         library: this.props.library.uberName,
-        params: this.libraryParams
+        params: {}
       },
     };
+  }
+
+  componentDidMount() {
+    const interactionIndex = this.props.editingInteractionIndex;
+    if (interactionIndex === null) {
+      this.params = this.setupNewInteraction();
+    }
+    else {
+      const scene = this.props.params.scenes[this.props.currentScene];
+      this.params = scene.interactions[interactionIndex];
+    }
 
     H5PEditor.processSemanticsChunk(
       this.interactionFields,
       this.params,
       this.semanticsRef.current,
-      this.semanticsParent
+      this.context.parent
     );
 
     const libraryWrapper = this.semanticsRef.current
@@ -46,10 +51,10 @@ export default class InteractionEditor extends React.Component {
 
     libraryWrapper.removeChild(librarySelector);
     libraryWrapper.removeChild(copyPasteWrapper);
-
   }
 
   handleDone() {
+    H5PEditor.Html.removeWysiwyg();
     this.props.doneAction(this.params);
   }
 
@@ -64,3 +69,5 @@ export default class InteractionEditor extends React.Component {
     );
   }
 }
+
+InteractionEditor.contextType = H5PContext;

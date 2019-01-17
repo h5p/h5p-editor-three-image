@@ -4,6 +4,7 @@ import ControlBar from "./ControlBar/ControlBar";
 import NewSceneEditor from "./EditingDialog/NewSceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
 import './Main.scss';
+import InteractionEditor from "./EditingDialog/InteractionEditor";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -12,13 +13,19 @@ export default class Main extends React.Component {
     const sceneField = H5PEditor.findSemanticsField('scenes', this.props.field);
     this.sceneFields = sceneField.field.fields;
 
+    this.interactionsField = H5PEditor.findSemanticsField(
+      'interactions',
+      this.sceneFields
+    );
+
     this.sceneRef = null;
     this.sceneWrapperRef = React.createRef();
     this.scenePreview = null;
 
     this.state = {
-      editing: false,
-      params: this.props.params,
+      isEditingNewScene: false,
+      isEditingInteraction: false,
+      editingLibrary: null,
       currentScene: this.props.params.scenes.length ? 0 : null,
       isSceneInitialized: false,
     };
@@ -26,19 +33,19 @@ export default class Main extends React.Component {
 
   editScene() {
     this.setState({
-      editing: true,
+      isEditingNewScene: true,
     });
   }
 
   removeEditingDialog() {
     this.setState({
-      editing: false,
+      isEditingNewScene: false,
     });
   }
 
   finalizeEditingDialog() {
     this.setState({
-      editing: false,
+      isEditingNewScene: false,
     });
   }
 
@@ -51,14 +58,36 @@ export default class Main extends React.Component {
 
     // Set current scene
     this.setState({
+      isSceneInitialized: false,
       currentScene: this.props.params.scenes.length - 1,
     });
 
     this.finalizeEditingDialog();
   }
 
+  removeInteractionDialog() {
+    this.setState({
+      isEditingInteraction: false,
+      editingLibrary: null,
+    });
+  }
+
+  addNewInteraction(params) {
+    const scene = this.props.params.scenes[this.state.currentScene];
+    if (!scene.interactions) {
+      scene.interactions = [];
+    }
+    scene.interactions.push(params);
+
+    this.setState({
+      isEditingInteraction: false,
+      isSceneInitialized: false,
+    });
+  }
+
   changeScene(sceneIndex) {
     this.setState({
+      isSceneInitialized: false,
       currentScene: sceneIndex,
     });
   }
@@ -69,26 +98,11 @@ export default class Main extends React.Component {
     });
   }
 
-  droppedInteraction() {
-    const scene = this.props.params.scenes[this.state.currentScene];
-    if (!scene.interactions) {
-      scene.interactions = [];
-    }
-
-    const camera = this.scenePreview.getCamera();
-    const yaw = camera.camera.yaw;
-    const pitch = camera.camera.pitch;
-
-    const interaction = {
-      interactionspos: yaw + ',' + pitch,
-    };
-
-    scene.interactions.push(interaction);
-
+  createInteraction(library) {
     this.setState({
-      params: this.props.params,
-      isSceneInitialized: false,
-      forceStartCamera: camera.camera,
+      isEditingInteraction: true,
+      editingLibrary: library,
+      currentCamera: this.scenePreview.getCamera(),
     });
   }
 
@@ -111,9 +125,10 @@ export default class Main extends React.Component {
         <div className='scene-editor' ref={this.sceneWrapperRef}>
           <InteractionsBar
             isSceneInitialized={this.state.isSceneInitialized}
+            interactionsField={this.interactionsField}
             sceneRef={this.sceneRef}
             sceneWrapperRef={this.sceneWrapperRef}
-            droppedInteraction={this.droppedInteraction.bind(this)}
+            createInteraction={this.createInteraction.bind(this)}
           />
           <Scene
             params={this.props.params}
@@ -122,7 +137,7 @@ export default class Main extends React.Component {
             setSceneRef={this.setSceneRef.bind(this)}
             setScenePreview={this.setScenePreview.bind(this)}
             forceStartScreen={this.state.currentScene}
-            forceStartCamera={this.state.forceStartCamera}
+            currentCamera={this.state.currentCamera}
           />
         </div>
         <ControlBar
@@ -132,11 +147,24 @@ export default class Main extends React.Component {
           changeScene={this.changeScene.bind(this)}
         />
         {
-          this.state.editing &&
+          this.state.isEditingNewScene &&
           <NewSceneEditor
             removeAction={this.removeEditingDialog.bind(this)}
             doneAction={this.addNewScene.bind(this)}
             sceneFields={this.sceneFields}
+            params={this.props.params}
+            parent={this.props.parent}
+          />
+        }
+        {
+          this.state.isEditingInteraction &&
+          <InteractionEditor
+            removeAction={this.removeInteractionDialog.bind(this)}
+            doneAction={this.addNewInteraction.bind(this)}
+            currentCamera={this.state.currentCamera}
+            currentScene={this.state.currentScene}
+            interactionsField={this.interactionsField}
+            library={this.state.editingLibrary}
             params={this.props.params}
             parent={this.props.parent}
           />

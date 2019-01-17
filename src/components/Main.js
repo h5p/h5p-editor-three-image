@@ -65,11 +65,44 @@ export default class Main extends React.Component {
     this.finalizeEditingDialog();
   }
 
-  removeInteractionDialog() {
-    this.setState({
-      isEditingInteraction: false,
-      editingLibrary: null,
+  removeInteraction() {
+    // No interactions has been added yet
+    if (this.state.editingInteractionIndex === null) {
+      this.setState({
+        isEditingInteraction: false,
+        editingLibrary: null,
+      });
+    }
+
+    // Delete interaction
+    const deleteDialog = new H5P.ConfirmationDialog({
+      headerText: 'Deleting interaction',
+      dialogText: 'Are you sure you wish to delete this interaction ?',
+      cancelText: 'Cancel',
+      confirmText: 'Confirm',
+    }).appendTo(document.body);
+
+    deleteDialog.on('confirmed', () => {
+      const scene = this.props.params.scenes[this.state.currentScene];
+      scene.interactions.splice(this.state.editingInteractionIndex, 1);
+
+      this.setState({
+        isEditingInteraction: false,
+        editingInteractionIndex: null,
+        editingLibrary: null,
+        isSceneInitialized: false,
+      });
     });
+
+    deleteDialog.on('canceled', () => {
+      this.setState({
+        isEditingInteraction: false,
+        editingInteractionIndex: null,
+        editingLibrary: null,
+      });
+    });
+
+    deleteDialog.show();
   }
 
   addInteraction(params) {
@@ -175,7 +208,7 @@ export default class Main extends React.Component {
         {
           this.state.isEditingInteraction &&
           <InteractionEditor
-            removeAction={this.removeInteractionDialog.bind(this)}
+            removeAction={this.removeInteraction.bind(this)}
             doneAction={this.addInteraction.bind(this)}
             currentCamera={this.state.currentCamera}
             currentScene={this.state.currentScene}

@@ -62,6 +62,7 @@ export default class InteractionsBar extends React.Component {
 
     this.dnb.stopMovingCallback = (x, y) => {
       // TODO: Update params when the element stops moving
+      this.props.droppedInteraction();
     };
 
     this.dnb.dnd.releaseCallback = () => {

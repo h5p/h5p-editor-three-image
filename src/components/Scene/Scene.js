@@ -42,6 +42,10 @@ export default class Scene extends React.Component {
       extras.forceStartScreen = this.props.forceStartScreen;
     }
 
+    if (this.props.forceStartCamera) {
+      extras.forceStartCamera = this.props.forceStartCamera;
+    }
+
     this.preview = H5P.newRunnable(
       {
         library: this.library,
@@ -53,6 +57,7 @@ export default class Scene extends React.Component {
       extras
     );
 
+    this.props.setScenePreview(this.preview);
     this.props.setSceneRef(this.previewRef);
     this.props.sceneIsInitialized();
   }

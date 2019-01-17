@@ -14,6 +14,7 @@ export default class Main extends React.Component {
 
     this.sceneRef = null;
     this.sceneWrapperRef = React.createRef();
+    this.scenePreview = null;
 
     this.state = {
       editing: false,
@@ -68,6 +69,29 @@ export default class Main extends React.Component {
     });
   }
 
+  droppedInteraction() {
+    const scene = this.props.params.scenes[this.state.currentScene];
+    if (!scene.interactions) {
+      scene.interactions = [];
+    }
+
+    const camera = this.scenePreview.getCamera();
+    const yaw = camera.camera.yaw;
+    const pitch = camera.camera.pitch;
+
+    const interaction = {
+      interactionspos: yaw + ',' + pitch,
+    };
+
+    scene.interactions.push(interaction);
+
+    this.setState({
+      params: this.props.params,
+      isSceneInitialized: false,
+      forceStartCamera: camera.camera,
+    });
+  }
+
   handleAddingNewScene(params) {
     this.addNewScene(params);
     this.finalizeEditingDialog();
@@ -75,6 +99,10 @@ export default class Main extends React.Component {
 
   setSceneRef(ref) {
     this.sceneRef = ref;
+  }
+
+  setScenePreview(scene) {
+    this.scenePreview = scene;
   }
 
   render() {
@@ -85,13 +113,16 @@ export default class Main extends React.Component {
             isSceneInitialized={this.state.isSceneInitialized}
             sceneRef={this.sceneRef}
             sceneWrapperRef={this.sceneWrapperRef}
+            droppedInteraction={this.droppedInteraction.bind(this)}
           />
           <Scene
             params={this.props.params}
             isSceneInitialized={this.state.isSceneInitialized}
             sceneIsInitialized={this.sceneIsInitialized.bind(this)}
             setSceneRef={this.setSceneRef.bind(this)}
+            setScenePreview={this.setScenePreview.bind(this)}
             forceStartScreen={this.state.currentScene}
+            forceStartCamera={this.state.forceStartCamera}
           />
         </div>
         <ControlBar

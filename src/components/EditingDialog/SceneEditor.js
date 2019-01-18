@@ -7,6 +7,10 @@ export default class SceneEditor extends React.Component {
     super(props);
 
     this.semanticsRef = React.createRef();
+    this.semanticsParent = {
+      passReadies: false,
+      ready: () => true,
+    };
   }
 
   componentDidMount() {
@@ -21,11 +25,11 @@ export default class SceneEditor extends React.Component {
       this.props.sceneFields,
       this.params,
       this.semanticsRef.current,
-      this.context.parent
+      this.semanticsParent
     );
 
     // Preserve the children
-    this.children = this.context.parent.children;
+    this.children = this.semanticsParent.children;
   }
 
   handleDone() {
@@ -50,7 +54,7 @@ export default class SceneEditor extends React.Component {
       // Note that validate() does not necessarily return a bool...
       // e.g. for texts
       const isChildValid = child.validate();
-      if (!isChildValid) {
+      if (isChildValid === false) {
         isInputsValid = false;
       }
     });

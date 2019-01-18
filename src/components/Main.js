@@ -159,12 +159,31 @@ export default class Main extends React.Component {
   setScenePreview(scene) {
     this.scenePreview = scene;
 
+    this.scenePreview.off('doubleClickedInteraction');
     this.scenePreview.on('doubleClickedInteraction', (e) => {
       const interactionIndex = e.data;
       this.setState({
         isEditingInteraction: true,
         editingInteractionIndex: interactionIndex,
       });
+    });
+
+    this.scenePreview.off('movestop');
+    this.scenePreview.on('movestop', e => {
+      if (!e.data || e.data.elementIndex === undefined) {
+        // Not moving an interaction
+        return;
+      }
+
+      const interactionIndex = e.data.elementIndex;
+      const scene = this.props.params.scenes[this.state.currentScene];
+      const interaction = scene.interactions[interactionIndex];
+
+      // Update interaction pos
+      interaction.interactionpos = [
+        e.data.yaw,
+        e.data.pitch
+      ].join(',');
     });
   }
 

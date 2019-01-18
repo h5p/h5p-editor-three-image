@@ -1,12 +1,8 @@
 import React from 'react';
 import {H5PContext} from "../../context/H5PContext";
+import SceneSelectorSubmenu from "./SceneSelectorSubmenu";
 
 export default class SceneSelector extends React.Component {
-  handleSelectedScene(e) {
-    const sceneIndex = parseInt(e.target.value);
-    this.props.changeScene(sceneIndex);
-  }
-
   render() {
     if (this.props.currentScene === null) {
       return (
@@ -21,21 +17,22 @@ export default class SceneSelector extends React.Component {
 
     return (
       <div>
-        <select
-          value={this.props.currentScene}
-          onChange={this.handleSelectedScene.bind(this)}
-        >
+        <div>
           {
             scenes.map((scene, sceneIndex) => {
               return (
-                <option
-                  value={sceneIndex}
-                  key={scene.scenename} // TODO: Unique ID
-                >{scene.scenename}</option>
+                // TODO: Unique ID
+                <div key={scene.scenename}>
+                  <div>{scene.scenename}</div>
+                  <SceneSelectorSubmenu
+                    onJump={this.props.changeScene.bind(this, sceneIndex)}
+                    onEdit={this.props.editScene.bind(this, sceneIndex)}
+                  />
+                </div>
               );
             })
           }
-        </select>
+        </div>
       </div>
     );
   }

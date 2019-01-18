@@ -1,7 +1,7 @@
 import React from 'react';
 import Scene from "./Scene/Scene";
 import ControlBar from "./ControlBar/ControlBar";
-import NewSceneEditor from "./EditingDialog/NewSceneEditor";
+import SceneEditor from "./EditingDialog/SceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
 import './Main.scss';
 import InteractionEditor from "./EditingDialog/InteractionEditor";
@@ -24,7 +24,8 @@ export default class Main extends React.Component {
     this.scenePreview = null;
 
     this.state = {
-      isEditingNewScene: false,
+      isEditingScene: false,
+      editingScene: null,
       isEditingInteraction: false,
       editingLibrary: null,
       editingInteractionIndex: null,
@@ -33,37 +34,49 @@ export default class Main extends React.Component {
     };
   }
 
-  editScene() {
+  editScene(sceneIndex = null) {
+    let editingScene = null;
+    if (sceneIndex !== null) {
+      editingScene = sceneIndex;
+    }
+
     this.setState({
-      isEditingNewScene: true,
+      isEditingScene: true,
+      editingScene: editingScene,
     });
   }
 
   removeEditingDialog() {
     this.setState({
-      isEditingNewScene: false,
+      isEditingScene: false,
     });
   }
 
-  finalizeEditingDialog() {
-    this.setState({
-      isEditingNewScene: false,
-    });
-  }
-
-  addNewScene(params) {
-    if (!this.context.params.scenes) {
-      this.context.params.scenes = [];
+  doneEditingScene(params) {
+    let scenes = this.context.params.scenes;
+    if (!scenes) {
+      scenes = [];
     }
-    this.context.params.scenes.push(params);
+
+    const isEditing = this.state.editingScene !== null;
+    if (isEditing) {
+      // Replace scene
+      scenes[this.state.editingScene] = params;
+    }
+    else {
+      // Add new scene
+      scenes.push(params);
+    }
 
     // Set current scene
-    this.setState({
-      isSceneInitialized: false,
-      currentScene: this.context.params.scenes.length - 1,
+    this.setState((prevState) => {
+      return {
+        isSceneInitialized: false,
+        currentScene: isEditing ? prevState.currentScene : scenes.length - 1,
+        isEditingScene: false,
+        editingScene: null,
+      };
     });
-
-    this.finalizeEditingDialog();
   }
 
   removeInteraction() {
@@ -148,11 +161,6 @@ export default class Main extends React.Component {
     });
   }
 
-  handleAddingNewScene(params) {
-    this.addNewScene(params);
-    this.finalizeEditingDialog();
-  }
-
   setSceneRef(ref) {
     this.sceneRef = ref;
   }
@@ -210,15 +218,17 @@ export default class Main extends React.Component {
         </div>
         <ControlBar
           currentScene={this.state.currentScene}
+          editScene={this.editScene.bind(this)}
           newScene={this.editScene.bind(this)}
           changeScene={this.changeScene.bind(this)}
         />
         {
-          this.state.isEditingNewScene &&
-          <NewSceneEditor
+          this.state.isEditingScene &&
+          <SceneEditor
             removeAction={this.removeEditingDialog.bind(this)}
-            doneAction={this.addNewScene.bind(this)}
+            doneAction={this.doneEditingScene.bind(this)}
             sceneFields={this.sceneFields}
+            editingScene={this.state.editingScene}
           />
         }
         {

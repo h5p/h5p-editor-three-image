@@ -2,15 +2,21 @@ import React from 'react';
 import EditingDialog from "./EditingDialog";
 import {H5PContext} from "../../context/H5PContext";
 
-export default class NewSceneEditor extends React.Component {
+export default class SceneEditor extends React.Component {
   constructor(props) {
     super(props);
 
     this.semanticsRef = React.createRef();
-    this.params = {};
   }
 
   componentDidMount() {
+    let params = {};
+    if (this.props.editingScene !== null) {
+      const scenes = this.context.params.scenes;
+      params = scenes[this.props.editingScene];
+    }
+    this.params = params;
+
     H5PEditor.processSemanticsChunk(
       this.props.sceneFields,
       this.params,
@@ -27,6 +33,8 @@ export default class NewSceneEditor extends React.Component {
     H5PEditor.Html.removeWysiwyg();
 
     let isInputsValid = true;
+    // validate() should always run for all children because it adds
+    // styling to children that fails to validate
     this.children.forEach(child => {
       // Special validation for scene image, since having a required image
       // is not supported by core yet
@@ -67,4 +75,4 @@ export default class NewSceneEditor extends React.Component {
   }
 }
 
-NewSceneEditor.contextType = H5PContext;
+SceneEditor.contextType = H5PContext;

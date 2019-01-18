@@ -33,6 +33,11 @@ export default class SceneEditor extends React.Component {
   }
 
   handleDone() {
+
+    // TODO:  If sceneType has changed we must display a confirmation dialog
+    //        and reset all interaction positions to the center/close to the
+    //        center on confirmation.
+
     // Validate children
     H5PEditor.Html.removeWysiwyg();
 

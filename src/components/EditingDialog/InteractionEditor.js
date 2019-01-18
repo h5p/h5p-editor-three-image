@@ -2,6 +2,11 @@ import React from 'react';
 import EditingDialog from "./EditingDialog";
 import {H5PContext} from '../../context/H5PContext';
 
+const sceneType = {
+  threeSixty: '360',
+  static: 'static',
+};
+
 export default class InteractionEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -10,24 +15,17 @@ export default class InteractionEditor extends React.Component {
     this.interactionFields = this.props.interactionsField.field.fields;
   }
 
-  setupNewInteraction() {
-    const camera = this.props.currentCamera;
-    const yaw = camera.camera.yaw;
-    const pitch = camera.camera.pitch;
-
-    return {
-      interactionpos: yaw + ',' + pitch,
-      action: {
-        library: this.props.library.uberName,
-        params: {}
-      },
-    };
-  }
-
   componentDidMount() {
     const interactionIndex = this.props.editingInteractionIndex;
     if (interactionIndex === null) {
-      this.params = this.setupNewInteraction();
+      this.params = {
+        interactionpos: '', // Filled in on saving interaction
+        action: {
+          library: this.props.library.uberName,
+          params: {}
+        }
+      };
+
     }
     else {
       const scene = this.context.params.scenes[this.props.currentScene];
@@ -55,7 +53,33 @@ export default class InteractionEditor extends React.Component {
 
   handleDone() {
     H5PEditor.Html.removeWysiwyg();
+
+    const interactionIndex = this.props.editingInteractionIndex;
+    if (interactionIndex === null) {
+      // Conditionally set position of the interaction
+      this.params.interactionpos = this.getDefaultInteractionPosition();
+    }
+
     this.props.doneAction(this.params);
+  }
+
+  getDefaultInteractionPosition() {
+    const scene = this.context.params.scenes[this.props.currentScene];
+
+    if (scene.sceneType === sceneType.static) {
+      // Place it in image center
+      // % denotes that its placed on a static image.
+      return '50%,50%';
+    }
+
+    const camera = this.props.currentCamera;
+    const yaw = camera.camera.yaw;
+    const pitch = camera.camera.pitch;
+
+    return [
+      yaw,
+      pitch
+    ].join(',');
   }
 
   render() {

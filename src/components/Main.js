@@ -5,6 +5,7 @@ import NewSceneEditor from "./EditingDialog/NewSceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
 import './Main.scss';
 import InteractionEditor from "./EditingDialog/InteractionEditor";
+import {H5PContext} from "../context/H5PContext";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ export default class Main extends React.Component {
       isEditingInteraction: false,
       editingLibrary: null,
       editingInteractionIndex: null,
-      currentScene: this.props.params.scenes.length ? 0 : null,
+      currentScene: this.props.initialScene,
       isSceneInitialized: false,
     };
   }
@@ -51,15 +52,15 @@ export default class Main extends React.Component {
   }
 
   addNewScene(params) {
-    if (!this.props.params.scenes) {
-      this.props.params.scenes = [];
+    if (!this.context.params.scenes) {
+      this.context.params.scenes = [];
     }
-    this.props.params.scenes.push(params);
+    this.context.params.scenes.push(params);
 
     // Set current scene
     this.setState({
       isSceneInitialized: false,
-      currentScene: this.props.params.scenes.length - 1,
+      currentScene: this.context.params.scenes.length - 1,
     });
 
     this.finalizeEditingDialog();
@@ -83,7 +84,7 @@ export default class Main extends React.Component {
     }).appendTo(document.body);
 
     deleteDialog.on('confirmed', () => {
-      const scene = this.props.params.scenes[this.state.currentScene];
+      const scene = this.context.params.scenes[this.state.currentScene];
       scene.interactions.splice(this.state.editingInteractionIndex, 1);
 
       this.setState({
@@ -106,7 +107,7 @@ export default class Main extends React.Component {
   }
 
   addInteraction(params) {
-    const scene = this.props.params.scenes[this.state.currentScene];
+    const scene = this.context.params.scenes[this.state.currentScene];
     if (!scene.interactions) {
       scene.interactions = [];
     }
@@ -176,7 +177,7 @@ export default class Main extends React.Component {
       }
 
       const interactionIndex = e.data.elementIndex;
-      const scene = this.props.params.scenes[this.state.currentScene];
+      const scene = this.context.params.scenes[this.state.currentScene];
       const interaction = scene.interactions[interactionIndex];
 
       // Update interaction pos
@@ -199,7 +200,6 @@ export default class Main extends React.Component {
             createInteraction={this.createInteraction.bind(this)}
           />
           <Scene
-            params={this.props.params}
             isSceneInitialized={this.state.isSceneInitialized}
             sceneIsInitialized={this.sceneIsInitialized.bind(this)}
             setSceneRef={this.setSceneRef.bind(this)}
@@ -210,7 +210,6 @@ export default class Main extends React.Component {
         </div>
         <ControlBar
           currentScene={this.state.currentScene}
-          params={this.props.params}
           newScene={this.editScene.bind(this)}
           changeScene={this.changeScene.bind(this)}
         />
@@ -220,8 +219,6 @@ export default class Main extends React.Component {
             removeAction={this.removeEditingDialog.bind(this)}
             doneAction={this.addNewScene.bind(this)}
             sceneFields={this.sceneFields}
-            params={this.props.params}
-            parent={this.props.parent}
           />
         }
         {
@@ -234,11 +231,11 @@ export default class Main extends React.Component {
             interactionsField={this.interactionsField}
             editingInteractionIndex={this.state.editingInteractionIndex}
             library={this.state.editingLibrary}
-            params={this.props.params}
-            parent={this.props.parent}
           />
         }
       </div>
     );
   }
 }
+
+Main.contextType = H5PContext;

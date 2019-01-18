@@ -30,7 +30,7 @@ export default class InteractionEditor extends React.Component {
       this.params = this.setupNewInteraction();
     }
     else {
-      const scene = this.props.params.scenes[this.props.currentScene];
+      const scene = this.context.params.scenes[this.props.currentScene];
       this.params = scene.interactions[interactionIndex];
     }
 

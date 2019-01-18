@@ -1,4 +1,5 @@
 import React from 'react';
+import {H5PContext} from "../../context/H5PContext";
 
 export default class SceneSelector extends React.Component {
   handleSelectedScene(e) {
@@ -16,6 +17,7 @@ export default class SceneSelector extends React.Component {
         </div>
       );
     }
+    const scenes = this.context.params.scenes;
 
     return (
       <div>
@@ -24,7 +26,7 @@ export default class SceneSelector extends React.Component {
           onChange={this.handleSelectedScene.bind(this)}
         >
           {
-            this.props.scenes.map((scene, sceneIndex) => {
+            scenes.map((scene, sceneIndex) => {
               return (
                 <option
                   value={sceneIndex}
@@ -38,3 +40,5 @@ export default class SceneSelector extends React.Component {
     );
   }
 }
+
+SceneSelector.contextType = H5PContext;

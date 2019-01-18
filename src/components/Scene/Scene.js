@@ -1,6 +1,7 @@
 import React from 'react';
 import NoScene from "./NoScene";
 import './Scene.scss';
+import {H5PContext} from "../../context/H5PContext";
 
 export default class Scene extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ export default class Scene extends React.Component {
   }
 
   initializePreview() {
-    if (this.props.params.scenes.length <= 0) {
+    if (this.context.params.scenes.length <= 0) {
       return;
     }
 
@@ -51,7 +52,7 @@ export default class Scene extends React.Component {
     this.preview = H5P.newRunnable(
       {
         library: this.library,
-        params: this.props.params
+        params: this.context.params
       },
       H5PEditor.contentId,
       H5P.jQuery(this.previewRef.current),
@@ -65,8 +66,7 @@ export default class Scene extends React.Component {
   }
 
   render() {
-    console.log("what is scenes ?", this.props.params.scenes);
-    if (this.props.params.scenes.length <= 0) {
+    if (this.context.params.scenes.length <= 0) {
       return <NoScene/>;
     }
 
@@ -75,3 +75,5 @@ export default class Scene extends React.Component {
     );
   }
 }
+
+Scene.contextType = H5PContext;

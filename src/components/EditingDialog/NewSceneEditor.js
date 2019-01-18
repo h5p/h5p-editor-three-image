@@ -1,25 +1,25 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
+import {H5PContext} from "../../context/H5PContext";
 
 export default class NewSceneEditor extends React.Component {
   constructor(props) {
     super(props);
 
     this.semanticsRef = React.createRef();
-    this.newSceneParams = {};
-    this.semanticsParent = {
-      passReadies: false,
-      ready: () => true,
-    };
+    this.params = {};
   }
 
   componentDidMount() {
     H5PEditor.processSemanticsChunk(
       this.props.sceneFields,
-      this.newSceneParams,
+      this.params,
       this.semanticsRef.current,
-      this.semanticsParent
+      this.context.parent
     );
+
+    // Preserve the children
+    this.children = this.context.parent.children;
   }
 
   handleDone() {
@@ -27,7 +27,7 @@ export default class NewSceneEditor extends React.Component {
     H5PEditor.Html.removeWysiwyg();
 
     let isInputsValid = true;
-    this.semanticsParent.children.forEach(child => {
+    this.children.forEach(child => {
       // Special validation for scene image, since having a required image
       // is not supported by core yet
       const isRequiredImage = child.field.type === 'image'
@@ -52,7 +52,7 @@ export default class NewSceneEditor extends React.Component {
       return;
     }
 
-    this.props.doneAction(this.newSceneParams);
+    this.props.doneAction(this.params);
   }
 
   render() {
@@ -66,3 +66,5 @@ export default class NewSceneEditor extends React.Component {
     );
   }
 }
+
+NewSceneEditor.contextType = H5PContext;

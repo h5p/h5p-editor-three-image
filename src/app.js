@@ -10,9 +10,6 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     this.params = Object.assign({
       scenes: [],
     }, this.params);
-
-    this.passReadies = true;
-    parent.ready(() => this.passReadies = false);
     this.parent = parent;
 
     this.appendTo = function ($container) {
@@ -21,12 +18,14 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
 
       setValue(field, this.params);
 
+      // TODO: Should be possible to set start scene
+      const startScene = this.params.scenes.length ? 0 : null;
+
       ReactDOM.render(
         <H5PContext.Provider value={this}>
           <Main
-            params={this.params}
+            initialScene={startScene}
             field={field}
-            parent={this}
           />
         </H5PContext.Provider>,
         wrapper

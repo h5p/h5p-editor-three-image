@@ -30,6 +30,10 @@
     "react-dom": "^16.7.0"
   },
   "keywords": [],
-  "author": "thomasmars",
-  "license": "MIT"
+  "author": "Joubel AS <contact@joubel.com> (https://joubel.com)",
+  "license": "MIT",
+  "contributors": [
+    "Frode Petterson <frode.petterson@joubel.com> (https://github.com/icc)",
+    "Thomas Marstrander <thomas.marstrander@joubel.com> (https://github.com/thomasmars)"
+  ]
 }

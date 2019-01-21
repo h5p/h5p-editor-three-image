@@ -161,7 +161,6 @@ export default class Main extends React.Component {
     this.setState({
       isEditingInteraction: true,
       editingLibrary: library,
-      currentCamera: this.scenePreview.getCamera(),
     });
   }
 
@@ -219,7 +218,6 @@ export default class Main extends React.Component {
             setSceneRef={this.setSceneRef.bind(this)}
             setScenePreview={this.setScenePreview.bind(this)}
             forceStartScreen={this.state.currentScene}
-            currentCamera={this.state.currentCamera}
           />
         </div>
         <ControlBar
@@ -242,7 +240,7 @@ export default class Main extends React.Component {
           <InteractionEditor
             removeAction={this.removeInteraction.bind(this)}
             doneAction={this.addInteraction.bind(this)}
-            currentCamera={this.state.currentCamera}
+            scenePreview={this.scenePreview}
             currentScene={this.state.currentScene}
             interactionsField={this.interactionsField}
             editingInteractionIndex={this.state.editingInteractionIndex}

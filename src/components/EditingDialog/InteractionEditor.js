@@ -78,7 +78,7 @@ export default class InteractionEditor extends React.Component {
       return '50%,50%';
     }
 
-    const camera = this.props.currentCamera;
+    const camera = this.props.scenePreview.getCamera();
     const yaw = camera.camera.yaw;
     const pitch = camera.camera.pitch;
 

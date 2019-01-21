@@ -60,11 +60,6 @@ export default class Scene extends React.Component {
       extras.forceStartScreen = this.props.forceStartScreen;
     }
 
-    if (this.props.currentCamera) {
-      extras.forceStartCamera = this.props.currentCamera.camera;
-    }
-
-
     // TODO:  Add a unique ID for each scene that persists across editing sessions.
     //        The scene name is not necessarily unique, so we should use an incrementing id instead.
     this.preview = H5P.newRunnable(

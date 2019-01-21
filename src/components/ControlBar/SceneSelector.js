@@ -25,8 +25,8 @@ export default class SceneSelector extends React.Component {
                 <div key={scene.scenename}>
                   <div>{scene.scenename}</div>
                   <SceneSelectorSubmenu
-                    onJump={this.props.changeScene.bind(this, sceneIndex)}
-                    onEdit={this.props.editScene.bind(this, sceneIndex)}
+                    onJump={this.props.changeScene.bind(this, scene.sceneId)}
+                    onEdit={this.props.editScene.bind(this, scene.sceneId)}
                   />
                 </div>
               );

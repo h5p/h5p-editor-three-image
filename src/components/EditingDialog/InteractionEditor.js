@@ -28,7 +28,9 @@ export default class InteractionEditor extends React.Component {
 
     }
     else {
-      const scene = this.context.params.scenes[this.props.currentScene];
+      const scene = this.context.params.scenes.find(scene => {
+        return scene.sceneId === this.props.currentScene;
+      });
       this.params = scene.interactions[interactionIndex];
     }
 
@@ -54,6 +56,8 @@ export default class InteractionEditor extends React.Component {
   handleDone() {
     H5PEditor.Html.removeWysiwyg();
 
+    // TODO:  Run validation for interaction params ?
+
     const interactionIndex = this.props.editingInteractionIndex;
     if (interactionIndex === null) {
       // Conditionally set position of the interaction
@@ -64,7 +68,9 @@ export default class InteractionEditor extends React.Component {
   }
 
   getDefaultInteractionPosition() {
-    const scene = this.context.params.scenes[this.props.currentScene];
+    const scene = this.context.params.scenes.find(scene => {
+      return scene.sceneId === this.props.currentScene;
+    });
 
     if (scene.sceneType === sceneType.static) {
       // Place it in image center

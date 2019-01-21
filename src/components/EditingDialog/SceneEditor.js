@@ -15,9 +15,21 @@ export default class SceneEditor extends React.Component {
 
   componentDidMount() {
     let params = {};
+    const scenes = this.context.params.scenes;
     if (this.props.editingScene !== null) {
-      const scenes = this.context.params.scenes;
       params = scenes[this.props.editingScene];
+    }
+    else {
+      // Set unique ID for the new scene
+      let sceneId = 0;
+      if (scenes.length) {
+        const sceneIds = scenes.map(scene => {
+          return scene.sceneId;
+        });
+        const maxSceneId = Math.max(...sceneIds);
+        sceneId = maxSceneId + 1;
+      }
+      params.sceneId = sceneId;
     }
     this.params = params;
 

@@ -97,7 +97,9 @@ export default class Main extends React.Component {
     }).appendTo(document.body);
 
     deleteDialog.on('confirmed', () => {
-      const scene = this.context.params.scenes[this.state.currentScene];
+      const scene = this.context.params.scenes.find(scene => {
+        return scene.sceneId === this.state.currentScene;
+      });
       scene.interactions.splice(this.state.editingInteractionIndex, 1);
 
       this.setState({
@@ -120,7 +122,9 @@ export default class Main extends React.Component {
   }
 
   addInteraction(params) {
-    const scene = this.context.params.scenes[this.state.currentScene];
+    const scene = this.context.params.scenes.find(scene => {
+      return scene.sceneId === this.state.currentScene;
+    });
     if (!scene.interactions) {
       scene.interactions = [];
     }
@@ -140,10 +144,10 @@ export default class Main extends React.Component {
     });
   }
 
-  changeScene(sceneIndex) {
+  changeScene(sceneId) {
     this.setState({
       isSceneInitialized: false,
-      currentScene: sceneIndex,
+      currentScene: sceneId,
     });
   }
 
@@ -185,7 +189,9 @@ export default class Main extends React.Component {
       }
 
       const interactionIndex = e.data.elementIndex;
-      const scene = this.context.params.scenes[this.state.currentScene];
+      const scene = this.context.params.scenes.find(scene => {
+        return scene.sceneId === this.state.currentScene;
+      });
       const interaction = scene.interactions[interactionIndex];
 
       // Update interaction pos

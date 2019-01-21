@@ -29,8 +29,23 @@ export default class Scene extends React.Component {
     }
   }
 
+  setAsActiveScene() {
+    this.props.setScenePreview(this.preview);
+    this.props.setSceneRef(this.previewRef);
+    this.props.sceneIsInitialized();
+  }
+
   initializePreview() {
     if (this.context.params.scenes.length <= 0) {
+      return;
+    }
+
+    if (this.preview) {
+      // TODO:  Do not re-initialize the scene, only re-render the interactions
+      //        to match the new params for that scene
+
+      this.preview.reDraw(this.props.forceStartScreen);
+      this.setAsActiveScene();
       return;
     }
 
@@ -63,9 +78,7 @@ export default class Scene extends React.Component {
       extras
     );
 
-    this.props.setScenePreview(this.preview);
-    this.props.setSceneRef(this.previewRef);
-    this.props.sceneIsInitialized();
+    this.setAsActiveScene();
   }
 
   render() {

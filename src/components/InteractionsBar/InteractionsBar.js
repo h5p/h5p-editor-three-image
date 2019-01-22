@@ -1,5 +1,6 @@
 import React from 'react';
 import './InteractionsBar.scss';
+import {getLibraries, H5PContext} from "../../context/H5PContext";
 
 export default class InteractionsBar extends React.Component {
   constructor(props) {
@@ -11,23 +12,12 @@ export default class InteractionsBar extends React.Component {
     };
   }
 
-  componentDidMount() {
-
-    const actionField = H5PEditor.findSemanticsField(
-      'action',
-      this.props.interactionsField
-    );
-
-
-    H5PEditor.LibraryListCache.getLibraries(
-      actionField.options,
-      (libraries) => {
-        this.setState({
-          isInitialized: true,
-          libraries: libraries,
-        });
-      }
-    );
+  async componentDidMount() {
+    const libraries = await getLibraries(this.context.field);
+    this.setState({
+      isInitialized: true,
+      libraries: libraries,
+    });
   }
 
   render() {
@@ -55,3 +45,5 @@ export default class InteractionsBar extends React.Component {
     );
   }
 }
+
+InteractionsBar.contextType = H5PContext;

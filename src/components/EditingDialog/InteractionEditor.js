@@ -1,23 +1,32 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
-import {H5PContext} from '../../context/H5PContext';
+import {getInteractionsField, H5PContext} from '../../context/H5PContext';
 
-const sceneType = {
+// TODO:  What scene type an interaction is placed within is not really the
+//        concern of the interaction, this should be managed from a higher
+//        level component, perhaps Main ?
+const SceneType = {
   threeSixty: '360',
   static: 'static',
+};
+
+export const InteractionEditingType = {
+  NOT_EDITING: null,
+  NEW_INTERACTION: -1,
 };
 
 export default class InteractionEditor extends React.Component {
   constructor(props) {
     super(props);
-
     this.semanticsRef = React.createRef();
-    this.interactionFields = this.props.interactionsField.field.fields;
   }
 
   componentDidMount() {
-    const interactionIndex = this.props.editingInteractionIndex;
-    if (interactionIndex === null) {
+    const interactionIndex = this.props.editingInteraction;
+    const isNewScene = interactionIndex
+      === InteractionEditingType.NEW_INTERACTION;
+
+    if (isNewScene) {
       this.params = {
         interactionpos: '', // Filled in on saving interaction
         action: {
@@ -34,8 +43,11 @@ export default class InteractionEditor extends React.Component {
       this.params = scene.interactions[interactionIndex];
     }
 
+    // TODO: Move semantics processing to the H5PContext
+    const interactionsField = getInteractionsField(this.context.field);
+
     H5PEditor.processSemanticsChunk(
-      this.interactionFields,
+      interactionsField.field.fields,
       this.params,
       this.semanticsRef.current,
       this.context.parent
@@ -58,8 +70,8 @@ export default class InteractionEditor extends React.Component {
 
     // TODO:  Run validation for interaction params ?
 
-    const interactionIndex = this.props.editingInteractionIndex;
-    if (interactionIndex === null) {
+    const interactionIndex = this.props.editingInteraction;
+    if (interactionIndex === InteractionEditingType.NEW_INTERACTION) {
       // Conditionally set position of the interaction
       this.params.interactionpos = this.getDefaultInteractionPosition();
     }
@@ -72,7 +84,7 @@ export default class InteractionEditor extends React.Component {
       return scene.sceneId === this.props.currentScene;
     });
 
-    if (scene.sceneType === sceneType.static) {
+    if (scene.sceneType === SceneType.static) {
       // Place it in image center
       // % denotes that its placed on a static image.
       return '50%,50%';

@@ -1,8 +1,8 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
-import {H5PContext} from "../../context/H5PContext";
+import {getSceneField, H5PContext} from "../../context/H5PContext";
 
-export const SceneType = {
+export const SceneEditingType = {
   NOT_EDITING: null,
   NEW_SCENE: -1,
 };
@@ -21,7 +21,7 @@ export default class SceneEditor extends React.Component {
   componentDidMount() {
     let params = {};
     const scenes = this.context.params.scenes;
-    if (this.props.editingScene !== SceneType.NEW_SCENE) {
+    if (this.props.editingScene !== SceneEditingType.NEW_SCENE) {
       params = scenes[this.props.editingScene];
     }
     else {
@@ -38,8 +38,9 @@ export default class SceneEditor extends React.Component {
     }
     this.params = params;
 
+    // TODO: Move semantics processing to the H5PContext
     H5PEditor.processSemanticsChunk(
-      this.props.sceneFields,
+      getSceneField(this.context.field),
       this.params,
       this.semanticsRef.current,
       this.semanticsParent
@@ -51,7 +52,7 @@ export default class SceneEditor extends React.Component {
 
   handleDone() {
 
-    // TODO:  If sceneType has changed we must display a confirmation dialog
+    // TODO:  If SceneType has changed we must display a confirmation dialog
     //        and reset all interaction positions to the center/close to the
     //        center on confirmation.
 

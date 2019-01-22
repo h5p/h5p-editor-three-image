@@ -14,7 +14,12 @@ export default class SceneEditor extends React.Component {
     this.semanticsRef = React.createRef();
     this.semanticsParent = {
       passReadies: false,
-      ready: () => true,
+      ready: (callBack) => {
+        if (callBack) {
+          callBack();
+        }
+        return true;
+      },
     };
   }
 

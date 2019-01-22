@@ -15,6 +15,8 @@ export default class ControlBar extends React.Component {
           isSceneUpdated={this.props.isSceneUpdated}
           changeScene={this.props.changeScene}
           editScene={this.props.editScene}
+          setStartScene={this.props.setStartScene}
+          startScene={this.props.startScene}
         />
         <button
           onClick={this.props.newScene.bind(this, SceneEditingType.NEW_SCENE)}

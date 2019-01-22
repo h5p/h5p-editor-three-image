@@ -20,8 +20,10 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
 
       setValue(field, this.params);
 
-      // TODO: Should be possible to set start scene
-      const startScene = this.params.scenes.length ? 0 : null;
+      let startScene = this.params.scenes.length ? 0 : null;
+      if (this.params.scenes.length) {
+        startScene = this.params.startSceneId;
+      }
 
       ReactDOM.render(
         <H5PContext.Provider value={this}>

@@ -18,6 +18,7 @@ export default class Main extends React.Component {
       editingLibrary: null,
       editingInteraction: InteractionEditingType.NOT_EDITING,
       currentScene: this.props.initialScene,
+      startScene: this.props.initialScene,
       isSceneUpdated: false,
     };
   }
@@ -128,6 +129,13 @@ export default class Main extends React.Component {
     });
   }
 
+  setStartScene(sceneId) {
+    this.context.params.startSceneId = sceneId;
+    this.setState({
+      startScene: sceneId,
+    });
+  }
+
   sceneIsInitialized() {
     this.setState({
       isSceneUpdated: true,
@@ -199,6 +207,8 @@ export default class Main extends React.Component {
           editScene={this.editScene.bind(this)}
           newScene={this.editScene.bind(this)}
           changeScene={this.changeScene.bind(this)}
+          setStartScene={this.setStartScene.bind(this)}
+          startScene={this.state.startScene}
         />
         {
           // TODO: Refactor to single editor dialog since they can never be shown together

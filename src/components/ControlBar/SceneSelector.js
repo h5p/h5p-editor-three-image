@@ -3,6 +3,10 @@ import {H5PContext} from "../../context/H5PContext";
 import SceneSelectorSubmenu from "./SceneSelectorSubmenu";
 
 export default class SceneSelector extends React.Component {
+  setStartScene(scene) {
+    this.props.setStartScene(scene.sceneId);
+  }
+
   render() {
     if (this.props.currentScene === null) {
       return (
@@ -19,12 +23,17 @@ export default class SceneSelector extends React.Component {
       <div>
         <div>
           {
-            scenes.map((scene, sceneIndex) => {
+            scenes.map(scene => {
               return (
                 // TODO: Unique ID
                 <div key={scene.scenename}>
                   <div>{scene.scenename}</div>
+                  {
+                    this.props.startScene === scene.sceneId &&
+                    <div>(Starting scene)</div>
+                  }
                   <SceneSelectorSubmenu
+                    setStartScene={this.setStartScene.bind(this, scene)}
                     onJump={this.props.changeScene.bind(this, scene.sceneId)}
                     onEdit={this.props.editScene.bind(this, scene.sceneId)}
                   />

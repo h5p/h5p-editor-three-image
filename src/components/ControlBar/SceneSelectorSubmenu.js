@@ -9,6 +9,9 @@ export default class SceneSelectorSubmenu extends React.Component {
   render() {
     return (
       <div>
+        <button
+          onClick={this.props.setStartScene.bind(this)}
+        >Set start scene</button>
         <button onClick={this.props.onJump.bind(this)}>Jump</button>
         <button onClick={this.props.onEdit.bind(this)}>Edit</button>
         <button onClick={this.onDelete.bind(this)}>Delete</button>

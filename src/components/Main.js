@@ -171,6 +171,12 @@ export default class Main extends React.Component {
         e.data.pitch
       ].join(',');
     });
+
+    this.scenePreview.on('changedScene', e => {
+      this.setState({
+        currentScene: e.data,
+      });
+    });
   }
 
   render() {

@@ -39,8 +39,10 @@ export default class SceneEditor extends React.Component {
     this.params = params;
 
     // TODO: Move semantics processing to the H5PContext
+    const sceneField = getSceneField(this.context.field);
+
     H5PEditor.processSemanticsChunk(
-      getSceneField(this.context.field),
+      sceneField.field.fields,
       this.params,
       this.semanticsRef.current,
       this.semanticsParent

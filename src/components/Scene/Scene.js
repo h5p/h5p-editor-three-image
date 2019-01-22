@@ -36,7 +36,7 @@ export default class Scene extends React.Component {
   }
 
   redrawScene() {
-    this.preview.reDraw();
+    this.preview.reDraw(this.props.currentScene);
     this.setAsActiveScene();
   }
 

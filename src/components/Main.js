@@ -185,6 +185,7 @@ export default class Main extends React.Component {
             isSceneUpdated={this.state.isSceneUpdated}
             sceneIsInitialized={this.sceneIsInitialized.bind(this)}
             setScenePreview={this.setScenePreview.bind(this)}
+            currentScene={this.state.currentScene}
           />
         </div>
         <ControlBar
@@ -194,6 +195,7 @@ export default class Main extends React.Component {
           changeScene={this.changeScene.bind(this)}
         />
         {
+          // TODO: Refactor to single editor dialog since they can never be shown together
           (this.state.editingScene !== SceneEditingType.NOT_EDITING) &&
           <SceneEditor
             removeAction={this.removeEditingDialog.bind(this)}

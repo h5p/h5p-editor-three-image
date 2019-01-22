@@ -31,7 +31,7 @@ export default class InteractionsBar extends React.Component {
   }
 
   render() {
-    if (!this.props.isSceneInitialized) {
+    if (!this.props.isSceneUpdated) {
       return null;
     }
 

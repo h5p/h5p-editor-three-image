@@ -18,13 +18,13 @@ export default class Scene extends React.Component {
 
 
   componentDidMount() {
-    if (!this.props.isSceneInitialized && this.previewRef) {
+    if (!this.props.isSceneUpdated && this.previewRef) {
       this.initializePreview();
     }
   }
 
   componentDidUpdate() {
-    if (!this.props.isSceneInitialized && this.previewRef) {
+    if (!this.props.isSceneUpdated && this.previewRef) {
       this.initializePreview();
     }
   }

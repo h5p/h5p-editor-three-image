@@ -1,5 +1,6 @@
 import React from 'react';
 import SceneSelector from "./SceneSelector";
+import {SceneType} from "../EditingDialog/SceneEditor";
 
 export default class ControlBar extends React.Component {
   render() {
@@ -10,11 +11,13 @@ export default class ControlBar extends React.Component {
       <div>
         <SceneSelector
           currentScene={this.props.currentScene}
-          isSceneInitialized={this.props.isSceneInitialized}
+          isSceneUpdated={this.props.isSceneUpdated}
           changeScene={this.props.changeScene}
           editScene={this.props.editScene}
         />
-        <button onClick={() => this.props.newScene()}>+ New scene</button>
+        <button
+          onClick={this.props.newScene.bind(this, SceneType.NEW_SCENE)}
+        >+ New scene</button>
         <div>TODO: Conditionally render set start position button</div>
       </div>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 import Scene from "./Scene/Scene";
 import ControlBar from "./ControlBar/ControlBar";
-import SceneEditor from "./EditingDialog/SceneEditor";
+import SceneEditor, {SceneType} from "./EditingDialog/SceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
 import './Main.scss';
 import InteractionEditor from "./EditingDialog/InteractionEditor";
@@ -11,44 +11,29 @@ export default class Main extends React.Component {
   constructor(props) {
     super(props);
 
-    const sceneField = H5PEditor.findSemanticsField('scenes', this.props.field);
-    this.sceneFields = sceneField.field.fields;
-
-    this.interactionsField = H5PEditor.findSemanticsField(
-      'interactions',
-      this.sceneFields
-    );
-
     this.sceneRef = null;
     this.sceneWrapperRef = React.createRef();
     this.scenePreview = null;
 
     this.state = {
-      isEditingScene: false,
-      editingScene: null,
+      editingScene: SceneType.NOT_EDITING,
       isEditingInteraction: false,
       editingLibrary: null,
       editingInteractionIndex: null,
       currentScene: this.props.initialScene,
-      isSceneInitialized: false,
+      isSceneUpdated: false,
     };
   }
 
-  editScene(sceneIndex = null) {
-    let editingScene = null;
-    if (sceneIndex !== null) {
-      editingScene = sceneIndex;
-    }
-
+  editScene(sceneIndex = SceneType.NEW_SCENE) {
     this.setState({
-      isEditingScene: true,
-      editingScene: editingScene,
+      editingScene: sceneIndex,
     });
   }
 
   removeEditingDialog() {
     this.setState({
-      isEditingScene: false,
+      editingScene: SceneType.NOT_EDITING,
     });
   }
 
@@ -58,7 +43,7 @@ export default class Main extends React.Component {
       scenes = [];
     }
 
-    const isEditing = this.state.editingScene !== null;
+    const isEditing = this.state.editingScene !== SceneType.NEW_SCENE;
     if (isEditing) {
       // Replace scene
       scenes[this.state.editingScene] = params;
@@ -71,10 +56,9 @@ export default class Main extends React.Component {
     // Set current scene
     this.setState((prevState) => {
       return {
-        isSceneInitialized: false,
+        isSceneUpdated: false,
         currentScene: isEditing ? prevState.currentScene : scenes.length - 1,
-        isEditingScene: false,
-        editingScene: null,
+        editingScene: SceneType.NOT_EDITING,
       };
     });
   }
@@ -106,7 +90,7 @@ export default class Main extends React.Component {
         isEditingInteraction: false,
         editingInteractionIndex: null,
         editingLibrary: null,
-        isSceneInitialized: false,
+        isSceneUpdated: false,
       });
     });
 
@@ -140,20 +124,20 @@ export default class Main extends React.Component {
       isEditingInteraction: false,
       editingInteractionIndex: null,
       editingLibrary: null,
-      isSceneInitialized: false,
+      isSceneUpdated: false,
     });
   }
 
   changeScene(sceneId) {
     this.setState({
-      isSceneInitialized: false,
+      isSceneUpdated: false,
       currentScene: sceneId,
     });
   }
 
   sceneIsInitialized() {
     this.setState({
-      isSceneInitialized: true,
+      isSceneUpdated: true,
     });
   }
 
@@ -202,18 +186,30 @@ export default class Main extends React.Component {
   }
 
   render() {
+    const sceneField = H5PEditor.findSemanticsField(
+      'scenes',
+      this.context.field
+    );
+
+    const sceneFields = sceneField.field.fields;
+
+    const interactionsField = H5PEditor.findSemanticsField(
+      'interactions',
+      sceneFields
+    );
+
     return (
       <div>
         <div className='scene-editor' ref={this.sceneWrapperRef}>
           <InteractionsBar
-            isSceneInitialized={this.state.isSceneInitialized}
-            interactionsField={this.interactionsField}
+            isSceneUpdated={this.state.isSceneUpdated}
+            interactionsField={interactionsField}
             sceneRef={this.sceneRef}
             sceneWrapperRef={this.sceneWrapperRef}
             createInteraction={this.createInteraction.bind(this)}
           />
           <Scene
-            isSceneInitialized={this.state.isSceneInitialized}
+            isSceneUpdated={this.state.isSceneUpdated}
             sceneIsInitialized={this.sceneIsInitialized.bind(this)}
             setSceneRef={this.setSceneRef.bind(this)}
             setScenePreview={this.setScenePreview.bind(this)}
@@ -227,11 +223,11 @@ export default class Main extends React.Component {
           changeScene={this.changeScene.bind(this)}
         />
         {
-          this.state.isEditingScene &&
+          (this.state.editingScene !== SceneType.NOT_EDITING) &&
           <SceneEditor
             removeAction={this.removeEditingDialog.bind(this)}
             doneAction={this.doneEditingScene.bind(this)}
-            sceneFields={this.sceneFields}
+            sceneFields={sceneFields}
             editingScene={this.state.editingScene}
           />
         }
@@ -242,7 +238,7 @@ export default class Main extends React.Component {
             doneAction={this.addInteraction.bind(this)}
             scenePreview={this.scenePreview}
             currentScene={this.state.currentScene}
-            interactionsField={this.interactionsField}
+            interactionsField={interactionsField}
             editingInteractionIndex={this.state.editingInteractionIndex}
             library={this.state.editingLibrary}
           />

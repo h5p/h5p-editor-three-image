@@ -2,6 +2,11 @@ import React from 'react';
 import EditingDialog from "./EditingDialog";
 import {H5PContext} from "../../context/H5PContext";
 
+export const SceneType = {
+  NOT_EDITING: null,
+  NEW_SCENE: -1,
+};
+
 export default class SceneEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -16,7 +21,7 @@ export default class SceneEditor extends React.Component {
   componentDidMount() {
     let params = {};
     const scenes = this.context.params.scenes;
-    if (this.props.editingScene !== null) {
+    if (this.props.editingScene !== SceneType.NEW_SCENE) {
       params = scenes[this.props.editingScene];
     }
     else {

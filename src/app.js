@@ -11,6 +11,7 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
       scenes: [],
     }, this.params);
     this.parent = parent;
+    this.field = field;
 
     this.appendTo = function ($container) {
       const wrapper = document.createElement('div');
@@ -23,10 +24,7 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
 
       ReactDOM.render(
         <H5PContext.Provider value={this}>
-          <Main
-            initialScene={startScene}
-            field={field}
-          />
+          <Main initialScene={startScene} />
         </H5PContext.Provider>,
         wrapper
       );

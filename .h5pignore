@@ -1,7 +1,11 @@
 node_modules
 .idea
 .h5pignore
+.babelrc
+.gitignore
 package.json
+package-lock.json
 README.md
+TODOs.md
 src
 webpack.config.js

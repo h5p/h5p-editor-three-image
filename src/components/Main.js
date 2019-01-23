@@ -47,6 +47,11 @@ export default class Main extends React.Component {
       scenes[this.state.editingScene] = params;
     }
     else {
+      // Add as start scene if this is the first scene we addd
+      if (!scenes.length) {
+        this.context.params.startSceneId = params.sceneId;
+      }
+
       // Add new scene
       scenes.push(params);
     }
@@ -55,7 +60,7 @@ export default class Main extends React.Component {
     this.setState((prevState) => {
       return {
         isSceneUpdated: false,
-        currentScene: isEditing ? prevState.currentScene : scenes.length - 1,
+        currentScene: isEditing ? prevState.currentScene : params.sceneId,
         editingScene: SceneEditingType.NOT_EDITING,
       };
     });
@@ -149,6 +154,25 @@ export default class Main extends React.Component {
     });
   }
 
+  setStartPosition() {
+    const currentPosition = this.scenePreview.getCamera();
+    const camera = currentPosition.camera;
+
+    const cameraPos = [
+      camera.yaw,
+      camera.pitch,
+    ].join(',');
+
+    // TODO: Params specific operations should be done in H5PContext, e.g. getScene()
+    const scene = this.context.params.scenes.find(scene => {
+      return scene.sceneId === this.state.currentScene;
+    });
+
+    scene.cameraStartPosition = cameraPos;
+
+    // TODO: Disable button when in the same position as start camera
+  }
+
   setScenePreview(scene) {
     this.scenePreview = scene;
 
@@ -209,6 +233,7 @@ export default class Main extends React.Component {
           changeScene={this.changeScene.bind(this)}
           setStartScene={this.setStartScene.bind(this)}
           startScene={this.state.startScene}
+          setStartPosition={this.setStartPosition.bind(this)}
         />
         {
           // TODO: Refactor to single editor dialog since they can never be shown together

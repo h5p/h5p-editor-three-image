@@ -1,0 +1,80 @@
+.h5p-editing-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 2;
+}
+
+.h5p-editing-dialog {
+  background: white;
+  position: absolute;
+  left: 50%;
+  top: 1.5em;
+  transform: translateX(-50%);
+  width: calc(100% - 3em);
+  max-height: calc(100% - 3em);
+}
+
+.h5p-editing-dialog-header {
+  padding: 0.75em 0.75em 0.75em 1.75em;
+  border-bottom: 1px solid #e3e3e3;
+  display: flex;
+
+  .title {
+    flex: 1;
+    font-size: 1.125em;
+    align-self: center;
+  }
+
+  .title.scene:before {
+    font-family: "360-image";
+    content: "\e915";
+    margin-right: 0.75em;
+    font-size: 1.25em;
+    vertical-align: text-bottom;
+  }
+
+  button {
+    font-size: 0.875em;
+    padding: 0.75em 2em;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:not(:first-of-type) {
+    margin-left: 0.5em;
+  }
+
+  .remove-button {
+    color: #a00;
+  }
+
+  .remove-button:hover {
+    color: #e40000;
+  }
+
+  .done-button {
+    color: #fff;
+    background: -webkit-linear-gradient(top,#5A94D3 0,#3673B5 100%);
+    background: -moz-linear-gradient(top,#5A94D3 0,#3673B5 100%);
+    background: -ms-linear-gradient(top,#5A94D3 0,#3673B5 100%);
+    background: -o-linear-gradient(top,#5A94D3 0,#3673B5 100%);
+    border-color: #20588F;
+  }
+
+  .done-button:hover {
+    background: #3275bc;
+    background: -webkit-linear-gradient(top,#3275bc 0,#285585 100%);
+    background: -moz-linear-gradient(top,#3275bc 0,#285585 100%);
+    background: -ms-linear-gradient(top,#3275bc 0,#285585 100%);
+    background: -o-linear-gradient(top,#3275bc 0,#285585 100%);
+  }
+}
+
+.h5p-editing-dialog-body {
+  padding: 1.75em;
+}

@@ -3,6 +3,11 @@ import NoScene from "./NoScene";
 import './Scene.scss';
 import {H5PContext, initializeThreeSixtyPreview} from "../../context/H5PContext";
 
+export const SceneTypes = {
+  THREE_SIXTY_SCENE: '360',
+  STATIC_SCENE: 'static',
+};
+
 export default class Scene extends React.Component {
   constructor(props) {
     super(props);

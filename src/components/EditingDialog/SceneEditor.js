@@ -45,9 +45,18 @@ export default class SceneEditor extends React.Component {
 
     // TODO: Move semantics processing to the H5PContext
     const sceneField = getSceneField(this.context.field);
+    const hiddenSceneFields = [
+      'sceneId',
+      'cameraStartPosition',
+      'interactions',
+    ];
+
+    this.sceneFields = sceneField.field.fields.filter(sceneField => {
+      return !hiddenSceneFields.includes(sceneField.name);
+    });
 
     H5PEditor.processSemanticsChunk(
-      sceneField.field.fields,
+      this.sceneFields,
       this.params,
       this.semanticsRef.current,
       this.semanticsParent
@@ -62,6 +71,11 @@ export default class SceneEditor extends React.Component {
     // TODO:  If SceneType has changed we must display a confirmation dialog
     //        and reset all interaction positions to the center/close to the
     //        center on confirmation.
+
+    // Fill in initial camera position if it is not set
+    if (!this.params.cameraStartPosition) {
+      this.params.cameraStartPosition = '0,0';
+    }
 
     // Validate children
     H5PEditor.Html.removeWysiwyg();
@@ -100,6 +114,8 @@ export default class SceneEditor extends React.Component {
   render() {
     return (
       <EditingDialog
+        title='Scene'
+        titleClasses={['scene']}
         removeAction={this.props.removeAction}
         doneAction={this.handleDone.bind(this)}
       >

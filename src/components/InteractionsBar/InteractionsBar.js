@@ -30,14 +30,19 @@ export default class InteractionsBar extends React.Component {
     }
 
     return (
-      <div>
+      <div className='h5p-interactions-bar'>
         {
           this.state.libraries.map(library => {
+            const className = library.name
+              .toLowerCase()
+              .replace('.', '-');
+
             return (
               <button
+                className={className}
                 key={library.name}
                 onClick={this.props.createInteraction.bind(this, library)}
-              >{library.title}</button>
+              />
             );
           })
         }

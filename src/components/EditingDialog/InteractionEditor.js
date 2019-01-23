@@ -1,6 +1,7 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
 import {getInteractionsField, H5PContext} from '../../context/H5PContext';
+import './InteractionEditor.scss';
 
 // TODO:  What scene type an interaction is placed within is not really the
 //        concern of the interaction, this should be managed from a higher
@@ -44,10 +45,17 @@ export default class InteractionEditor extends React.Component {
     }
 
     // TODO: Move semantics processing to the H5PContext
+    const hiddenFormFields = [
+      'interactionpos',
+    ];
+
     const interactionsField = getInteractionsField(this.context.field);
+    const interactionFields = interactionsField.field.fields.filter(field => {
+      return !hiddenFormFields.includes(field.name);
+    });
 
     H5PEditor.processSemanticsChunk(
-      interactionsField.field.fields,
+      interactionFields,
       this.params,
       this.semanticsRef.current,
       this.context.parent
@@ -56,13 +64,22 @@ export default class InteractionEditor extends React.Component {
     const libraryWrapper = this.semanticsRef.current
       .querySelector('.field.library');
 
-    // Remove selector and copy/paste
-    const librarySelector = libraryWrapper.querySelector('select');
-    const copyPasteWrapper = libraryWrapper
-      .querySelector('.h5peditor-copypaste-wrap');
+    const hiddenSemanticsSelectors = [
+      '.h5p-editor-flex-wrapper',
+      '.h5peditor-field-description',
+      'select',
+      '.h5peditor-copypaste-wrap',
+    ];
 
-    libraryWrapper.removeChild(librarySelector);
-    libraryWrapper.removeChild(copyPasteWrapper);
+    // Remove semantics that we don't want to show
+    hiddenSemanticsSelectors.forEach(selector => {
+      const foundElement = this.semanticsRef.current
+        .querySelector(`.field.library > ${selector}`);
+
+      if (foundElement) {
+        libraryWrapper.removeChild(foundElement);
+      }
+    });
   }
 
   handleDone() {

@@ -1,46 +1,51 @@
-.h5p-dragnbar-a {
-  width: 1em;
-  height: 1.1em;
-  line-height: inherit;
-  text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 0.25em;
-  margin: 0.25em 0 0.25em 0;
-  display: block;
-  padding: 0.2em 0.5em;
-  color: #333;
-  background: #f2f2f2;
-  background: linear-gradient(top,#fff 0,#f2f2f2 100%);
-  background: -moz-linear-gradient(top,#fff 0,#f2f2f2 100%);
-}
+.h5p-interactions-bar {
+  margin-bottom: 0.5em;
 
-.h5p-dragnbar-ul {
-  margin: 0;
-  padding: 0;
-}
+  button {
+    box-sizing: content-box;
+    vertical-align: top;
+    position: relative;
+    font-size: 1.2em;
 
-.dummy-element {
-  position: absolute;
-  width: 2em;
-  height: 2em;
-  background: red;
-  z-index: 1;
-}
+    width: 1em;
+    height: 1.1em;
+    margin-right: 0.4em;
+    padding: 0.25em 0.65em;
 
-li.h5p-dragnbar-li {
-  position: relative;
-  margin: 0;
-  padding: 0;
-  margin-right: 0.25em;
-  background: none;
-  border-left: none;
-  border-right: none;
-  display: inline-block;
-}
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 0.25em;
+    color: #333;
+    background: #f2f2f2;
+    background: -webkit-linear-gradient(top, #fff 0, #f2f2f2 100%);
+    background: -moz-linear-gradient(top, #fff 0, #f2f2f2 100%);
+    background: -ms-linear-gradient(top, #fff 0, #f2f2f2 100%);
+    background: -o-linear-gradient(top, #fff 0, #f2f2f2 100%);
+  }
 
-.h5peditor-dragnbar {
-  font-size: 1em;
-  padding: 0;
-  background: #f5f5f5;
-  width: 100%;
+  button:before {
+    font-family: 'H5PFontAwesome4';
+  }
+
+  .h5p-gotoscene:before {
+    font-family: '360-image';
+    font-size: 0.8em;
+    content: '\e907';
+  }
+
+  .h5p-advancedtext:before {
+    content: 'T';
+  }
+
+  .h5p-image:before {
+    content: "\f03e";
+  }
+
+  .h5p-audio:before {
+    content: '\f028';
+  }
+
+  .h5p-video:before {
+    content: "\f008";
+  }
 }

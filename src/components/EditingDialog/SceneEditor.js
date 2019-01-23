@@ -136,6 +136,10 @@ export default class SceneEditor extends React.Component {
       this.params.cameraStartPosition = '0,0';
     }
 
+    if (!this.params.interactions) {
+      this.params.interactions = [];
+    }
+
     this.sanitizeInteractionPositions();
 
     // Validate children

@@ -1,6 +1,7 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
 import {getSceneField, H5PContext} from "../../context/H5PContext";
+import {SceneTypes} from "../Scene/Scene";
 
 export const SceneEditingType = {
   NOT_EDITING: null,
@@ -66,6 +67,64 @@ export default class SceneEditor extends React.Component {
     this.children = this.semanticsParent.children;
   }
 
+  sanitizeInteractionPositions() {
+    // Update interactions if scene type is changed
+    const isThreeSixtyScene = this.params.sceneType
+      === SceneTypes.THREE_SIXTY_SCENE;
+
+    const hasPercentageDenotation = (position) => {
+      return position.substr(-1) === '%';
+    };
+
+    this.params.interactions.forEach(interaction => {
+      const position = interaction.interactionpos.split(',');
+
+      const isValidPosition = position.reduce((isValid, pos) => {
+        const isStaticScenePositions = hasPercentageDenotation(pos);
+        const hasCorrectDenotation = isThreeSixtyScene
+          ? !isStaticScenePositions
+          : isStaticScenePositions;
+
+        return isValid && hasCorrectDenotation;
+      }, true);
+
+      if (!isValidPosition) {
+        // Spread interactions a bit so they don't overlap so much
+        let newPos;
+        if (isThreeSixtyScene) {
+          // Place interactions spread randomly within a threshold in degrees
+          const cameraCenter = this.params.cameraStartPosition
+            .split(',')
+            .map(parseFloat);
+
+          const degreeSpread = 20;
+          const radianSpread = degreeSpread * Math.PI / 180;
+          const yawCenterOffset = cameraCenter[0] - radianSpread / 2;
+          const pitchCenterOffset = cameraCenter[1] - radianSpread / 2;
+          const newYaw = yawCenterOffset + Math.random() * radianSpread;
+          const newPitch = pitchCenterOffset + Math.random() * radianSpread;
+          newPos = [
+            newYaw,
+            newPitch
+          ].join(',');
+        }
+        else {
+          // Spread interactions within percentage position of center
+          const percentageSpread = 30;
+          const centerOffset = 50 - percentageSpread / 2;
+          const newX = centerOffset + Math.random() * percentageSpread;
+          const newY = centerOffset + Math.random() * percentageSpread;
+          newPos = [
+            newX + '%',
+            newY + '%',
+          ].join(',');
+        }
+        interaction.interactionpos = newPos;
+      }
+    });
+
+  }
+
   handleDone() {
 
     // TODO:  If SceneType has changed we must display a confirmation dialog
@@ -76,6 +135,8 @@ export default class SceneEditor extends React.Component {
     if (!this.params.cameraStartPosition) {
       this.params.cameraStartPosition = '0,0';
     }
+
+    this.sanitizeInteractionPositions();
 
     // Validate children
     H5PEditor.Html.removeWysiwyg();

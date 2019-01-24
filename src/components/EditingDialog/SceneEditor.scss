@@ -1,0 +1,8 @@
+@import '../../styles/icons';
+
+.editing-dialog-header {
+  .title.scene:before {
+    font-family: "360-image";
+    content: $scene;
+  }
+}

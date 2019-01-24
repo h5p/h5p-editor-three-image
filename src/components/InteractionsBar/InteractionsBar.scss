@@ -1,3 +1,5 @@
+@import "../../styles/icons";
+
 .h5p-interactions-bar {
   margin-bottom: 0.5em;
 
@@ -30,7 +32,7 @@
   .h5p-gotoscene:before {
     font-family: '360-image';
     font-size: 0.8em;
-    content: '\e907';
+    content: $goToScene;
   }
 
   .h5p-advancedtext:before {
@@ -38,14 +40,14 @@
   }
 
   .h5p-image:before {
-    content: "\f03e";
+    content: $image;
   }
 
   .h5p-audio:before {
-    content: '\f028';
+    content: $audio;
   }
 
   .h5p-video:before {
-    content: "\f008";
+    content: $video;
   }
 }

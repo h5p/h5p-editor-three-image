@@ -2,6 +2,7 @@ import React from 'react';
 import EditingDialog from "./EditingDialog";
 import {getSceneField, H5PContext} from "../../context/H5PContext";
 import {SceneTypes} from "../Scene/Scene";
+import './SceneEditor.scss';
 
 export const SceneEditingType = {
   NOT_EDITING: null,

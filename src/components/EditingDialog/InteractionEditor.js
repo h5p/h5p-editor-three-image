@@ -1,6 +1,6 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
-import {getInteractionsField, H5PContext} from '../../context/H5PContext';
+import {getInteractionsField, getLibraries, H5PContext} from '../../context/H5PContext';
 import './InteractionEditor.scss';
 
 // TODO:  What scene type an interaction is placed within is not really the
@@ -20,9 +20,13 @@ export default class InteractionEditor extends React.Component {
   constructor(props) {
     super(props);
     this.semanticsRef = React.createRef();
+
+    this.state = {
+      library: null,
+    };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const interactionIndex = this.props.editingInteraction;
     const isNewScene = interactionIndex
       === InteractionEditingType.NEW_INTERACTION;
@@ -80,6 +84,16 @@ export default class InteractionEditor extends React.Component {
         libraryWrapper.removeChild(foundElement);
       }
     });
+
+    // Get library data
+    const libraries = await getLibraries(this.context.field);
+    const library = libraries.find(lib => {
+      return lib.uberName === this.params.action.library;
+    });
+
+    this.setState({
+      library: library,
+    });
   }
 
   handleDone() {
@@ -118,8 +132,20 @@ export default class InteractionEditor extends React.Component {
   }
 
   render() {
+
+    let title = '';
+    let className = '';
+    if (this.state.library) {
+      title = this.state.library.title;
+      className = this.state.library.name
+        .toLowerCase()
+        .replace('.', '-');
+    }
+
     return (
       <EditingDialog
+        title={title}
+        titleClasses={[className]}
         removeAction={this.props.removeAction}
         doneAction={this.handleDone.bind(this)}
       >

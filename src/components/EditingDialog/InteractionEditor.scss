@@ -1,5 +1,34 @@
+@import "../../styles/icons";
+
 .h5p-editing-dialog-body {
   .field.library .libwrap {
     margin-top: 0;
+  }
+}
+
+.h5p-editing-dialog-header {
+  .title:before {
+    font-family: H5PFontAwesome4;
+  }
+
+  .h5p-gotoscene:before {
+    font-family: '360-image';
+    content: $goToScene;
+  }
+
+  .h5p-advancedtext:before {
+    content: 'T';
+  }
+
+  .h5p-image:before {
+    content: $image;
+  }
+
+  .h5p-audio:before {
+    content: $audio;
+  }
+
+  .h5p-video:before {
+    content: $video;
   }
 }

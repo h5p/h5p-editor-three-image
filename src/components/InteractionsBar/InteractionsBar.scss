@@ -50,4 +50,14 @@
   .h5p-video:before {
     content: $video;
   }
+
+  .h5p-summary:before {
+    font-family: "H5PFontIcons";
+    content: $summary;
+    font-size: 1.45em;
+    position: absolute;
+    left: 50%;
+    top: 48%;
+    transform: translate(-50%, -50%);
+  }
 }

@@ -16,12 +16,15 @@
   transform: translateX(-50%);
   width: calc(100% - 3em);
   max-height: calc(100% - 3em);
+  display: flex;
+  flex-direction: column;
 }
 
 .h5p-editing-dialog-header {
   padding: 0.75em 0.75em 0.75em 1.75em;
   border-bottom: 1px solid #e3e3e3;
   display: flex;
+  flex-shrink: 0;
 
   .title {
     flex: 1;
@@ -75,4 +78,5 @@
 
 .h5p-editing-dialog-body {
   padding: 1.75em;
+  overflow: auto;
 }

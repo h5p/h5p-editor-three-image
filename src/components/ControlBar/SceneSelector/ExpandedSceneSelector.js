@@ -28,6 +28,7 @@ export default class ExpandedSceneSelector extends Component {
                 setStartScene={this.props.setStartScene.bind(this)}
                 changeScene={this.props.changeScene}
                 editScene={this.props.editScene}
+                deleteScene={this.props.deleteScene}
               />
             );
           })

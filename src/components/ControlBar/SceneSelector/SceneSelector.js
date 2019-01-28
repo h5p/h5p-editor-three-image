@@ -70,6 +70,7 @@ export default class SceneSelector extends React.Component {
             setStartScene={this.setStartScene.bind(this)}
             changeScene={this.props.changeScene}
             editScene={this.props.editScene}
+            deleteScene={this.props.deleteScene}
           />
         }
       </div>

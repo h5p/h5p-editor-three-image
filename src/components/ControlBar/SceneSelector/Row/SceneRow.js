@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {SceneTypes} from "../../../Scene/Scene";
-import SceneSelectorSubmenu from "./SceneSelectorSubmenu";
+import SceneSelectorSubmenu from "./Submenu/SceneSelectorSubmenu";
 import './SceneRow.scss';
 import {getImageSource} from "../../../../context/H5PContext";
 
@@ -67,6 +67,7 @@ export default class SceneRow extends Component {
           setStartScene={this.props.setStartScene.bind(this, this.props.scene)}
           onJump={this.props.changeScene.bind(this, this.props.scene.sceneId)}
           onEdit={this.props.editScene.bind(this, this.props.scene.sceneId)}
+          onDelete={this.props.deleteScene.bind(this, this.props.scene.sceneId)}
         />
       </div>
     );

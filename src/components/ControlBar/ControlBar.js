@@ -25,6 +25,7 @@ export default class ControlBar extends React.Component {
           isSceneUpdated={this.props.isSceneUpdated}
           changeScene={this.props.changeScene}
           editScene={this.props.editScene}
+          deleteScene={this.props.deleteScene}
           setStartScene={this.props.setStartScene}
           startScene={this.props.startScene}
           toggleSceneOverlay={this.props.toggleSceneOverlay}

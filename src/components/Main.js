@@ -30,6 +30,57 @@ export default class Main extends React.Component {
     });
   }
 
+  deleteScene(sceneId) {
+    const scenes = this.context.params.scenes;
+    const scene = scenes.find(scene => {
+      return scene.sceneId === sceneId;
+    });
+
+    if (scene.sceneId === this.state.currentScene) {
+      // Find the first scene that is not current scene
+      if (scenes.length > 1) {
+        const newScene = scenes.find(scene => {
+          return scene.sceneId !== this.state.currentScene;
+        });
+        this.changeScene(newScene.sceneId);
+
+        this.setState({
+          startScene: newScene.sceneId,
+        });
+      }
+      else {
+        // No scenes
+        this.setState({
+          currentScene: null,
+          startScene: null,
+        });
+      }
+    }
+
+    this.context.params.scenes = scenes.filter(scene => {
+      return scene.sceneId !== sceneId;
+    });
+
+
+    this.context.params.scenes.forEach(scene => {
+      const interactions = scene.interactions;
+      if (interactions) {
+        scene.interactions = interactions.filter(interaction => {
+          const library = H5P.libraryFromString(interaction.action.library);
+          const isGoToScene = library.machineName === 'H5P.GoToScene';
+          if (!isGoToScene) {
+            return true;
+          }
+
+          // Filter away GoToScene with the deleted scene id
+          return interaction.action.params.nextSceneId !== sceneId;
+        });
+      }
+    });
+
+    this.forceUpdate();
+  }
+
   removeEditingDialog() {
     this.setState({
       editingScene: SceneEditingType.NOT_EDITING,
@@ -75,6 +126,7 @@ export default class Main extends React.Component {
       });
     }
 
+    // TODO: Make into a H5PContext function
     // Delete interaction
     const deleteDialog = new H5P.ConfirmationDialog({
       headerText: 'Deleting interaction',
@@ -240,6 +292,7 @@ export default class Main extends React.Component {
         <ControlBar
           currentScene={this.state.currentScene}
           editScene={this.editScene.bind(this)}
+          deleteScene={this.deleteScene.bind(this)}
           newScene={this.editScene.bind(this)}
           changeScene={this.changeScene.bind(this)}
           setStartScene={this.setStartScene.bind(this)}

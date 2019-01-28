@@ -1,0 +1,63 @@
+@import '../../../../styles/icons';
+
+.scene-selector-submenu {
+  display: inline-block;
+
+  button {
+    height: 100%;
+    padding: 0.5em;
+    margin-left: 0.5em;
+
+    border: 1px solid #f0f0f0;
+    background: white;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: default;
+    }
+
+    &:not(:disabled):hover {
+      background-color: #f4f4f4;
+    }
+
+    &:not(:disabled):active {
+      background-color: #e8e8e8;
+      border-color: #e0e0e0;
+    }
+  }
+
+  button:before {
+    font-family: "360-image";
+  }
+
+  .set-start-scene:before {
+    content: $setStartScene
+  }
+
+  .jump:before {
+    content: $openScene;
+  }
+
+  .edit:before {
+    content: $edit;
+  }
+
+  .delete:before {
+    content: $delete;
+    color: #d63129;
+  }
+  
+  .delete {
+    border-color: #fcdbd4;
+
+    &:hover {
+      background-color: #fcdbd4;
+      border-color: #f2c1b1;
+    }
+
+    &:active {
+      background-color: #f2c1b1;
+      border-color: #e39e98;
+    }
+  }
+}

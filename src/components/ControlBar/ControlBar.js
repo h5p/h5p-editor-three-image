@@ -1,5 +1,5 @@
 import React from 'react';
-import SceneSelector from "./SceneSelector";
+import SceneSelector from "./SceneSelector/SceneSelector";
 import {SceneEditingType} from "../EditingDialog/SceneEditor";
 import './ControlBar.scss';
 import {H5PContext} from "../../context/H5PContext";
@@ -19,7 +19,7 @@ export default class ControlBar extends React.Component {
       : false;
 
     return (
-      <div>
+      <div className='h5p-control-bar'>
         <SceneSelector
           currentScene={this.props.currentScene}
           isSceneUpdated={this.props.isSceneUpdated}
@@ -27,6 +27,7 @@ export default class ControlBar extends React.Component {
           editScene={this.props.editScene}
           setStartScene={this.props.setStartScene}
           startScene={this.props.startScene}
+          toggleSceneOverlay={this.props.toggleSceneOverlay}
         />
         <button
           className='h5p-new-scene-button'

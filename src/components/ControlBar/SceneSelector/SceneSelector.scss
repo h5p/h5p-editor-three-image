@@ -1,0 +1,61 @@
+@import '../../../styles/icons';
+
+.scene-selector-wrapper {
+  position: relative;
+  margin-right: 0.5em;
+}
+
+.h5p-scene-selector {
+  display: inline-flex;
+  font-size: 1em;
+  width: 30em;
+
+  border: 1px solid #d1d1d1;
+  cursor: pointer;
+
+
+  &:hover {
+    background: #f0f2ff;
+    border-color: #d3d7f0;
+  }
+
+  &:active {
+    background: #dcdef5;
+    border-color: #c8cae8;
+  }
+}
+
+.h5p-scene-selector.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  &:hover {
+    background: white;
+    border-color: #d1d1d1;
+  }
+
+  &:active {
+    background: white;
+    border-color: #d1d1d1;
+  }
+}
+
+.h5p-select-content {
+  flex: 1;
+  display: flex;
+  align-self: center;
+}
+
+.h5p-select-handle {
+  background: #e6e6e8;
+  padding: 0.5em 0.75em;
+}
+
+.h5p-select-handle:before {
+  font-family: "360-image";
+  content: $dropdown;
+}

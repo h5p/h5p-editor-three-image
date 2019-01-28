@@ -1,0 +1,26 @@
+.expanded-scene-selector {
+  max-height: 33.5em;
+  width: 100%;
+
+  position: absolute;
+  top: 0;
+  transform: translateY(-100%);
+  overflow: auto;
+  box-sizing: border-box;
+
+  background: white;
+  cursor: default;
+  border-bottom: none;
+  z-index: 1;
+
+  .header {
+    padding: 0.75em;
+    border: 1px solid #d1d1d1;
+    border-bottom: none;
+
+    .title {
+      font-size: 1.125em;
+      font-weight: bold;
+    }
+  }
+}

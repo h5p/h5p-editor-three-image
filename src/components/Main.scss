@@ -12,3 +12,19 @@
 .scene-editor {
   position: relative;
 }
+
+.h5p-threeimage-editor {
+
+  .tree .h5p-editor-three-image-wrapper,
+  .h5peditor-form {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .h5peditor-form > div:not(.tree),
+  .tree > div {
+    padding: 0 20px;
+  }
+
+
+}

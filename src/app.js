@@ -16,6 +16,8 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
 
     this.appendTo = function ($container) {
       const wrapper = document.createElement('div');
+      wrapper.classList.add('h5p-editor-three-image-wrapper');
+
       $container[0].appendChild(wrapper);
 
       setValue(field, this.params);

@@ -20,6 +20,7 @@ export default class Main extends React.Component {
       currentScene: this.props.initialScene,
       startScene: this.props.initialScene,
       isSceneUpdated: false,
+      hasSceneOverlay: false,
     };
   }
 
@@ -83,10 +84,13 @@ export default class Main extends React.Component {
     }).appendTo(document.body);
 
     deleteDialog.on('confirmed', () => {
-      const scene = this.context.params.scenes.find(scene => {
-        return scene.sceneId === this.state.currentScene;
-      });
-      scene.interactions.splice(this.state.editingInteraction, 1);
+      // Remove interaction if we were editing one, otherwise it is not created
+      if (this.state.editingInteraction !== null) {
+        const scene = this.context.params.scenes.find(scene => {
+          return scene.sceneId === this.state.currentScene;
+        });
+        scene.interactions.splice(this.state.editingInteraction, 1);
+      }
 
       this.setState({
         editingInteraction: SceneEditingType.NOT_EDITING,
@@ -95,9 +99,7 @@ export default class Main extends React.Component {
     });
 
     deleteDialog.on('canceled', () => {
-      this.setState({
-        editingInteraction: SceneEditingType.NOT_EDITING,
-      });
+      // Just return to dialog
     });
 
     deleteDialog.show();
@@ -211,6 +213,14 @@ export default class Main extends React.Component {
     });
   }
 
+  toggleSceneOverlay() {
+    this.setState(prevState => {
+      return {
+        hasSceneOverlay: !prevState.hasSceneOverlay,
+      };
+    });
+  }
+
   render() {
     return (
       <div>
@@ -224,6 +234,7 @@ export default class Main extends React.Component {
             sceneIsInitialized={this.sceneIsInitialized.bind(this)}
             setScenePreview={this.setScenePreview.bind(this)}
             currentScene={this.state.currentScene}
+            hasOverlay={this.state.hasSceneOverlay}
           />
         </div>
         <ControlBar
@@ -234,6 +245,7 @@ export default class Main extends React.Component {
           setStartScene={this.setStartScene.bind(this)}
           startScene={this.state.startScene}
           setStartPosition={this.setStartPosition.bind(this)}
+          toggleSceneOverlay={this.toggleSceneOverlay.bind(this)}
         />
         {
           // TODO: Refactor to single editor dialog since they can never be shown together

@@ -68,7 +68,13 @@ export default class Scene extends React.Component {
     }
 
     return (
-      <div className='scene-container' ref={this.previewRef} />
+      <div>
+        <div className='scene-container' ref={this.previewRef} />
+        {
+          this.props.hasOverlay &&
+          <div className='scene-overlay' />
+        }
+      </div>
     );
   }
 }

@@ -52,6 +52,10 @@ export const initializeThreeSixtyPreview = (container, params) => {
   );
 };
 
+export const getImageSource = (path) => {
+  return H5P.getPath(path, H5PEditor.contentId);
+};
+
 // TODO: Move more H5PEditor related rendering to this context
 
 export const H5PContext = React.createContext(null);

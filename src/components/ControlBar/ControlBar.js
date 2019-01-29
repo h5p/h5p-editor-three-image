@@ -4,6 +4,7 @@ import {SceneEditingType} from "../EditingDialog/SceneEditor";
 import './ControlBar.scss';
 import {H5PContext} from "../../context/H5PContext";
 import {SceneTypes} from "../Scene/Scene";
+import {getSceneFromId} from "../../h5phelpers/sceneParams";
 
 export default class ControlBar extends React.Component {
   render() {
@@ -11,9 +12,8 @@ export default class ControlBar extends React.Component {
     //        three layers of components, perhaps render sceneselector as
     //        the children prop
 
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.props.currentScene;
-    });
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.props.currentScene);
     const is360Scene = scene
       ? scene.sceneType === SceneTypes.THREE_SIXTY_SCENE
       : false;

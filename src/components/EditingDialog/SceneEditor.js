@@ -1,8 +1,15 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
-import {getSceneField, H5PContext} from "../../context/H5PContext";
+import {H5PContext, showConfirmationDialog} from "../../context/H5PContext";
 import {SceneTypes} from "../Scene/Scene";
 import './SceneEditor.scss';
+import {getSceneFromId} from "../../h5phelpers/sceneParams";
+import {
+  createSceneForm,
+  getDefaultSceneParams,
+  isInteractionsValid,
+  sanitizeSceneForm, validateSceneForm
+} from "../../h5phelpers/editorForms";
 
 export const SceneEditingType = {
   NOT_EDITING: null,
@@ -14,165 +21,69 @@ export default class SceneEditor extends React.Component {
     super(props);
 
     this.semanticsRef = React.createRef();
-    this.semanticsParent = {
-      passReadies: false,
-      ready: (callBack) => {
-        if (callBack) {
-          callBack();
-        }
-        return true;
-      },
-    };
+  }
+
+  getSceneParams() {
+    const scenes = this.context.params.scenes;
+
+    // New scene
+    if (this.props.editingScene === SceneEditingType.NEW_SCENE) {
+      return getDefaultSceneParams(scenes);
+    }
+
+    return getSceneFromId(scenes, this.props.editingScene);
   }
 
   componentDidMount() {
-    let params = {};
-    const scenes = this.context.params.scenes;
-    if (this.props.editingScene !== SceneEditingType.NEW_SCENE) {
-      params = scenes[this.props.editingScene];
-    }
-    else {
-      // Set unique ID for the new scene
-      let sceneId = 0;
-      if (scenes.length) {
-        const sceneIds = scenes.map(scene => {
-          return scene.sceneId;
-        });
-        const maxSceneId = Math.max(...sceneIds);
-        sceneId = maxSceneId + 1;
-      }
-      params.sceneId = sceneId;
-    }
-    this.params = params;
+    this.params = this.getSceneParams();
 
-    // TODO: Move semantics processing to the H5PContext
-    const sceneField = getSceneField(this.context.field);
-    const hiddenSceneFields = [
-      'sceneId',
-      'cameraStartPosition',
-      'interactions',
-    ];
+    // Preserve parent's children
+    this.parentChildren = this.context.parent.children;
 
-    this.sceneFields = sceneField.field.fields.filter(sceneField => {
-      return !hiddenSceneFields.includes(sceneField.name);
-    });
-
-    H5PEditor.processSemanticsChunk(
-      this.sceneFields,
+    createSceneForm(
+      this.context.field,
       this.params,
       this.semanticsRef.current,
-      this.semanticsParent
+      this.context.parent
     );
 
-    // Preserve the children
-    this.children = this.semanticsParent.children;
-  }
-
-  sanitizeInteractionPositions() {
-    // Update interactions if scene type is changed
-    const isThreeSixtyScene = this.params.sceneType
-      === SceneTypes.THREE_SIXTY_SCENE;
-
-    const hasPercentageDenotation = (position) => {
-      return position.substr(-1) === '%';
-    };
-
-    this.params.interactions.forEach(interaction => {
-      const position = interaction.interactionpos.split(',');
-
-      const isValidPosition = position.reduce((isValid, pos) => {
-        const isStaticScenePositions = hasPercentageDenotation(pos);
-        const hasCorrectDenotation = isThreeSixtyScene
-          ? !isStaticScenePositions
-          : isStaticScenePositions;
-
-        return isValid && hasCorrectDenotation;
-      }, true);
-
-      if (!isValidPosition) {
-        // Spread interactions a bit so they don't overlap so much
-        let newPos;
-        if (isThreeSixtyScene) {
-          // Place interactions spread randomly within a threshold in degrees
-          const cameraCenter = this.params.cameraStartPosition
-            .split(',')
-            .map(parseFloat);
-
-          const degreeSpread = 20;
-          const radianSpread = degreeSpread * Math.PI / 180;
-          const yawCenterOffset = cameraCenter[0] - radianSpread / 2;
-          const pitchCenterOffset = cameraCenter[1] - radianSpread / 2;
-          const newYaw = yawCenterOffset + Math.random() * radianSpread;
-          const newPitch = pitchCenterOffset + Math.random() * radianSpread;
-          newPos = [
-            newYaw,
-            newPitch
-          ].join(',');
-        }
-        else {
-          // Spread interactions within percentage position of center
-          const percentageSpread = 30;
-          const centerOffset = 50 - percentageSpread / 2;
-          const newX = centerOffset + Math.random() * percentageSpread;
-          const newY = centerOffset + Math.random() * percentageSpread;
-          newPos = [
-            newX + '%',
-            newY + '%',
-          ].join(',');
-        }
-        interaction.interactionpos = newPos;
-      }
-    });
-
+    // Capture own children and restore parent
+    this.children = this.context.parent.children;
+    this.context.parent.children = this.parentChildren;
   }
 
   handleDone() {
-
-    // TODO:  If SceneType has changed we must display a confirmation dialog
-    //        and reset all interaction positions to the center/close to the
-    //        center on confirmation.
-
-    // Fill in initial camera position if it is not set
-    if (!this.params.cameraStartPosition) {
-      this.params.cameraStartPosition = '0,0';
-    }
-
-    if (!this.params.interactions) {
-      this.params.interactions = [];
-    }
-
-    this.sanitizeInteractionPositions();
-
-    // Validate children
-    H5PEditor.Html.removeWysiwyg();
-
-    let isInputsValid = true;
-    // validate() should always run for all children because it adds
-    // styling to children that fails to validate
-    this.children.forEach(child => {
-      // Special validation for scene image, since having a required image
-      // is not supported by core yet
-      const isRequiredImage = child.field.type === 'image'
-        && (child.field.optional === undefined
-          || child.field.optional === false);
-      if (isRequiredImage) {
-        if (!child.params || !child.params.path) {
-          isInputsValid = false;
-        }
-      }
-
-      // Note that validate() does not necessarily return a bool...
-      // e.g. for texts
-      const isChildValid = child.validate();
-      if (isChildValid === false) {
-        isInputsValid = false;
-      }
-    });
-
-    // Inputs must be valid to create a scene
-    if (!isInputsValid) {
+    const isValid = validateSceneForm(this.children);
+    if (!isValid) {
       return;
     }
+
+    const isThreeSixtyScene = this.params.sceneType
+      === SceneTypes.THREE_SIXTY_SCENE;
+
+    if (isInteractionsValid(this.params, isThreeSixtyScene)) {
+      this.confirmDone();
+      return;
+    }
+
+    showConfirmationDialog({
+      headerText: 'Scene type changed',
+      dialogText: 'Changing the scene type will cause all interactions to be repositioned randomly. Are you sure you wish to proceed ?',
+      cancelText: 'Cancel',
+      confirmText: 'Confirm',
+    }, this.confirmDone.bind(this));
+
+  }
+
+  confirmDone() {
+    const isThreeSixtyScene = this.params.sceneType
+      === SceneTypes.THREE_SIXTY_SCENE;
+
+    sanitizeSceneForm(
+      this.params,
+      isThreeSixtyScene,
+      this.params.cameraStartPosition
+    );
 
     this.props.doneAction(this.params);
   }

@@ -24,9 +24,9 @@ export default class Main extends React.Component {
     };
   }
 
-  editScene(sceneIndex = SceneEditingType.NEW_SCENE) {
+  editScene(sceneId = SceneEditingType.NEW_SCENE) {
     this.setState({
-      editingScene: sceneIndex,
+      editingScene: sceneId,
     });
   }
 
@@ -35,27 +35,6 @@ export default class Main extends React.Component {
     const scene = scenes.find(scene => {
       return scene.sceneId === sceneId;
     });
-
-    if (scene.sceneId === this.state.currentScene) {
-      // Find the first scene that is not current scene
-      if (scenes.length > 1) {
-        const newScene = scenes.find(scene => {
-          return scene.sceneId !== this.state.currentScene;
-        });
-        this.changeScene(newScene.sceneId);
-
-        this.setState({
-          startScene: newScene.sceneId,
-        });
-      }
-      else {
-        // No scenes
-        this.setState({
-          currentScene: null,
-          startScene: null,
-        });
-      }
-    }
 
     this.context.params.scenes = scenes.filter(scene => {
       return scene.sceneId !== sceneId;
@@ -78,6 +57,29 @@ export default class Main extends React.Component {
       }
     });
 
+    if (scene.sceneId === this.state.currentScene) {
+      // Find the first scene that is not current scene
+      if (scenes.length > 1) {
+        const newScene = scenes.find(scene => {
+          return scene.sceneId !== this.state.currentScene;
+        });
+        this.changeScene(newScene.sceneId);
+
+        if (scene.sceneId === this.state.startScene) {
+          this.setState({
+            startScene: newScene.sceneId,
+          });
+        }
+      }
+      else {
+        // No scenes
+        this.setState({
+          currentScene: null,
+          startScene: null,
+        });
+      }
+    }
+
     this.forceUpdate();
   }
 
@@ -96,7 +98,10 @@ export default class Main extends React.Component {
     const isEditing = this.state.editingScene !== SceneEditingType.NEW_SCENE;
     if (isEditing) {
       // Replace scene
-      scenes[this.state.editingScene] = params;
+      const sceneIndex = this.context.params.scenes.findIndex(scene => {
+        return scene.sceneId === this.state.editingScene;
+      });
+      this.context.params.scenes[sceneIndex] = params;
     }
     else {
       // Add as start scene if this is the first scene we addd

@@ -1,15 +1,16 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
-import {getInteractionsField, getLibraries, H5PContext} from '../../context/H5PContext';
+import {H5PContext} from '../../context/H5PContext';
 import './InteractionEditor.scss';
-
-// TODO:  What scene type an interaction is placed within is not really the
-//        concern of the interaction, this should be managed from a higher
-//        level component, perhaps Main ?
-const SceneType = {
-  threeSixty: '360',
-  static: 'static',
-};
+import {SceneTypes} from "../Scene/Scene";
+import {getDefaultLibraryParams} from "../../h5phelpers/libraryParams";
+import {getSceneFromId} from "../../h5phelpers/sceneParams";
+import {
+  createInteractionForm,
+  getLibraryDataFromFields,
+  sanitizeInteractionParams,
+  validateInteractionForm
+} from "../../h5phelpers/editorForms";
 
 export const InteractionEditingType = {
   NOT_EDITING: null,
@@ -26,96 +27,23 @@ export default class InteractionEditor extends React.Component {
     };
   }
 
-  async componentDidMount() {
-    const interactionIndex = this.props.editingInteraction;
-    const isNewScene = interactionIndex
-      === InteractionEditingType.NEW_INTERACTION;
+  getInteractionParams(interactionIndex = null) {
+    const isNewScene = interactionIndex === InteractionEditingType.NEW_INTERACTION;
 
     if (isNewScene) {
-      this.params = {
-        interactionpos: '', // Filled in on saving interaction
-        action: {
-          library: this.props.library.uberName,
-          params: {}
-        }
-      };
-
-    }
-    else {
-      const scene = this.context.params.scenes.find(scene => {
-        return scene.sceneId === this.props.currentScene;
-      });
-      this.params = scene.interactions[interactionIndex];
+      return getDefaultLibraryParams(this.props.library.uberName);
     }
 
-    // TODO: Move semantics processing to the H5PContext
-    const hiddenFormFields = [
-      'interactionpos',
-    ];
-
-    const interactionsField = getInteractionsField(this.context.field);
-    const interactionFields = interactionsField.field.fields.filter(field => {
-      return !hiddenFormFields.includes(field.name);
-    });
-
-    H5PEditor.processSemanticsChunk(
-      interactionFields,
-      this.params,
-      this.semanticsRef.current,
-      this.context.parent
-    );
-
-    const libraryWrapper = this.semanticsRef.current
-      .querySelector('.field.library');
-
-    const hiddenSemanticsSelectors = [
-      '.h5p-editor-flex-wrapper',
-      '.h5peditor-field-description',
-      'select',
-      '.h5peditor-copypaste-wrap',
-    ];
-
-    // Remove semantics that we don't want to show
-    hiddenSemanticsSelectors.forEach(selector => {
-      const foundElement = this.semanticsRef.current
-        .querySelector(`.field.library > ${selector}`);
-
-      if (foundElement) {
-        libraryWrapper.removeChild(foundElement);
-      }
-    });
-
-    // Get library data
-    const libraries = await getLibraries(this.context.field);
-    const library = libraries.find(lib => {
-      return lib.uberName === this.params.action.library;
-    });
-
-    this.setState({
-      library: library,
-    });
-  }
-
-  handleDone() {
-    H5PEditor.Html.removeWysiwyg();
-
-    // TODO:  Run validation for interaction params ?
-
-    const interactionIndex = this.props.editingInteraction;
-    if (interactionIndex === InteractionEditingType.NEW_INTERACTION) {
-      // Conditionally set position of the interaction
-      this.params.interactionpos = this.getDefaultInteractionPosition();
-    }
-
-    this.props.doneAction(this.params);
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.props.currentScene);
+    return scene.interactions[interactionIndex];
   }
 
   getDefaultInteractionPosition() {
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.props.currentScene;
-    });
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.props.currentScene);
 
-    if (scene.sceneType === SceneType.static) {
+    if (scene.sceneType === SceneTypes.STATIC_SCENE) {
       // Place it in image center
       // % denotes that its placed on a static image.
       return '50%,50%';
@@ -131,10 +59,56 @@ export default class InteractionEditor extends React.Component {
     ].join(',');
   }
 
-  render() {
+  async componentDidMount() {
+    this.params = this.getInteractionParams(this.props.editingInteraction);
+    const field = this.context.field;
 
+    // Preserve parent's children
+    this.parentChildren = this.context.parent.children;
+
+    createInteractionForm(
+      field,
+      this.params,
+      this.semanticsRef.current,
+      this.context.parent,
+    );
+
+    // Restore parent's children after preserving our own
+    this.children = this.context.parent.children;
+    this.context.parent.children = this.parentChildren;
+
+    const uberName = this.params.action.library;
+    const library = await getLibraryDataFromFields(field, uberName);
+
+    this.setState({
+      library: library,
+    });
+  }
+
+  handleDone() {
+    const interactionIndex = this.props.editingInteraction;
+    let interactionPosition = null;
+
+    // Set default position if new interaction
+    if (interactionIndex === InteractionEditingType.NEW_INTERACTION) {
+      interactionPosition = this.getDefaultInteractionPosition();
+    }
+
+    this.params = sanitizeInteractionParams(this.params, interactionPosition);
+    const isValid = validateInteractionForm(this.children);
+
+    // Return to form with error messages if form is invalid
+    if (!isValid) {
+      return;
+    }
+
+    this.props.doneAction(this.params);
+  }
+
+  render() {
     let title = '';
     let className = '';
+
     if (this.state.library) {
       title = this.state.library.title;
       className = this.state.library.name

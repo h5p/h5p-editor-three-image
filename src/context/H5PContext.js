@@ -56,6 +56,23 @@ export const getImageSource = (path) => {
   return H5P.getPath(path, H5PEditor.contentId);
 };
 
-// TODO: Move more H5PEditor related rendering to this context
+export const showConfirmationDialog = (dialogOptions, confirm, cancel) => {
+  const deleteDialog = new H5P.ConfirmationDialog(dialogOptions)
+    .appendTo(document.body);
+
+  deleteDialog.on('confirmed', () => {
+    if (confirm) {
+      confirm();
+    }
+  });
+
+  deleteDialog.on('canceled', () => {
+    if (cancel) {
+      cancel();
+    }
+  });
+
+  deleteDialog.show();
+};
 
 export const H5PContext = React.createContext(null);

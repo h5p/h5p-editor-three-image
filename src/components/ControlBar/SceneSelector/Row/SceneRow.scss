@@ -69,12 +69,17 @@
   .scene-wrapper {
     flex: 1;
     display: inline-block;
-    margin-left: 0.75em;
+    margin: 0 0.75em;
     vertical-align: top;
+    box-sizing: border-box;
+    overflow: hidden;
 
     .h5p-scene-name {
       font-size: 0.9em;
       font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .starting-scene {

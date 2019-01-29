@@ -31,4 +31,9 @@
   .h5p-video:before {
     content: $video;
   }
+
+  .h5p-summary:before {
+    font-family: "H5PFontIcons";
+    content: $summary;
+  }
 }

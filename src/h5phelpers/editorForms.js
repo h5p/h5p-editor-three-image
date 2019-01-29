@@ -106,6 +106,10 @@ export const sanitizeSceneForm = (params, isThreeSixty, cameraPos) => {
 };
 
 export const isInteractionsValid = (params, isThreeSixty) => {
+  if (!params.interactions) {
+    return true;
+  }
+
   return params.interactions.every(interaction => {
     return isInteractionPositionValid(interaction, isThreeSixty);
   });

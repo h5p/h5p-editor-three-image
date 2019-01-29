@@ -5,7 +5,8 @@ import SceneEditor, {SceneEditingType} from "./EditingDialog/SceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
 import './Main.scss';
 import InteractionEditor, {InteractionEditingType} from "./EditingDialog/InteractionEditor";
-import {H5PContext} from "../context/H5PContext";
+import {H5PContext, showConfirmationDialog} from "../context/H5PContext";
+import {deleteScene, getSceneFromId} from "../h5phelpers/sceneParams";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -25,68 +26,88 @@ export default class Main extends React.Component {
   }
 
   editScene(sceneId = SceneEditingType.NEW_SCENE) {
+    this.toggleExpandSceneSelector(false);
     this.setState({
       editingScene: sceneId,
     });
   }
 
-  deleteScene(sceneId) {
-    const scenes = this.context.params.scenes;
-    const scene = scenes.find(scene => {
-      return scene.sceneId === sceneId;
-    });
-
-    this.context.params.scenes = scenes.filter(scene => {
-      return scene.sceneId !== sceneId;
-    });
-
-
-    this.context.params.scenes.forEach(scene => {
-      const interactions = scene.interactions;
-      if (interactions) {
-        scene.interactions = interactions.filter(interaction => {
-          const library = H5P.libraryFromString(interaction.action.library);
-          const isGoToScene = library.machineName === 'H5P.GoToScene';
-          if (!isGoToScene) {
-            return true;
-          }
-
-          // Filter away GoToScene with the deleted scene id
-          return interaction.action.params.nextSceneId !== sceneId;
-        });
-      }
-    });
-
-    if (scene.sceneId === this.state.currentScene) {
-      // Find the first scene that is not current scene
-      if (scenes.length > 1) {
-        const newScene = scenes.find(scene => {
-          return scene.sceneId !== this.state.currentScene;
-        });
-        this.changeScene(newScene.sceneId);
-
-        if (scene.sceneId === this.state.startScene) {
-          this.setState({
-            startScene: newScene.sceneId,
-          });
-        }
-      }
-      else {
-        // No scenes
-        this.setState({
-          currentScene: null,
-          startScene: null,
-        });
-      }
+  updateCurrentScene(deletedSceneId) {
+    const hasDeletedCurrentScene = deletedSceneId === this.state.currentScene;
+    if (!hasDeletedCurrentScene) {
+      return;
     }
 
-    this.forceUpdate();
+    const scenes = this.context.params.scenes;
+    if (scenes.length > 1) {
+      // Find the first scene that is not current scene and jump to it
+      const newScene = scenes.find(scene => {
+        return scene !== this.state.currentScene;
+      });
+      this.changeScene(newScene.sceneId);
+      return;
+    }
+
+    // No scenes left
+    this.setState({
+      currentScene: null,
+    });
   }
 
-  removeEditingDialog() {
+  updateStartScene(deletedSceneId) {
+    const hasDeletedStartScene = deletedSceneId === this.state.startScene;
+    if (!hasDeletedStartScene) {
+      return;
+    }
+
+    const scenes = this.context.params.scenes;
+    if (scenes.length) {
+      const newScene = scenes[0];
+      this.setState({
+        startScene: newScene.sceneId,
+      });
+      return;
+    }
+
+    // No scenes left
+    this.setState({
+      startScene: null,
+    });
+  }
+
+  deleteScene(sceneId) {
+    const isNewScene = sceneId === SceneEditingType.NEW_SCENE;
+    const deleteSceneText = isNewScene
+      ? 'Are you sure you wish to delete this scene ?'
+      : 'Deleting this scene will also delete all interactions within the scene and any navigational hotspots pointing to this scene. Are you sure you wish to delete this scene ?';
+
+    // Confirm deletion
+    showConfirmationDialog({
+      headerText: 'Deleting scene',
+      dialogText: deleteSceneText,
+      cancelText: 'Cancel',
+      confirmText: 'Confirm',
+    }, this.confirmedDeleteScene.bind(this, sceneId));
+  }
+
+  confirmedDeleteScene(sceneId) {
     this.setState({
       editingScene: SceneEditingType.NOT_EDITING,
     });
+
+    // Scene not added to params
+    const isNewScene = sceneId === SceneEditingType.NEW_SCENE;
+    if (isNewScene) {
+      return;
+    }
+
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, sceneId);
+    this.context.params.scenes = deleteScene(scenes, sceneId);
+
+    this.updateCurrentScene(scene.sceneId);
+    this.updateStartScene(scene.sceneId);
+    this.forceUpdate();
   }
 
   doneEditingScene(params) {
@@ -272,15 +293,18 @@ export default class Main extends React.Component {
     });
   }
 
-  toggleExpandSceneSelector() {
+  toggleExpandSceneSelector(forceState) {
     // Disabled
     if (this.state.currentScene === null) {
       return;
     }
 
     this.setState((prevState) => {
+      const isExpanded = forceState !== undefined
+        ? forceState
+        : !prevState.isSceneSelectorExpanded;
       return {
-        isSceneSelectorExpanded: !prevState.isSceneSelectorExpanded,
+        isSceneSelectorExpanded: isExpanded,
       };
     });
   }
@@ -317,7 +341,7 @@ export default class Main extends React.Component {
           // TODO: Refactor to single editor dialog since they can never be shown together
           (this.state.editingScene !== SceneEditingType.NOT_EDITING) &&
           <SceneEditor
-            removeAction={this.removeEditingDialog.bind(this)}
+            removeAction={this.deleteScene.bind(this, this.state.editingScene)}
             doneAction={this.doneEditingScene.bind(this)}
             editingScene={this.state.editingScene}
           />

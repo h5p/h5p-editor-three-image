@@ -10,7 +10,7 @@
     display: none;
   }
 
-  &.starting-scene {
+  &.current-scene {
     background-color: #ddf0dd;
     border-color: #72c967;
     border-bottom-width: 1px;
@@ -80,6 +80,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      cursor: pointer;
     }
 
     .starting-scene {

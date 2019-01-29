@@ -40,6 +40,11 @@ export default class SceneSelector extends React.Component {
     this.props.toggleSceneOverlay();
   }
 
+  changeScene(sceneId) {
+    this.toggleExpanded();
+    this.props.changeScene(sceneId);
+  }
+
   render() {
     const activeScene = this.getActiveScene();
 
@@ -67,8 +72,9 @@ export default class SceneSelector extends React.Component {
           this.state.isExpanded &&
           <ExpandedSceneSelector
             startScene={this.props.startScene}
+            currentScene={this.props.currentScene}
             setStartScene={this.setStartScene.bind(this)}
-            changeScene={this.props.changeScene}
+            changeScene={this.changeScene.bind(this)}
             editScene={this.props.editScene}
             deleteScene={this.props.deleteScene}
           />

@@ -31,11 +31,11 @@ export default class SceneRow extends Component {
       rowClasses.push('three-sixty');
     }
 
-    if (this.props.isStartScene) {
-      rowClasses.push('starting-scene');
+    if (this.props.isActiveScene) {
+      rowClasses.push('current-scene');
     }
 
-    if (this.props.isAfterStartScene) {
+    if (this.props.isAfterActiveScene) {
       rowClasses.push('no-top-border');
     }
 
@@ -56,7 +56,10 @@ export default class SceneRow extends Component {
           />
         </div>
         <div className='scene-wrapper'>
-          <div className='h5p-scene-name'>{this.props.scene.scenename}</div>
+          <div
+            className='h5p-scene-name'
+            onClick={this.props.changeScene.bind(this, this.props.scene.sceneId)}
+          >{this.props.scene.scenename}</div>
           {
             this.props.isStartScene &&
             <div className='starting-scene'>Starting scene</div>

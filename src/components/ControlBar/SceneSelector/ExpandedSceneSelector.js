@@ -16,15 +16,17 @@ export default class ExpandedSceneSelector extends Component {
         {
           scenes.map(scene => {
             const isStartScene = scene.sceneId === this.props.startScene;
-            let isAfterStartScene = previousElementHasTopBorder;
-            previousElementHasTopBorder = isStartScene;
+            const isActiveScene = scene.sceneId === this.props.currentScene;
+            let isAfterActiveScene = previousElementHasTopBorder;
+            previousElementHasTopBorder = isActiveScene;
 
             return (
               <SceneRow
                 key={scene.sceneId}
                 scene={scene}
                 isStartScene={isStartScene}
-                isAfterStartScene={isAfterStartScene}
+                isActiveScene={isActiveScene}
+                isAfterActiveScene={isAfterActiveScene}
                 setStartScene={this.props.setStartScene.bind(this)}
                 changeScene={this.props.changeScene}
                 editScene={this.props.editScene}

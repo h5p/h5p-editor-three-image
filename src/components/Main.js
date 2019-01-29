@@ -20,7 +20,7 @@ export default class Main extends React.Component {
       currentScene: this.props.initialScene,
       startScene: this.props.initialScene,
       isSceneUpdated: false,
-      hasSceneOverlay: false,
+      isSceneSelectorExpanded: false,
     };
   }
 
@@ -185,10 +185,12 @@ export default class Main extends React.Component {
     this.setState({
       isSceneUpdated: false,
       currentScene: sceneId,
+      isSceneSelectorExpanded: false,
     });
   }
 
-  setStartScene(sceneId) {
+  setStartScene(scene) {
+    const sceneId = scene.sceneId;
     this.context.params.startSceneId = sceneId;
     this.setState({
       startScene: sceneId,
@@ -265,10 +267,15 @@ export default class Main extends React.Component {
     });
   }
 
-  toggleSceneOverlay() {
-    this.setState(prevState => {
+  toggleExpandSceneSelector() {
+    // Disabled
+    if (this.state.currentScene === null) {
+      return;
+    }
+
+    this.setState((prevState) => {
       return {
-        hasSceneOverlay: !prevState.hasSceneOverlay,
+        isSceneSelectorExpanded: !prevState.isSceneSelectorExpanded,
       };
     });
   }
@@ -286,7 +293,7 @@ export default class Main extends React.Component {
             sceneIsInitialized={this.sceneIsInitialized.bind(this)}
             setScenePreview={this.setScenePreview.bind(this)}
             currentScene={this.state.currentScene}
-            hasOverlay={this.state.hasSceneOverlay}
+            hasOverlay={this.state.isSceneSelectorExpanded}
           />
         </div>
         <ControlBar
@@ -298,7 +305,8 @@ export default class Main extends React.Component {
           setStartScene={this.setStartScene.bind(this)}
           startScene={this.state.startScene}
           setStartPosition={this.setStartPosition.bind(this)}
-          toggleSceneOverlay={this.toggleSceneOverlay.bind(this)}
+          isSceneSelectorExpanded={this.state.isSceneSelectorExpanded}
+          toggleExpandSceneSelector={this.toggleExpandSceneSelector.bind(this)}
         />
         {
           // TODO: Refactor to single editor dialog since they can never be shown together

@@ -29,6 +29,8 @@ export default class ControlBar extends React.Component {
           setStartScene={this.props.setStartScene}
           startScene={this.props.startScene}
           toggleSceneOverlay={this.props.toggleSceneOverlay}
+          isExpanded={this.props.isSceneSelectorExpanded}
+          toggleExpand={this.props.toggleExpandSceneSelector}
         />
         <button
           className='h5p-new-scene-button'

@@ -3,7 +3,7 @@ import EditingDialog from "./EditingDialog";
 import {H5PContext} from '../../context/H5PContext';
 import './InteractionEditor.scss';
 import {SceneTypes} from "../Scene/Scene";
-import {getDefaultLibraryParams} from "../../h5phelpers/libraryParams";
+import {getDefaultLibraryParams, isGoToScene} from "../../h5phelpers/libraryParams";
 import {getSceneFromId} from "../../h5phelpers/sceneParams";
 import {getLibraryDataFromFields} from "../../h5phelpers/editorForms";
 import {
@@ -11,6 +11,7 @@ import {
   sanitizeInteractionParams,
   validateInteractionForm
 } from "../../h5phelpers/forms/interactionForm";
+import GoToScene from "./GoToScene/GoToScene";
 
 export const InteractionEditingType = {
   NOT_EDITING: null,
@@ -24,6 +25,8 @@ export default class InteractionEditor extends React.Component {
 
     this.state = {
       library: null,
+      initialized: false,
+      hasInputError: false,
     };
   }
 
@@ -77,6 +80,22 @@ export default class InteractionEditor extends React.Component {
     this.children = this.context.parent.children;
     this.context.parent.children = this.parentChildren;
 
+    // Update state when library has loaded
+    const libraryWidget = this.children[0];
+    const libraryLoadedCallback = () => {
+      this.setState({
+        initialized: true,
+      });
+    };
+
+    // Check if children has been loaded, since ready() doesn't work for library
+    if (libraryWidget.children && libraryWidget.children.length) {
+      libraryLoadedCallback();
+    }
+    else {
+      libraryWidget.change(libraryLoadedCallback.bind(this));
+    }
+
     const uberName = this.params.action.library;
     const library = await getLibraryDataFromFields(field, uberName);
 
@@ -99,10 +118,19 @@ export default class InteractionEditor extends React.Component {
 
     // Return to form with error messages if form is invalid
     if (!isValid) {
+      this.setState({
+        hasInputError: true,
+      });
       return;
     }
 
     this.props.doneAction(this.params);
+  }
+
+  removeInputErrors() {
+    this.setState({
+      hasInputError: false,
+    });
   }
 
   render() {
@@ -124,6 +152,16 @@ export default class InteractionEditor extends React.Component {
         doneAction={this.handleDone.bind(this)}
       >
         <div ref={this.semanticsRef}/>
+        {
+          this.state.initialized && isGoToScene(this.params) &&
+          <GoToScene
+            selectedScene={this.removeInputErrors.bind(this)}
+            hasInputError={this.state.hasInputError}
+            nextSceneIdWidget={this.children[0].children[0]}
+            currentScene={this.props.currentScene}
+            params={this.params}
+          />
+        }
       </EditingDialog>
     );
   }

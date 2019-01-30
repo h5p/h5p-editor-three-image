@@ -1,5 +1,5 @@
 import React from 'react';
-import Scene from "./Scene/Scene";
+import Scene, {SceneTypes} from "./Scene/Scene";
 import ControlBar from "./ControlBar/ControlBar";
 import SceneEditor, {SceneEditingType} from "./EditingDialog/SceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
@@ -51,9 +51,7 @@ export default class Main extends React.Component {
     }
 
     // No scenes left
-    this.setState({
-      currentScene: null,
-    });
+    this.changeScene(SceneTypes.NO_SCENE);
   }
 
   updateStartScene(deletedSceneId) {
@@ -95,6 +93,7 @@ export default class Main extends React.Component {
   confirmedDeleteScene(sceneId) {
     this.setState({
       editingScene: SceneEditingType.NOT_EDITING,
+      isSceneSelectorExpanded: false,
     });
 
     // Scene not added to params
@@ -109,7 +108,9 @@ export default class Main extends React.Component {
 
     this.updateCurrentScene(scene.sceneId);
     this.updateStartScene(scene.sceneId);
-    this.forceUpdate();
+    this.setState({
+      isSceneUpdated: false,
+    });
   }
 
   doneEditingScene(params) {
@@ -118,8 +119,8 @@ export default class Main extends React.Component {
     const isEditing = editingScene !== SceneEditingType.NEW_SCENE;
 
     // Add as start scene if this is the first scene we add
-    if (!params.scenes.length) {
-      params.startSceneId = params.sceneId;
+    if (!this.context.params.scenes.length) {
+      this.setStartScene(params.sceneId);
     }
 
     this.context.params.scenes = updateScene(scenes, params, editingScene);
@@ -193,8 +194,7 @@ export default class Main extends React.Component {
     });
   }
 
-  setStartScene(scene) {
-    const sceneId = scene.sceneId;
+  setStartScene(sceneId) {
     this.context.params.startSceneId = sceneId;
     this.setState({
       startScene: sceneId,
@@ -244,7 +244,7 @@ export default class Main extends React.Component {
 
       const interactionIndex = e.data.elementIndex;
       updatePosition(
-        this.params.context.scenes,
+        this.context.params.scenes,
         this.state.currentScene,
         interactionIndex,
         e.data

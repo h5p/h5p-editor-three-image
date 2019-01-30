@@ -13,6 +13,7 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     }, this.params);
     this.parent = parent;
     this.field = field;
+    this.setValue = setValue;
 
     this.appendTo = function ($container) {
       const wrapper = document.createElement('div');

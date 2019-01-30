@@ -9,10 +9,6 @@
   font-style: normal;
 }
 
-.scene-editor {
-  position: relative;
-}
-
 .h5p-threeimage-editor {
 
   .tree .h5p-editor-three-image-wrapper,
@@ -26,5 +22,11 @@
     padding: 0 20px;
   }
 
+  .scene-editor {
+    position: relative;
+  }
 
+  .scene-wrapper.no-scenes .scene-container {
+    display: none;
+  }
 }

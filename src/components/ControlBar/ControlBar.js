@@ -22,7 +22,6 @@ export default class ControlBar extends React.Component {
       <div className='h5p-control-bar'>
         <SceneSelector
           currentScene={this.props.currentScene}
-          isSceneUpdated={this.props.isSceneUpdated}
           changeScene={this.props.changeScene}
           editScene={this.props.editScene}
           deleteScene={this.props.deleteScene}

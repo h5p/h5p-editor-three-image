@@ -10,10 +10,18 @@
     display: none;
   }
 
-  &.current-scene {
+  &.marked-scene {
     background-color: #ddf0dd;
     border-color: #72c967;
     border-bottom-width: 1px;
+  }
+
+  &.marked-scene.checked:after {
+    font-family: "H5PFontAwesome4";
+    content: "\f00c";
+    font-size: 1.5em;
+    align-self: center;
+    margin-right: 0.5em;
   }
 
   &.no-top-border {

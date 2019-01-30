@@ -7,6 +7,7 @@ import {initializeThreeSixtyPreview} from "../../h5phelpers/h5pComponents";
 export const SceneTypes = {
   THREE_SIXTY_SCENE: '360',
   STATIC_SCENE: 'static',
+  NO_SCENE: null,
 };
 
 export default class Scene extends React.Component {
@@ -15,7 +16,7 @@ export default class Scene extends React.Component {
     this.previewRef = React.createRef();
 
     this.state = {
-      isInitialize: false,
+      isInitialized: false,
     };
   }
 
@@ -64,12 +65,18 @@ export default class Scene extends React.Component {
   }
 
   render() {
-    if (this.context.params.scenes.length <= 0) {
-      return <NoScene/>;
+    const sceneClasses = ['scene-wrapper'];
+    const hasNoScenes = this.context.params.scenes.length <= 0;
+    if (hasNoScenes) {
+      sceneClasses.push('no-scenes');
     }
 
     return (
-      <div>
+      <div className={sceneClasses.join(' ')}>
+        {
+          hasNoScenes &&
+          <NoScene/>
+        }
         <div className='scene-container' ref={this.previewRef} />
         {
           this.props.hasOverlay &&

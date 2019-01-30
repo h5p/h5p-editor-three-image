@@ -1,7 +1,8 @@
 import React from 'react';
 import NoScene from "./NoScene";
 import './Scene.scss';
-import {H5PContext, initializeThreeSixtyPreview} from "../../context/H5PContext";
+import {H5PContext} from "../../context/H5PContext";
+import {initializeThreeSixtyPreview} from "../../h5phelpers/h5pComponents";
 
 export const SceneTypes = {
   THREE_SIXTY_SCENE: '360',

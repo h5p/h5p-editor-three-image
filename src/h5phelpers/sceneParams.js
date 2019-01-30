@@ -1,3 +1,5 @@
+import {SceneEditingType} from "../components/EditingDialog/SceneEditor";
+
 const MachineName = {
   GoToScene: 'H5P.GoToScene',
 };
@@ -34,3 +36,27 @@ export const deleteScene = (scenes, sceneId) => {
     return scene;
   });
 };
+
+export const updateScene = (scenes, params, editingScene = -1) => {
+  if (editingScene === SceneEditingType.NEW_SCENE) {
+    scenes.push(params);
+    return scenes;
+  }
+
+  return scenes.map(scene => {
+    if (scene.sceneId === editingScene) {
+      // Replace scene
+      scene = params;
+    }
+    return scene;
+  });
+};
+
+export const setScenePositionFromCamera = (scenes, sceneId, camera) => {
+  const scene = getSceneFromId(scenes, sceneId);
+  scene.cameraStartPosition = [
+    camera.yaw,
+    camera.pitch,
+  ].join(',');
+};
+

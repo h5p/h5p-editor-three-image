@@ -5,12 +5,12 @@ import './InteractionEditor.scss';
 import {SceneTypes} from "../Scene/Scene";
 import {getDefaultLibraryParams} from "../../h5phelpers/libraryParams";
 import {getSceneFromId} from "../../h5phelpers/sceneParams";
+import {getLibraryDataFromFields} from "../../h5phelpers/editorForms";
 import {
   createInteractionForm,
-  getLibraryDataFromFields,
   sanitizeInteractionParams,
   validateInteractionForm
-} from "../../h5phelpers/editorForms";
+} from "../../h5phelpers/forms/interactionForm";
 
 export const InteractionEditingType = {
   NOT_EDITING: null,

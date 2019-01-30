@@ -5,8 +5,10 @@ import SceneEditor, {SceneEditingType} from "./EditingDialog/SceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
 import './Main.scss';
 import InteractionEditor, {InteractionEditingType} from "./EditingDialog/InteractionEditor";
-import {H5PContext, showConfirmationDialog} from "../context/H5PContext";
-import {deleteScene, getSceneFromId} from "../h5phelpers/sceneParams";
+import {H5PContext} from "../context/H5PContext";
+import {deleteScene, getSceneFromId, setScenePositionFromCamera, updateScene} from "../h5phelpers/sceneParams";
+import {updatePosition} from "../h5phelpers/libraryParams";
+import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -111,28 +113,16 @@ export default class Main extends React.Component {
   }
 
   doneEditingScene(params) {
-    let scenes = this.context.params.scenes;
-    if (!scenes) {
-      scenes = [];
+    const scenes = this.context.params.scenes;
+    const editingScene = this.state.editingScene;
+    const isEditing = editingScene !== SceneEditingType.NEW_SCENE;
+
+    // Add as start scene if this is the first scene we add
+    if (!params.scenes.length) {
+      params.startSceneId = params.sceneId;
     }
 
-    const isEditing = this.state.editingScene !== SceneEditingType.NEW_SCENE;
-    if (isEditing) {
-      // Replace scene
-      const sceneIndex = this.context.params.scenes.findIndex(scene => {
-        return scene.sceneId === this.state.editingScene;
-      });
-      this.context.params.scenes[sceneIndex] = params;
-    }
-    else {
-      // Add as start scene if this is the first scene we addd
-      if (!scenes.length) {
-        this.context.params.startSceneId = params.sceneId;
-      }
-
-      // Add new scene
-      scenes.push(params);
-    }
+    this.context.params.scenes = updateScene(scenes, params, editingScene);
 
     // Set current scene
     this.setState((prevState) => {
@@ -145,48 +135,36 @@ export default class Main extends React.Component {
   }
 
   removeInteraction() {
+    showConfirmationDialog({
+      headerText: 'Deleting interaction',
+      dialogText: 'Are you sure you wish to delete this interaction ?',
+      cancelText: 'Cancel',
+      confirmText: 'Confirm',
+    }, this.confirmRemoveInteraction.bind(this));
+  }
+
+  confirmRemoveInteraction() {
     // No interactions has been added yet
     if (this.state.editingInteraction === SceneEditingType.NEW_SCENE) {
       this.setState({
         editingInteraction: SceneEditingType.NOT_EDITING,
       });
+      return;
     }
 
-    // TODO: Make into a H5PContext function
-    // Delete interaction
-    const deleteDialog = new H5P.ConfirmationDialog({
-      headerText: 'Deleting interaction',
-      dialogText: 'Are you sure you wish to delete this interaction ?',
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
-    }).appendTo(document.body);
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.state.currentScene);
+    scene.interactions.splice(this.state.editingInteraction, 1);
 
-    deleteDialog.on('confirmed', () => {
-      // Remove interaction if we were editing one, otherwise it is not created
-      if (this.state.editingInteraction !== null) {
-        const scene = this.context.params.scenes.find(scene => {
-          return scene.sceneId === this.state.currentScene;
-        });
-        scene.interactions.splice(this.state.editingInteraction, 1);
-      }
-
-      this.setState({
-        editingInteraction: SceneEditingType.NOT_EDITING,
-        isSceneUpdated: false,
-      });
+    this.setState({
+      editingInteraction: SceneEditingType.NOT_EDITING,
+      isSceneUpdated: false,
     });
-
-    deleteDialog.on('canceled', () => {
-      // Just return to dialog
-    });
-
-    deleteDialog.show();
   }
 
-  addInteraction(params) {
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.state.currentScene;
-    });
+  editInteraction(params) {
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.state.currentScene);
     if (!scene.interactions) {
       scene.interactions = [];
     }
@@ -237,20 +215,11 @@ export default class Main extends React.Component {
   }
 
   setStartPosition() {
-    const currentPosition = this.scenePreview.getCamera();
-    const camera = currentPosition.camera;
-
-    const cameraPos = [
-      camera.yaw,
-      camera.pitch,
-    ].join(',');
-
-    // TODO: Params specific operations should be done in H5PContext, e.g. getScene()
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.state.currentScene;
-    });
-
-    scene.cameraStartPosition = cameraPos;
+    setScenePositionFromCamera(
+      this.context.params.scenes,
+      this.state.currentScene,
+      this.scenePreview.getCamera().camera
+    );
 
     // TODO: Disable button when in the same position as start camera
   }
@@ -274,16 +243,12 @@ export default class Main extends React.Component {
       }
 
       const interactionIndex = e.data.elementIndex;
-      const scene = this.context.params.scenes.find(scene => {
-        return scene.sceneId === this.state.currentScene;
-      });
-      const interaction = scene.interactions[interactionIndex];
-
-      // Update interaction pos
-      interaction.interactionpos = [
-        e.data.yaw,
-        e.data.pitch
-      ].join(',');
+      updatePosition(
+        this.params.context.scenes,
+        this.state.currentScene,
+        interactionIndex,
+        e.data
+      );
     });
 
     this.scenePreview.on('changedScene', e => {
@@ -350,7 +315,7 @@ export default class Main extends React.Component {
           this.state.editingInteraction !== InteractionEditingType.NOT_EDITING &&
           <InteractionEditor
             removeAction={this.removeInteraction.bind(this)}
-            doneAction={this.addInteraction.bind(this)}
+            doneAction={this.editInteraction.bind(this)}
             scenePreview={this.scenePreview}
             currentScene={this.state.currentScene}
             editingInteraction={this.state.editingInteraction}

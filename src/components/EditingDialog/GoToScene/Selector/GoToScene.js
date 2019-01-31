@@ -19,7 +19,7 @@ export default class GoToScene extends Component {
     return (
       <div className={sceneClasses.join(' ')} >
         {
-          scenes.length &&
+          scenes.length > 0 &&
           <div className='go-to-scene-selector-wrapper'>
             <GoToSceneSelector
               scenes={scenes}
@@ -31,6 +31,10 @@ export default class GoToScene extends Component {
         }
         <div className='create-new-scene-wrapper'>
           <div className='new-scene-title'>Create a new scene to go to:</div>
+          {
+            this.props.hasInputError && !scenes.length &&
+            <div className='error-message'>Please create a new scene to proceed</div>
+          }
           <button
             className='h5p-new-scene-button'
             onClick={this.props.newScene.bind(this)}

@@ -41,11 +41,9 @@ export default class Main extends React.Component {
     }
 
     const scenes = this.context.params.scenes;
-    if (scenes.length > 1) {
+    if (scenes.length) {
       // Find the first scene that is not current scene and jump to it
-      const newScene = scenes.find(scene => {
-        return scene !== this.state.currentScene;
-      });
+      const newScene = scenes[0];
       this.changeScene(newScene.sceneId);
       return;
     }
@@ -60,19 +58,15 @@ export default class Main extends React.Component {
       return;
     }
 
+    let startScene = null;
     const scenes = this.context.params.scenes;
     if (scenes.length) {
       const newScene = scenes[0];
-      this.setState({
-        startScene: newScene.sceneId,
-      });
-      return;
+      startScene = newScene.sceneId;
     }
 
     // No scenes left
-    this.setState({
-      startScene: null,
-    });
+    this.setStartScene(startScene);
   }
 
   deleteScene(sceneId) {
@@ -280,11 +274,13 @@ export default class Main extends React.Component {
   }
 
   render() {
+    const hasScenes = this.context.params.scenes.length;
+
     return (
       <div>
         <div className='scene-editor'>
           <InteractionsBar
-            isSceneUpdated={this.state.isSceneUpdated}
+            isShowing={this.state.isSceneUpdated && hasScenes}
             createInteraction={this.createInteraction.bind(this)}
           />
           <Scene

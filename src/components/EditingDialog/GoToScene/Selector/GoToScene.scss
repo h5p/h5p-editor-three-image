@@ -5,6 +5,12 @@
     display: block;
   }
 
+  .error-message {
+    display: none;
+    padding: 0.5em 0;
+    color: darkred;
+  }
+
   .selector-separator {
     font-weight: bold;
     padding: 1.25em 0;

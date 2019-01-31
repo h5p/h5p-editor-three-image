@@ -11,7 +11,7 @@ export default class GoToScene extends Component {
       return scene.sceneId !== this.props.currentScene;
     });
 
-    const sceneClasses = ['go-to-scene-selector'];
+    const sceneClasses = ['go-to-scene'];
     if (this.props.hasInputError) {
       sceneClasses.push('has-error');
     }
@@ -30,7 +30,7 @@ export default class GoToScene extends Component {
           </div>
         }
         <div className='create-new-scene-wrapper'>
-          <div>Create a new scene to go to:</div>
+          <div className='new-scene-title'>Create a new scene to go to:</div>
           <button
             className='h5p-new-scene-button'
             onClick={this.props.newScene.bind(this)}

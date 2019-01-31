@@ -1,29 +1,17 @@
-.go-to-scene-selector {
-  margin-top: 1em;
+.go-to-scene {
+  margin-top: 2em;
 
-  .h5p-scene-row {
-    cursor: pointer;
-  }
-
-  .h5p-scene-row:last-of-type {
-    border-bottom-width: 1px;
-  }
-
-  .h5p-scene-list {
-    max-height: 20em;
-    overflow: auto;
-    padding: 1px;
-  }
-
-  .error-message {
-    display: none;
-    padding: 0.5em 0;
-    color: darkred;
-  }
-}
-
-.go-to-scene-selector.has-error {
-  .error-message {
+  &.has-error .error-message {
     display: block;
+  }
+
+  .selector-separator {
+    font-weight: bold;
+    padding: 1.25em 0;
+  }
+
+  .new-scene-title {
+    font-weight: bold;
+    margin-bottom: 0.75em;
   }
 }

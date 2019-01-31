@@ -11,7 +11,8 @@ import {
   sanitizeInteractionParams,
   validateInteractionForm
 } from "../../h5phelpers/forms/interactionForm";
-import GoToScene from "./GoToScene/GoToScene";
+import GoToSceneWrapper from "./GoToScene/GoToSceneWrapper";
+import {sanitizeSceneForm, validateSceneForm} from "../../h5phelpers/forms/sceneForm";
 
 export const InteractionEditingType = {
   NOT_EDITING: null,
@@ -113,6 +114,14 @@ export default class InteractionEditor extends React.Component {
       interactionPosition = this.getDefaultInteractionPosition();
     }
 
+    if (this.scene) {
+      // Return if scene is invalid
+      const isValidScene = this.validateScene();
+      if (!isValidScene) {
+        return;
+      }
+    }
+
     this.params = sanitizeInteractionParams(this.params, interactionPosition);
     const isValid = validateInteractionForm(this.children);
 
@@ -124,13 +133,34 @@ export default class InteractionEditor extends React.Component {
       return;
     }
 
-    this.props.doneAction(this.params);
+    this.props.doneAction(this.params, this.scene && this.scene.params);
+  }
+
+  validateScene() {
+    const isValid = validateSceneForm(this.scene.children);
+    if (!isValid) {
+      return false;
+    }
+
+    const isThreeSixtyScene = this.scene.params.sceneType
+      === SceneTypes.THREE_SIXTY_SCENE;
+
+    sanitizeSceneForm(
+      this.scene.params,
+      isThreeSixtyScene,
+      this.scene.params.cameraStartPosition
+    );
+    return true;
   }
 
   removeInputErrors() {
     this.setState({
       hasInputError: false,
     });
+  }
+
+  setScene(scene) {
+    this.scene = scene;
   }
 
   render() {
@@ -154,12 +184,13 @@ export default class InteractionEditor extends React.Component {
         <div ref={this.semanticsRef}/>
         {
           this.state.initialized && isGoToScene(this.params) &&
-          <GoToScene
+          <GoToSceneWrapper
             selectedScene={this.removeInputErrors.bind(this)}
             hasInputError={this.state.hasInputError}
             nextSceneIdWidget={this.children[0].children[0]}
             currentScene={this.props.currentScene}
             params={this.params}
+            setScene={this.setScene.bind(this)}
           />
         }
       </EditingDialog>

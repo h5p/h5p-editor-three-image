@@ -113,9 +113,9 @@ export default class Main extends React.Component {
     });
   }
 
-  doneEditingScene(params) {
+  doneEditingScene(params, editingScene = null) {
     const scenes = this.context.params.scenes;
-    const editingScene = this.state.editingScene;
+    editingScene = editingScene || this.state.editingScene;
     const isEditing = editingScene !== SceneEditingType.NEW_SCENE;
 
     // Add as start scene if this is the first scene we add
@@ -163,7 +163,12 @@ export default class Main extends React.Component {
     });
   }
 
-  editInteraction(params) {
+  editInteraction(params, sceneParams = null) {
+    // Creating scene as well
+    if (sceneParams) {
+      this.doneEditingScene(sceneParams, SceneEditingType.NEW_SCENE);
+    }
+
     const scenes = this.context.params.scenes;
     const scene = getSceneFromId(scenes, this.state.currentScene);
     if (!scene.interactions) {

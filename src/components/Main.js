@@ -107,7 +107,7 @@ export default class Main extends React.Component {
     });
   }
 
-  doneEditingScene(params, editingScene = null) {
+  doneEditingScene(params, editingScene = null, skipChangingScene = false) {
     const scenes = this.context.params.scenes;
     editingScene = editingScene || this.state.editingScene;
     const isEditing = editingScene !== SceneEditingType.NEW_SCENE;
@@ -120,10 +120,12 @@ export default class Main extends React.Component {
     this.context.params.scenes = updateScene(scenes, params, editingScene);
 
     // Set current scene
+    const isChangingScene = !(skipChangingScene || isEditing);
+
     this.setState((prevState) => {
       return {
         isSceneUpdated: false,
-        currentScene: isEditing ? prevState.currentScene : params.sceneId,
+        currentScene: isChangingScene ? params.sceneId : prevState.currentScene,
         editingScene: SceneEditingType.NOT_EDITING,
       };
     });
@@ -160,7 +162,11 @@ export default class Main extends React.Component {
   editInteraction(params, sceneParams = null) {
     // Creating scene as well
     if (sceneParams) {
-      this.doneEditingScene(sceneParams, SceneEditingType.NEW_SCENE);
+      this.doneEditingScene(
+        sceneParams,
+        SceneEditingType.NEW_SCENE,
+        true,
+      );
     }
 
     const scenes = this.context.params.scenes;

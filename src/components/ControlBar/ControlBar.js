@@ -4,6 +4,7 @@ import {SceneEditingType} from "../EditingDialog/SceneEditor";
 import './ControlBar.scss';
 import {H5PContext} from "../../context/H5PContext";
 import {SceneTypes} from "../Scene/Scene";
+import {getSceneFromId} from "../../h5phelpers/sceneParams";
 
 export default class ControlBar extends React.Component {
   render() {
@@ -11,9 +12,8 @@ export default class ControlBar extends React.Component {
     //        three layers of components, perhaps render sceneselector as
     //        the children prop
 
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.props.currentScene;
-    });
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.props.currentScene);
     const is360Scene = scene
       ? scene.sceneType === SceneTypes.THREE_SIXTY_SCENE
       : false;
@@ -22,13 +22,14 @@ export default class ControlBar extends React.Component {
       <div className='h5p-control-bar'>
         <SceneSelector
           currentScene={this.props.currentScene}
-          isSceneUpdated={this.props.isSceneUpdated}
           changeScene={this.props.changeScene}
           editScene={this.props.editScene}
           deleteScene={this.props.deleteScene}
           setStartScene={this.props.setStartScene}
           startScene={this.props.startScene}
           toggleSceneOverlay={this.props.toggleSceneOverlay}
+          isExpanded={this.props.isSceneSelectorExpanded}
+          toggleExpand={this.props.toggleExpandSceneSelector}
         />
         <button
           className='h5p-new-scene-button'

@@ -1,0 +1,38 @@
+export const initializeThreeSixtyPreview = (container, params) => {
+  const library = Object.keys(H5PEditor.libraryLoaded)
+    .filter((library) => {
+      return library.split(' ')[0] === 'H5P.ThreeImage';
+    })[0];
+
+  return H5P.newRunnable(
+    {
+      library: library,
+      params: params
+    },
+    H5PEditor.contentId,
+    H5P.jQuery(container),
+    undefined,
+    {
+      isEditor: true,
+    }
+  );
+};
+
+export const showConfirmationDialog = (dialogOptions, confirm, cancel) => {
+  const deleteDialog = new H5P.ConfirmationDialog(dialogOptions)
+    .appendTo(document.body);
+
+  deleteDialog.on('confirmed', () => {
+    if (confirm) {
+      confirm();
+    }
+  });
+
+  deleteDialog.on('canceled', () => {
+    if (cancel) {
+      cancel();
+    }
+  });
+
+  deleteDialog.show();
+};

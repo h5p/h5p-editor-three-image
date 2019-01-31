@@ -3,6 +3,8 @@ import {H5PContext} from "../../../context/H5PContext";
 import './SceneSelector.scss';
 import {ActiveSceneRow} from "./Row/ActiveSceneRow";
 import ExpandedSceneSelector from "./ExpandedSceneSelector";
+import SceneSelectorSubmenu from "./Row/Submenu/SceneSelectorSubmenu";
+import SceneList from "./SceneList";
 
 export default class SceneSelector extends React.Component {
   constructor(props) {
@@ -13,35 +15,11 @@ export default class SceneSelector extends React.Component {
     };
   }
 
-  setStartScene(scene) {
-    this.props.setStartScene(scene.sceneId);
-  }
-
-  getActiveScene() {
+  render() {
     const scenes = this.context.params.scenes;
-
-    return scenes.find(scene => {
+    const activeScene = scenes.find(scene => {
       return scene.sceneId === this.props.currentScene;
     });
-  }
-
-  toggleExpanded() {
-    // Disabled
-    if (!this.getActiveScene()) {
-      return;
-    }
-
-    this.setState((prevState) => {
-      return {
-        isExpanded: !prevState.isExpanded,
-      };
-    });
-
-    this.props.toggleSceneOverlay();
-  }
-
-  render() {
-    const activeScene = this.getActiveScene();
 
     const sceneSelectorClasses = ['h5p-scene-selector'];
     if (!activeScene) {
@@ -52,7 +30,7 @@ export default class SceneSelector extends React.Component {
       <div className='scene-selector-wrapper'>
         <div
           className={sceneSelectorClasses.join(' ')}
-          onClick={this.toggleExpanded.bind(this)}
+          onClick={this.props.toggleExpand.bind(this, undefined)}
         >
           <div className='h5p-select-content'>
             <ActiveSceneRow
@@ -64,14 +42,25 @@ export default class SceneSelector extends React.Component {
 
         </div>
         {
-          this.state.isExpanded &&
-          <ExpandedSceneSelector
-            startScene={this.props.startScene}
-            setStartScene={this.setStartScene.bind(this)}
-            changeScene={this.props.changeScene}
-            editScene={this.props.editScene}
-            deleteScene={this.props.deleteScene}
-          />
+          this.props.isExpanded &&
+          <ExpandedSceneSelector>
+            <SceneList
+              scenes={this.context.params.scenes}
+              startScene={this.props.startScene}
+              markedScene={this.props.currentScene}
+              onTitleClick={this.props.changeScene}
+            >
+              {(isStartScene, sceneId) => (
+                <SceneSelectorSubmenu
+                  isStartScene={isStartScene}
+                  setStartScene={this.props.setStartScene.bind(this, sceneId)}
+                  onJump={this.props.changeScene.bind(this, sceneId)}
+                  onEdit={this.props.editScene.bind(this, sceneId)}
+                  onDelete={this.props.deleteScene.bind(this, sceneId)}
+                />
+              )}
+            </SceneList>
+          </ExpandedSceneSelector>
         }
       </div>
     );

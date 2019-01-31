@@ -1,0 +1,23 @@
+.go-to-scene {
+  margin-top: 2em;
+
+  &.has-error .error-message {
+    display: block;
+  }
+
+  .error-message {
+    display: none;
+    padding: 0.5em 0;
+    color: darkred;
+  }
+
+  .selector-separator {
+    font-weight: bold;
+    padding: 1.25em 0;
+  }
+
+  .new-scene-title {
+    font-weight: bold;
+    margin-bottom: 0.75em;
+  }
+}

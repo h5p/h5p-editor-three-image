@@ -4,6 +4,10 @@
   .field.library .libwrap {
     margin-top: 0;
   }
+
+  .field-name-nextSceneId {
+    display: none;
+  }
 }
 
 .h5p-editing-dialog-header {
@@ -30,5 +34,10 @@
 
   .h5p-video:before {
     content: $video;
+  }
+
+  .h5p-summary:before {
+    font-family: "H5PFontIcons";
+    content: $summary;
   }
 }

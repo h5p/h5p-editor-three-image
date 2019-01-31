@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {SceneTypes} from "../../../Scene/Scene";
-import SceneSelectorSubmenu from "./Submenu/SceneSelectorSubmenu";
 import './SceneRow.scss';
 import {getImageSource} from "../../../../context/H5PContext";
 
@@ -24,6 +23,18 @@ export default class SceneRow extends Component {
     });
   }
 
+  onSceneClick() {
+    if (this.props.onSceneClick) {
+      this.props.onSceneClick(this.props.scene.sceneId);
+    }
+  }
+
+  onTitleClick() {
+    if (this.props.onTitleClick) {
+      this.props.onTitleClick(this.props.scene.sceneId);
+    }
+  }
+
   render() {
 
     const rowClasses = ['h5p-scene-row'];
@@ -31,11 +42,15 @@ export default class SceneRow extends Component {
       rowClasses.push('three-sixty');
     }
 
-    if (this.props.isStartScene) {
-      rowClasses.push('starting-scene');
+    if (this.props.isMarkedScene) {
+      rowClasses.push('marked-scene');
+
+      if (this.props.isShowingCheck) {
+        rowClasses.push('checked');
+      }
     }
 
-    if (this.props.isAfterStartScene) {
+    if (this.props.isAfterActiveScene) {
       rowClasses.push('no-top-border');
     }
 
@@ -45,7 +60,10 @@ export default class SceneRow extends Component {
     }
 
     return (
-      <div className={rowClasses.join(' ')}>
+      <div
+        className={rowClasses.join(' ')}
+        onClick={this.onSceneClick.bind(this)}
+      >
         <div className='thumbnail-wrapper'>
           <img
             className={imageClasses.join(' ')}
@@ -56,19 +74,16 @@ export default class SceneRow extends Component {
           />
         </div>
         <div className='scene-wrapper'>
-          <div className='h5p-scene-name'>{this.props.scene.scenename}</div>
+          <div
+            className='h5p-scene-name'
+            onClick={this.onTitleClick.bind(this)}
+          >{this.props.scene.scenename}</div>
           {
             this.props.isStartScene &&
             <div className='starting-scene'>Starting scene</div>
           }
         </div>
-        <SceneSelectorSubmenu
-          isStartScene={this.props.isStartScene}
-          setStartScene={this.props.setStartScene.bind(this, this.props.scene)}
-          onJump={this.props.changeScene.bind(this, this.props.scene.sceneId)}
-          onEdit={this.props.editScene.bind(this, this.props.scene.sceneId)}
-          onDelete={this.props.deleteScene.bind(this, this.props.scene.sceneId)}
-        />
+        {this.props.children}
       </div>
     );
   }

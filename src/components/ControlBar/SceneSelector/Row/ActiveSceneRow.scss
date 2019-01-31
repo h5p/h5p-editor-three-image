@@ -2,6 +2,9 @@
 
 .active-scene {
   padding: 0.5em;
+  display: flex;
+  max-width: 100%;
+  box-sizing: border-box;
 
   &:before {
     font-family: "360-image";
@@ -23,5 +26,9 @@
     display: inline-block;
     margin-left: 0.5em;
     font-weight: bold;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

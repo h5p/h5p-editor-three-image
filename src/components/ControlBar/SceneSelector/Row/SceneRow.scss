@@ -1,7 +1,7 @@
 @import '../../../../styles/icons';
 
 .h5p-scene-row {
-  padding: 0.5em;
+  padding: 0.625em;
   border: 1px solid #e0dede;
   border-bottom-width: 0;
   display: flex;
@@ -10,10 +10,18 @@
     display: none;
   }
 
-  &.starting-scene {
+  &.marked-scene {
     background-color: #ddf0dd;
     border-color: #72c967;
     border-bottom-width: 1px;
+  }
+
+  &.marked-scene.checked:after {
+    font-family: "H5PFontAwesome4";
+    content: "\f00c";
+    font-size: 1.5em;
+    align-self: center;
+    margin-right: 0.5em;
   }
 
   &.no-top-border {
@@ -69,12 +77,18 @@
   .scene-wrapper {
     flex: 1;
     display: inline-block;
-    margin-left: 0.75em;
+    margin: 0 0.75em;
     vertical-align: top;
+    box-sizing: border-box;
+    overflow: hidden;
 
     .h5p-scene-name {
       font-size: 0.9em;
       font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
     }
 
     .starting-scene {

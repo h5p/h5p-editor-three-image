@@ -1,0 +1,21 @@
+.go-to-scene-selector {
+
+  .go-to-scene-selector-title {
+    padding-bottom: 1.5em;
+    font-weight: bold;
+  }
+
+  .h5p-scene-row {
+    cursor: pointer;
+  }
+
+  .h5p-scene-row:last-of-type {
+    border-bottom-width: 1px;
+  }
+
+  .h5p-scene-list {
+    max-height: 20em;
+    overflow: auto;
+    padding: 1px;
+  }
+}

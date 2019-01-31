@@ -2,29 +2,6 @@ import React from 'react';
 import './SceneSelectorSubmenu.scss';
 
 export default class SceneSelectorSubmenu extends React.Component {
-
-  onDelete() {
-    // TODO: Make into an H5PContext function
-    // Show confirmation dialog
-    // Delete interaction
-    const deleteDialog = new H5P.ConfirmationDialog({
-      headerText: 'Deleting scene',
-      dialogText: 'Deleting this scene will also delete all interactions within the scene and any navigational hotspots pointing to this scene. Are you sure you wish to delete this scene ?',
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
-    }).appendTo(document.body);
-
-    deleteDialog.on('confirmed', () => {
-      this.props.onDelete();
-    });
-
-    deleteDialog.on('canceled', () => {
-      // Just return to dialog
-    });
-
-    deleteDialog.show();
-  }
-
   render() {
     return (
       <div className='scene-selector-submenu'>
@@ -47,7 +24,7 @@ export default class SceneSelectorSubmenu extends React.Component {
         <button
           className='delete'
           title='Delete'
-          onClick={this.onDelete.bind(this)}
+          onClick={this.props.onDelete.bind(this)}
         />
       </div>
     );

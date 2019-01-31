@@ -1,15 +1,18 @@
 import React from 'react';
 import EditingDialog from "./EditingDialog";
-import {getInteractionsField, getLibraries, H5PContext} from '../../context/H5PContext';
+import {H5PContext} from '../../context/H5PContext';
 import './InteractionEditor.scss';
-
-// TODO:  What scene type an interaction is placed within is not really the
-//        concern of the interaction, this should be managed from a higher
-//        level component, perhaps Main ?
-const SceneType = {
-  threeSixty: '360',
-  static: 'static',
-};
+import {SceneTypes} from "../Scene/Scene";
+import {getDefaultLibraryParams, isGoToScene} from "../../h5phelpers/libraryParams";
+import {getSceneFromId} from "../../h5phelpers/sceneParams";
+import {getLibraryDataFromFields} from "../../h5phelpers/editorForms";
+import {
+  createInteractionForm,
+  sanitizeInteractionParams,
+  validateInteractionForm
+} from "../../h5phelpers/forms/interactionForm";
+import GoToSceneWrapper from "./GoToScene/GoToSceneWrapper";
+import {sanitizeSceneForm, validateSceneForm} from "../../h5phelpers/forms/sceneForm";
 
 export const InteractionEditingType = {
   NOT_EDITING: null,
@@ -23,99 +26,28 @@ export default class InteractionEditor extends React.Component {
 
     this.state = {
       library: null,
+      initialized: false,
+      hasInputError: false,
     };
   }
 
-  async componentDidMount() {
-    const interactionIndex = this.props.editingInteraction;
-    const isNewScene = interactionIndex
-      === InteractionEditingType.NEW_INTERACTION;
+  getInteractionParams(interactionIndex = null) {
+    const isNewScene = interactionIndex === InteractionEditingType.NEW_INTERACTION;
 
     if (isNewScene) {
-      this.params = {
-        interactionpos: '', // Filled in on saving interaction
-        action: {
-          library: this.props.library.uberName,
-          params: {}
-        }
-      };
-
-    }
-    else {
-      const scene = this.context.params.scenes.find(scene => {
-        return scene.sceneId === this.props.currentScene;
-      });
-      this.params = scene.interactions[interactionIndex];
+      return getDefaultLibraryParams(this.props.library.uberName);
     }
 
-    // TODO: Move semantics processing to the H5PContext
-    const hiddenFormFields = [
-      'interactionpos',
-    ];
-
-    const interactionsField = getInteractionsField(this.context.field);
-    const interactionFields = interactionsField.field.fields.filter(field => {
-      return !hiddenFormFields.includes(field.name);
-    });
-
-    H5PEditor.processSemanticsChunk(
-      interactionFields,
-      this.params,
-      this.semanticsRef.current,
-      this.context.parent
-    );
-
-    const libraryWrapper = this.semanticsRef.current
-      .querySelector('.field.library');
-
-    const hiddenSemanticsSelectors = [
-      '.h5p-editor-flex-wrapper',
-      '.h5peditor-field-description',
-      'select',
-      '.h5peditor-copypaste-wrap',
-    ];
-
-    // Remove semantics that we don't want to show
-    hiddenSemanticsSelectors.forEach(selector => {
-      const foundElement = this.semanticsRef.current
-        .querySelector(`.field.library > ${selector}`);
-
-      if (foundElement) {
-        libraryWrapper.removeChild(foundElement);
-      }
-    });
-
-    // Get library data
-    const libraries = await getLibraries(this.context.field);
-    const library = libraries.find(lib => {
-      return lib.uberName === this.params.action.library;
-    });
-
-    this.setState({
-      library: library,
-    });
-  }
-
-  handleDone() {
-    H5PEditor.Html.removeWysiwyg();
-
-    // TODO:  Run validation for interaction params ?
-
-    const interactionIndex = this.props.editingInteraction;
-    if (interactionIndex === InteractionEditingType.NEW_INTERACTION) {
-      // Conditionally set position of the interaction
-      this.params.interactionpos = this.getDefaultInteractionPosition();
-    }
-
-    this.props.doneAction(this.params);
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.props.currentScene);
+    return scene.interactions[interactionIndex];
   }
 
   getDefaultInteractionPosition() {
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.props.currentScene;
-    });
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.props.currentScene);
 
-    if (scene.sceneType === SceneType.static) {
+    if (scene.sceneType === SceneTypes.STATIC_SCENE) {
       // Place it in image center
       // % denotes that its placed on a static image.
       return '50%,50%';
@@ -131,10 +63,110 @@ export default class InteractionEditor extends React.Component {
     ].join(',');
   }
 
-  render() {
+  async componentDidMount() {
+    this.params = this.getInteractionParams(this.props.editingInteraction);
+    const field = this.context.field;
 
+    // Preserve parent's children
+    this.parentChildren = this.context.parent.children;
+
+    createInteractionForm(
+      field,
+      this.params,
+      this.semanticsRef.current,
+      this.context.parent,
+    );
+
+    // Restore parent's children after preserving our own
+    this.children = this.context.parent.children;
+    this.context.parent.children = this.parentChildren;
+
+    // Update state when library has loaded
+    const libraryWidget = this.children[0];
+    const libraryLoadedCallback = () => {
+      this.setState({
+        initialized: true,
+      });
+    };
+
+    // Check if children has been loaded, since ready() doesn't work for library
+    if (libraryWidget.children && libraryWidget.children.length) {
+      libraryLoadedCallback();
+    }
+    else {
+      libraryWidget.change(libraryLoadedCallback.bind(this));
+    }
+
+    const uberName = this.params.action.library;
+    const library = await getLibraryDataFromFields(field, uberName);
+
+    this.setState({
+      library: library,
+    });
+  }
+
+  handleDone() {
+    const interactionIndex = this.props.editingInteraction;
+    let interactionPosition = null;
+
+    // Set default position if new interaction
+    if (interactionIndex === InteractionEditingType.NEW_INTERACTION) {
+      interactionPosition = this.getDefaultInteractionPosition();
+    }
+
+    if (this.scene) {
+      // Return if scene is invalid
+      const isValidScene = this.validateScene();
+      if (!isValidScene) {
+        return;
+      }
+    }
+
+    this.params = sanitizeInteractionParams(this.params, interactionPosition);
+    const isValid = validateInteractionForm(this.children);
+
+    // Return to form with error messages if form is invalid
+    if (!isValid) {
+      this.setState({
+        hasInputError: true,
+      });
+      return;
+    }
+
+    this.props.doneAction(this.params, this.scene && this.scene.params);
+  }
+
+  validateScene() {
+    const isValid = validateSceneForm(this.scene.children);
+    if (!isValid) {
+      return false;
+    }
+
+    const isThreeSixtyScene = this.scene.params.sceneType
+      === SceneTypes.THREE_SIXTY_SCENE;
+
+    sanitizeSceneForm(
+      this.scene.params,
+      isThreeSixtyScene,
+      this.scene.params.cameraStartPosition
+    );
+    return true;
+  }
+
+  removeInputErrors() {
+    this.setState({
+      hasInputError: false,
+    });
+  }
+
+  setScene(scene) {
+    this.scene = scene;
+  }
+
+  render() {
     let title = '';
     let className = '';
+
     if (this.state.library) {
       title = this.state.library.title;
       className = this.state.library.name
@@ -150,6 +182,17 @@ export default class InteractionEditor extends React.Component {
         doneAction={this.handleDone.bind(this)}
       >
         <div ref={this.semanticsRef}/>
+        {
+          this.state.initialized && isGoToScene(this.params) &&
+          <GoToSceneWrapper
+            selectedScene={this.removeInputErrors.bind(this)}
+            hasInputError={this.state.hasInputError}
+            nextSceneIdWidget={this.children[0].children[0]}
+            currentScene={this.props.currentScene}
+            params={this.params}
+            setScene={this.setScene.bind(this)}
+          />
+        }
       </EditingDialog>
     );
   }

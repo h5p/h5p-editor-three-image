@@ -1,11 +1,14 @@
 import React from 'react';
-import Scene from "./Scene/Scene";
+import Scene, {SceneTypes} from "./Scene/Scene";
 import ControlBar from "./ControlBar/ControlBar";
 import SceneEditor, {SceneEditingType} from "./EditingDialog/SceneEditor";
 import InteractionsBar from "./InteractionsBar/InteractionsBar";
 import './Main.scss';
 import InteractionEditor, {InteractionEditingType} from "./EditingDialog/InteractionEditor";
 import {H5PContext} from "../context/H5PContext";
+import {deleteScene, getSceneFromId, setScenePositionFromCamera, updateScene} from "../h5phelpers/sceneParams";
+import {updatePosition} from "../h5phelpers/libraryParams";
+import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -20,93 +23,101 @@ export default class Main extends React.Component {
       currentScene: this.props.initialScene,
       startScene: this.props.initialScene,
       isSceneUpdated: false,
-      hasSceneOverlay: false,
+      isSceneSelectorExpanded: false,
     };
   }
 
-  editScene(sceneIndex = SceneEditingType.NEW_SCENE) {
+  editScene(sceneId = SceneEditingType.NEW_SCENE) {
+    this.toggleExpandSceneSelector(false);
     this.setState({
-      editingScene: sceneIndex,
+      editingScene: sceneId,
     });
+  }
+
+  updateCurrentScene(deletedSceneId) {
+    const hasDeletedCurrentScene = deletedSceneId === this.state.currentScene;
+    if (!hasDeletedCurrentScene) {
+      return;
+    }
+
+    const scenes = this.context.params.scenes;
+    if (scenes.length) {
+      // Find the first scene that is not current scene and jump to it
+      const newScene = scenes[0];
+      this.changeScene(newScene.sceneId);
+      return;
+    }
+
+    // No scenes left
+    this.changeScene(SceneTypes.NO_SCENE);
+  }
+
+  updateStartScene(deletedSceneId) {
+    const hasDeletedStartScene = deletedSceneId === this.state.startScene;
+    if (!hasDeletedStartScene) {
+      return;
+    }
+
+    let startScene = null;
+    const scenes = this.context.params.scenes;
+    if (scenes.length) {
+      const newScene = scenes[0];
+      startScene = newScene.sceneId;
+    }
+
+    // No scenes left
+    this.setStartScene(startScene);
   }
 
   deleteScene(sceneId) {
-    const scenes = this.context.params.scenes;
-    const scene = scenes.find(scene => {
-      return scene.sceneId === sceneId;
-    });
+    const isNewScene = sceneId === SceneEditingType.NEW_SCENE;
+    const deleteSceneText = isNewScene
+      ? 'Are you sure you wish to delete this scene ?'
+      : 'Deleting this scene will also delete all interactions within the scene and any navigational hotspots pointing to this scene. Are you sure you wish to delete this scene ?';
 
-    if (scene.sceneId === this.state.currentScene) {
-      // Find the first scene that is not current scene
-      if (scenes.length > 1) {
-        const newScene = scenes.find(scene => {
-          return scene.sceneId !== this.state.currentScene;
-        });
-        this.changeScene(newScene.sceneId);
-
-        this.setState({
-          startScene: newScene.sceneId,
-        });
-      }
-      else {
-        // No scenes
-        this.setState({
-          currentScene: null,
-          startScene: null,
-        });
-      }
-    }
-
-    this.context.params.scenes = scenes.filter(scene => {
-      return scene.sceneId !== sceneId;
-    });
-
-
-    this.context.params.scenes.forEach(scene => {
-      const interactions = scene.interactions;
-      if (interactions) {
-        scene.interactions = interactions.filter(interaction => {
-          const library = H5P.libraryFromString(interaction.action.library);
-          const isGoToScene = library.machineName === 'H5P.GoToScene';
-          if (!isGoToScene) {
-            return true;
-          }
-
-          // Filter away GoToScene with the deleted scene id
-          return interaction.action.params.nextSceneId !== sceneId;
-        });
-      }
-    });
-
-    this.forceUpdate();
+    // Confirm deletion
+    showConfirmationDialog({
+      headerText: 'Deleting scene',
+      dialogText: deleteSceneText,
+      cancelText: 'Cancel',
+      confirmText: 'Confirm',
+    }, this.confirmedDeleteScene.bind(this, sceneId));
   }
 
-  removeEditingDialog() {
+  confirmedDeleteScene(sceneId) {
     this.setState({
       editingScene: SceneEditingType.NOT_EDITING,
+      isSceneSelectorExpanded: false,
+    });
+
+    // Scene not added to params
+    const isNewScene = sceneId === SceneEditingType.NEW_SCENE;
+    if (isNewScene) {
+      return;
+    }
+
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, sceneId);
+    this.context.params.scenes = deleteScene(scenes, sceneId);
+
+    this.updateCurrentScene(scene.sceneId);
+    this.updateStartScene(scene.sceneId);
+    this.setState({
+      isSceneUpdated: false,
     });
   }
 
-  doneEditingScene(params) {
-    let scenes = this.context.params.scenes;
-    if (!scenes) {
-      scenes = [];
+  doneEditingScene(params, editingScene = null) {
+    const scenes = this.context.params.scenes;
+    editingScene = editingScene || this.state.editingScene;
+    const isEditing = editingScene !== SceneEditingType.NEW_SCENE;
+
+    // Add as start scene if this is the first scene we add
+    if (!this.context.params.scenes.length) {
+      this.setStartScene(params.sceneId);
     }
 
-    const isEditing = this.state.editingScene !== SceneEditingType.NEW_SCENE;
-    if (isEditing) {
-      // Replace scene
-      scenes[this.state.editingScene] = params;
-    }
-    else {
-      // Add as start scene if this is the first scene we addd
-      if (!scenes.length) {
-        this.context.params.startSceneId = params.sceneId;
-      }
-
-      // Add new scene
-      scenes.push(params);
-    }
+    this.context.params.scenes = updateScene(scenes, params, editingScene);
 
     // Set current scene
     this.setState((prevState) => {
@@ -119,48 +130,41 @@ export default class Main extends React.Component {
   }
 
   removeInteraction() {
+    showConfirmationDialog({
+      headerText: 'Deleting interaction',
+      dialogText: 'Are you sure you wish to delete this interaction ?',
+      cancelText: 'Cancel',
+      confirmText: 'Confirm',
+    }, this.confirmRemoveInteraction.bind(this));
+  }
+
+  confirmRemoveInteraction() {
     // No interactions has been added yet
     if (this.state.editingInteraction === SceneEditingType.NEW_SCENE) {
       this.setState({
         editingInteraction: SceneEditingType.NOT_EDITING,
       });
+      return;
     }
 
-    // TODO: Make into a H5PContext function
-    // Delete interaction
-    const deleteDialog = new H5P.ConfirmationDialog({
-      headerText: 'Deleting interaction',
-      dialogText: 'Are you sure you wish to delete this interaction ?',
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
-    }).appendTo(document.body);
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.state.currentScene);
+    scene.interactions.splice(this.state.editingInteraction, 1);
 
-    deleteDialog.on('confirmed', () => {
-      // Remove interaction if we were editing one, otherwise it is not created
-      if (this.state.editingInteraction !== null) {
-        const scene = this.context.params.scenes.find(scene => {
-          return scene.sceneId === this.state.currentScene;
-        });
-        scene.interactions.splice(this.state.editingInteraction, 1);
-      }
-
-      this.setState({
-        editingInteraction: SceneEditingType.NOT_EDITING,
-        isSceneUpdated: false,
-      });
+    this.setState({
+      editingInteraction: SceneEditingType.NOT_EDITING,
+      isSceneUpdated: false,
     });
-
-    deleteDialog.on('canceled', () => {
-      // Just return to dialog
-    });
-
-    deleteDialog.show();
   }
 
-  addInteraction(params) {
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.state.currentScene;
-    });
+  editInteraction(params, sceneParams = null) {
+    // Creating scene as well
+    if (sceneParams) {
+      this.doneEditingScene(sceneParams, SceneEditingType.NEW_SCENE);
+    }
+
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.state.currentScene);
     if (!scene.interactions) {
       scene.interactions = [];
     }
@@ -185,6 +189,7 @@ export default class Main extends React.Component {
     this.setState({
       isSceneUpdated: false,
       currentScene: sceneId,
+      isSceneSelectorExpanded: false,
     });
   }
 
@@ -209,20 +214,11 @@ export default class Main extends React.Component {
   }
 
   setStartPosition() {
-    const currentPosition = this.scenePreview.getCamera();
-    const camera = currentPosition.camera;
-
-    const cameraPos = [
-      camera.yaw,
-      camera.pitch,
-    ].join(',');
-
-    // TODO: Params specific operations should be done in H5PContext, e.g. getScene()
-    const scene = this.context.params.scenes.find(scene => {
-      return scene.sceneId === this.state.currentScene;
-    });
-
-    scene.cameraStartPosition = cameraPos;
+    setScenePositionFromCamera(
+      this.context.params.scenes,
+      this.state.currentScene,
+      this.scenePreview.getCamera().camera
+    );
 
     // TODO: Disable button when in the same position as start camera
   }
@@ -246,16 +242,12 @@ export default class Main extends React.Component {
       }
 
       const interactionIndex = e.data.elementIndex;
-      const scene = this.context.params.scenes.find(scene => {
-        return scene.sceneId === this.state.currentScene;
-      });
-      const interaction = scene.interactions[interactionIndex];
-
-      // Update interaction pos
-      interaction.interactionpos = [
-        e.data.yaw,
-        e.data.pitch
-      ].join(',');
+      updatePosition(
+        this.context.params.scenes,
+        this.state.currentScene,
+        interactionIndex,
+        e.data
+      );
     });
 
     this.scenePreview.on('changedScene', e => {
@@ -265,20 +257,30 @@ export default class Main extends React.Component {
     });
   }
 
-  toggleSceneOverlay() {
-    this.setState(prevState => {
+  toggleExpandSceneSelector(forceState) {
+    // Disabled
+    if (this.state.currentScene === null) {
+      return;
+    }
+
+    this.setState((prevState) => {
+      const isExpanded = forceState !== undefined
+        ? forceState
+        : !prevState.isSceneSelectorExpanded;
       return {
-        hasSceneOverlay: !prevState.hasSceneOverlay,
+        isSceneSelectorExpanded: isExpanded,
       };
     });
   }
 
   render() {
+    const hasScenes = this.context.params.scenes.length;
+
     return (
       <div>
         <div className='scene-editor'>
           <InteractionsBar
-            isSceneUpdated={this.state.isSceneUpdated}
+            isShowing={this.state.isSceneUpdated && hasScenes}
             createInteraction={this.createInteraction.bind(this)}
           />
           <Scene
@@ -286,7 +288,7 @@ export default class Main extends React.Component {
             sceneIsInitialized={this.sceneIsInitialized.bind(this)}
             setScenePreview={this.setScenePreview.bind(this)}
             currentScene={this.state.currentScene}
-            hasOverlay={this.state.hasSceneOverlay}
+            hasOverlay={this.state.isSceneSelectorExpanded}
           />
         </div>
         <ControlBar
@@ -298,13 +300,14 @@ export default class Main extends React.Component {
           setStartScene={this.setStartScene.bind(this)}
           startScene={this.state.startScene}
           setStartPosition={this.setStartPosition.bind(this)}
-          toggleSceneOverlay={this.toggleSceneOverlay.bind(this)}
+          isSceneSelectorExpanded={this.state.isSceneSelectorExpanded}
+          toggleExpandSceneSelector={this.toggleExpandSceneSelector.bind(this)}
         />
         {
           // TODO: Refactor to single editor dialog since they can never be shown together
           (this.state.editingScene !== SceneEditingType.NOT_EDITING) &&
           <SceneEditor
-            removeAction={this.removeEditingDialog.bind(this)}
+            removeAction={this.deleteScene.bind(this, this.state.editingScene)}
             doneAction={this.doneEditingScene.bind(this)}
             editingScene={this.state.editingScene}
           />
@@ -313,7 +316,7 @@ export default class Main extends React.Component {
           this.state.editingInteraction !== InteractionEditingType.NOT_EDITING &&
           <InteractionEditor
             removeAction={this.removeInteraction.bind(this)}
-            doneAction={this.addInteraction.bind(this)}
+            doneAction={this.editInteraction.bind(this)}
             scenePreview={this.scenePreview}
             currentScene={this.state.currentScene}
             editingInteraction={this.state.editingInteraction}

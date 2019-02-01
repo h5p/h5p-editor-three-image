@@ -27,7 +27,7 @@ export default class InteractionEditor extends React.Component {
 
     this.state = {
       library: null,
-      initialized: false,
+      isInitialized: false,
       hasInputError: false,
     };
   }
@@ -86,7 +86,7 @@ export default class InteractionEditor extends React.Component {
     const libraryWidget = this.children[0];
     const libraryLoadedCallback = () => {
       this.setState({
-        initialized: true,
+        isInitialized: true,
       });
     };
 
@@ -175,6 +175,12 @@ export default class InteractionEditor extends React.Component {
         .replace('.', '-');
     }
 
+    const semanticsClasses = ['semantics-wrapper'];
+    if (this.state.isInitialized && isGoToScene(this.params)) {
+      semanticsClasses.push('go-to-scene');
+    }
+
+
     return (
       <EditingDialog
         title={title}
@@ -182,9 +188,9 @@ export default class InteractionEditor extends React.Component {
         removeAction={this.props.removeAction}
         doneAction={this.handleDone.bind(this)}
       >
-        <div ref={this.semanticsRef}/>
+        <div className={semanticsClasses.join(' ')} ref={this.semanticsRef}/>
         {
-          this.state.initialized && isGoToScene(this.params) &&
+          this.state.isInitialized && isGoToScene(this.params) &&
           <GoToSceneWrapper
             selectedScene={this.removeInputErrors.bind(this)}
             hasInputError={this.state.hasInputError}

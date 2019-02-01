@@ -14,7 +14,6 @@ import {
 } from "../../h5phelpers/forms/interactionForm";
 import GoToSceneWrapper from "./GoToScene/GoToSceneWrapper";
 import {sanitizeSceneForm, validateSceneForm} from "../../h5phelpers/forms/sceneForm";
-import {editingSceneType, libraryType, scenePreviewType} from "../../types";
 
 export const InteractionEditingType = {
   NOT_EDITING: null,
@@ -204,9 +203,16 @@ InteractionEditor.contextType = H5PContext;
 
 InteractionEditor.propTypes = {
   currentScene: PropTypes.number.isRequired,
-  library: libraryType,
-  scenePreview: scenePreviewType,
-  editingInteraction: editingSceneType,
+  library: PropTypes.shape({
+    uberName: PropTypes.string.isRequired,
+  }),
+  scenePreview: PropTypes.shape({
+    getCamera: PropTypes.func.isRequired,
+  }),
+  editingInteraction: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.oneOf(Object.values(InteractionEditingType)),
+  ]),
   doneAction: PropTypes.func.isRequired,
   removeAction: PropTypes.func.isRequired,
 };

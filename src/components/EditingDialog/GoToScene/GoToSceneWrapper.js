@@ -88,10 +88,10 @@ export default class GoToSceneWrapper extends Component {
 GoToSceneWrapper.contextType = H5PContext;
 
 GoToSceneWrapper.propTypes = {
-  params: PropTypes.func,
-  setScene: PropTypes.func,
-  nextSceneIdWidget: PropTypes.func,
-  selectedScene: PropTypes.func,
-  currentScene: PropTypes.func,
-  hasInputError: PropTypes.func,
+  params: PropTypes.object.isRequired,
+  nextSceneIdWidget: PropTypes.object.isRequired,
+  currentScene: PropTypes.number.isRequired,
+  hasInputError: PropTypes.bool,
+  selectedScene: PropTypes.func.isRequired,
+  setScene: PropTypes.func.isRequired,
 };

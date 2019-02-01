@@ -1,10 +1,8 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React from 'react';
 import SceneRow from "./Row/SceneRow";
-import {H5PContext} from "../../../context/H5PContext";
-import {sceneType} from "../../../types";
 
-const SceneList = (props) => {
+function SceneList(props) {
   let previousElementHasTopBorder = false;
 
   return (
@@ -43,12 +41,12 @@ const SceneList = (props) => {
       }
     </div>
   );
-};
-
-SceneList.contextType = H5PContext;
+}
 
 SceneList.propTypes = {
-  scenes: PropTypes.arrayOf(sceneType).isRequired,
+  scenes: PropTypes.arrayOf(PropTypes.shape({
+    sceneId: PropTypes.number,
+  })),
   startScene: PropTypes.number,
   markedScene: PropTypes.number,
   isShowingCheck: PropTypes.bool,

@@ -1,7 +1,7 @@
 import React from 'react';
+import {sceneType} from "../../../../types/types";
 import './ActiveSceneRow.scss';
 import {SceneTypes} from "../../../Scene/Scene";
-import {sceneType} from "../../../../types";
 
 const ActiveSceneRow = (props) => {
   if (!props.scene) {
@@ -23,8 +23,8 @@ const ActiveSceneRow = (props) => {
   );
 };
 
-export default ActiveSceneRow;
-
 ActiveSceneRow.propTypes = {
   scene: sceneType.isRequired,
 };
+
+export default ActiveSceneRow;

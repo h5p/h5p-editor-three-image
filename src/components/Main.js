@@ -281,7 +281,7 @@ export default class Main extends React.Component {
   }
 
   render() {
-    const hasScenes = this.context.params.scenes.length;
+    const hasScenes = this.context.params.scenes.length > 0;
 
     return (
       <div>

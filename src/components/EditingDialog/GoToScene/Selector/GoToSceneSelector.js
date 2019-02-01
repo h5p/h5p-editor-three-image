@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SceneList from "../../../ControlBar/SceneSelector/SceneList";
 import './GoToSceneSelector.scss';
-import {sceneType} from "../../../../types";
 
 const GoToSceneSelector = (props) => (
   <div className='go-to-scene-selector'>
@@ -20,8 +19,8 @@ const GoToSceneSelector = (props) => (
 );
 
 GoToSceneSelector.propTypes = {
-  scenes: PropTypes.arrayOf(sceneType).isRequired,
-  markedScene: PropTypes.bool,
+  scenes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  markedScene: PropTypes.number,
   setNextSceneId: PropTypes.func.isRequired,
 };
 

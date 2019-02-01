@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {H5PContext} from "../../../context/H5PContext";
 import './ExpandedSceneSelector.scss';
 
 const ExpandedSceneSelector = (props) => (
@@ -11,8 +10,6 @@ const ExpandedSceneSelector = (props) => (
     {props.children}
   </div>
 );
-
-ExpandedSceneSelector.contextType = H5PContext;
 
 ExpandedSceneSelector.propTypes = {
   children: PropTypes.node,

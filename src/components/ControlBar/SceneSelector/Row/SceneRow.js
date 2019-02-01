@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {SceneTypes} from "../../../Scene/Scene";
 import './SceneRow.scss';
 import {getImageSource} from "../../../../context/H5PContext";
-import {sceneType} from "../../../../types";
 
 export default class SceneRow extends Component {
   constructor(props) {
@@ -92,7 +91,14 @@ export default class SceneRow extends Component {
 }
 
 SceneRow.propTypes = {
-  scene: sceneType.isRequired,
+  scene: PropTypes.shape({
+    sceneType: PropTypes.oneOf(Object.values(SceneTypes)).isRequired,
+    scenename: PropTypes.string.isRequired,
+    scenesrc: PropTypes.shape({
+      path: PropTypes.string.isRequired,
+      alt: PropTypes.string
+    }).isRequired
+  }),
   isMarkedScene: PropTypes.bool,
   isShowingCheck: PropTypes.bool,
   isAfterActiveScene: PropTypes.bool,

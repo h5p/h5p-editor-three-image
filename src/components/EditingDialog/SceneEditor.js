@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {editingSceneType} from "../../types/types";
 import EditingDialog from "./EditingDialog";
 import {H5PContext} from "../../context/H5PContext";
 import {SceneTypes} from "../Scene/Scene";
@@ -13,7 +14,6 @@ import {
   sanitizeSceneForm,
   validateSceneForm
 } from "../../h5phelpers/forms/sceneForm";
-import {editingSceneType} from "../../types";
 
 export const SceneEditingType = {
   NOT_EDITING: null,

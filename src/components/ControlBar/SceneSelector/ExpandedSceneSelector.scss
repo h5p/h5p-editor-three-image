@@ -5,7 +5,8 @@
   position: absolute;
   top: 0;
   transform: translateY(-100%);
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-sizing: border-box;
 
   background: white;

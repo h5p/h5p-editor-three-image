@@ -14,6 +14,11 @@
     background-color: #ddf0dd;
     border-color: #72c967;
     border-bottom-width: 1px;
+
+    &:hover {
+      background-color: #bacdba;
+      border-color: #5baa55;
+    }
   }
 
   &.marked-scene.checked:after {
@@ -22,6 +27,7 @@
     font-size: 1.5em;
     align-self: center;
     margin-right: 0.5em;
+    color: #2c611a;
   }
 
   &.no-top-border {
@@ -46,7 +52,7 @@
     display: flex;
     position: relative;
     width: 2.7em;
-    height: 2.025em;
+    height: 2.1em;
 
     &:before {
       font-family: "360-image";

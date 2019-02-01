@@ -4,20 +4,40 @@
   display: inline-block;
 
   button {
-    height: 100%;
+    position: relative;
     padding: 0.5em;
     margin-left: 0.5em;
+    width: 2.5em;
+    height: 2.5em;
 
     border: 1px solid #f0f0f0;
     background: white;
     cursor: pointer;
+
+    .tooltip {
+      display: none;
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translate(-50%, -100%);
+      padding: 0.4em 0.6em;
+      white-space: nowrap;
+      background: #000;
+      color: #fff;
+      pointer-events: none;
+    }
 
     &:disabled {
       cursor: default;
     }
 
     &:not(:disabled):hover {
-      background-color: #f4f4f4;
+      background-color: #e0dede;
+      border-color: #e0dede;
+
+      .tooltip {
+        display: block;
+      }
     }
 
     &:not(:disabled):active {

@@ -6,25 +6,29 @@ const SceneSelectorSubmenu = (props) => (
   <div className='scene-selector-submenu'>
     <button
       className='set-start-scene'
-      title='Set as starting scene'
       disabled={props.isStartScene}
       onClick={props.setStartScene.bind(this)}
-    />
+    >
+      <div className='tooltip'>Set as starting scene</div>
+    </button>
     <button
       className='jump'
-      title='Open scene'
       onClick={props.onJump.bind(this)}
-    />
+    >
+      <div className='tooltip'>Open scene</div>
+    </button>
     <button
       className='edit'
-      title='Edit'
       onClick={props.onEdit.bind(this)}
-    />
+    >
+      <div className='tooltip'>Edit</div>
+    </button>
     <button
       className='delete'
-      title='Delete'
       onClick={props.onDelete.bind(this)}
-    />
+    >
+      <div className='tooltip'>Delete</div>
+    </button>
   </div>
 );
 

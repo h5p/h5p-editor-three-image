@@ -1,10 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {H5PContext} from "../../../context/H5PContext";
 import './SceneSelector.scss';
-import {ActiveSceneRow} from "./Row/ActiveSceneRow";
+import ActiveSceneRow from "./Row/ActiveSceneRow";
 import ExpandedSceneSelector from "./ExpandedSceneSelector";
-import SceneSelectorSubmenu from "./Row/Submenu/SceneSelectorSubmenu";
-import SceneList from "./SceneList";
 
 export default class SceneSelector extends React.Component {
   constructor(props) {
@@ -44,22 +43,7 @@ export default class SceneSelector extends React.Component {
         {
           this.props.isExpanded &&
           <ExpandedSceneSelector>
-            <SceneList
-              scenes={this.context.params.scenes}
-              startScene={this.props.startScene}
-              markedScene={this.props.currentScene}
-              onTitleClick={this.props.changeScene}
-            >
-              {(isStartScene, sceneId) => (
-                <SceneSelectorSubmenu
-                  isStartScene={isStartScene}
-                  setStartScene={this.props.setStartScene.bind(this, sceneId)}
-                  onJump={this.props.changeScene.bind(this, sceneId)}
-                  onEdit={this.props.editScene.bind(this, sceneId)}
-                  onDelete={this.props.deleteScene.bind(this, sceneId)}
-                />
-              )}
-            </SceneList>
+            {this.props.children}
           </ExpandedSceneSelector>
         }
       </div>
@@ -68,3 +52,10 @@ export default class SceneSelector extends React.Component {
 }
 
 SceneSelector.contextType = H5PContext;
+
+SceneSelector.propTypes = {
+  currentScene: PropTypes.number.isRequired,
+  isExpanded: PropTypes.bool,
+  toggleExpand: PropTypes.func.isRequired,
+  children: PropTypes.node,
+};

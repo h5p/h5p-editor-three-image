@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import GoToScene from "./Selector/GoToScene";
 import {createSceneForm, getDefaultSceneParams} from "../../../h5phelpers/forms/sceneForm";
 import {H5PContext} from "../../../context/H5PContext";
@@ -85,3 +86,12 @@ export default class GoToSceneWrapper extends Component {
 }
 
 GoToSceneWrapper.contextType = H5PContext;
+
+GoToSceneWrapper.propTypes = {
+  params: PropTypes.func,
+  setScene: PropTypes.func,
+  nextSceneIdWidget: PropTypes.func,
+  selectedScene: PropTypes.func,
+  currentScene: PropTypes.func,
+  hasInputError: PropTypes.func,
+};

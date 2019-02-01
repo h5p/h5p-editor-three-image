@@ -1,12 +1,27 @@
 import {SceneEditingType} from "../components/EditingDialog/SceneEditor";
 import {isGoToScene} from "./libraryParams";
 
+/**
+ * Get scene from id
+ *
+ * @param scenes
+ * @param sceneId
+ * @returns {*}
+ */
 export const getSceneFromId = (scenes, sceneId) => {
   return scenes.find(scene => {
     return scene.sceneId === sceneId;
   });
 };
 
+/**
+ * Delete a scene in parameters and deletes any GoToScene interactions
+ * within other scenes that was pointing to the deleted scene
+ *
+ * @param scenes
+ * @param sceneId
+ * @returns {*}
+ */
 export const deleteScene = (scenes, sceneId) => {
   // Filter out the scene
   const sceneRemoved  = scenes.filter(scene => {
@@ -31,6 +46,14 @@ export const deleteScene = (scenes, sceneId) => {
   });
 };
 
+/**
+ * Updates a scene within parameters
+ *
+ * @param scenes
+ * @param params
+ * @param editingScene
+ * @returns {*}
+ */
 export const updateScene = (scenes, params, editingScene = -1) => {
   if (editingScene === SceneEditingType.NEW_SCENE) {
     scenes.push(params);
@@ -46,6 +69,13 @@ export const updateScene = (scenes, params, editingScene = -1) => {
   });
 };
 
+/**
+ * Set scene position in parameters
+ *
+ * @param scenes
+ * @param sceneId
+ * @param camera
+ */
 export const setScenePositionFromCamera = (scenes, sceneId, camera) => {
   const scene = getSceneFromId(scenes, sceneId);
   scene.cameraStartPosition = [

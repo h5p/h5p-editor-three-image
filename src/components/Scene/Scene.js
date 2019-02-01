@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import NoScene from "./NoScene";
 import './Scene.scss';
 import {H5PContext} from "../../context/H5PContext";
@@ -88,3 +89,11 @@ export default class Scene extends React.Component {
 }
 
 Scene.contextType = H5PContext;
+
+Scene.propTypes = {
+  isSceneUpdated: PropTypes.bool,
+  hasOverlay: PropTypes.bool,
+  currentScene: PropTypes.number,
+  sceneIsInitialized: PropTypes.func.isRequired,
+  setScenePreview: PropTypes.func.isRequired,
+};

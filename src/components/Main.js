@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Scene, {SceneTypes} from "./Scene/Scene";
 import ControlBar from "./ControlBar/ControlBar";
 import SceneEditor, {SceneEditingType} from "./EditingDialog/SceneEditor";
@@ -335,3 +336,7 @@ export default class Main extends React.Component {
 }
 
 Main.contextType = H5PContext;
+
+Main.propTypes = {
+  initialScene: PropTypes.number,
+};

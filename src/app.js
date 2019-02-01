@@ -15,6 +15,20 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     this.field = field;
     this.setValue = setValue;
 
+    /**
+     * Help fetch the correct translations.
+     *
+     * @params {...args}
+     * @return {string}
+     */
+    this.t = function t() {
+      const args = ['H5PEditor.ThreeImage'];
+      for (let i = 0; i < arguments.length; i++) {
+        args.push(arguments[i]);
+      }
+      return H5PEditor.t.apply(window, args);
+    };
+
     this.appendTo = function ($container) {
       const wrapper = document.createElement('div');
       wrapper.classList.add('h5p-editor-three-image-wrapper');

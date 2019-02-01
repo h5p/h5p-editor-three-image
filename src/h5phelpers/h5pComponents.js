@@ -1,3 +1,10 @@
+/**
+ * Initializes Three Sixty content from parameters
+ *
+ * @param container
+ * @param params
+ * @returns {*|*}
+ */
 export const initializeThreeSixtyPreview = (container, params) => {
   const library = Object.keys(H5PEditor.libraryLoaded)
     .filter((library) => {
@@ -18,6 +25,13 @@ export const initializeThreeSixtyPreview = (container, params) => {
   );
 };
 
+/**
+ * Shows confirmation dialog
+ *
+ * @param dialogOptions
+ * @param confirm
+ * @param cancel
+ */
 export const showConfirmationDialog = (dialogOptions, confirm, cancel) => {
   const deleteDialog = new H5P.ConfirmationDialog(dialogOptions)
     .appendTo(document.body);

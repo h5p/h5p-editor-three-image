@@ -1,35 +1,44 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './EditingDialog.scss';
 
-export default class EditingDialog extends React.Component {
-  render() {
-    const titleClasses = [
-      'title',
-      ...this.props.titleClasses || [],
-    ];
+const EditingDialog = (props) => {
+  const titleClasses = [
+    'title',
+    ...props.titleClasses || [],
+  ];
 
-    return (
-      <div className='h5p-editing-overlay'>
-        <div className='h5p-editing-dialog'>
-          <div className='h5p-editing-dialog-header'>
-            <div className={titleClasses.join(' ')}
-            >{this.props.title || ''}</div>
-            <div className='h5p-editing-dialog-button-row'>
-              <button
-                className='remove-button'
-                onClick={this.props.removeAction.bind(this)}
-              >Remove</button>
-              <button
-                className='done-button'
-                onClick={this.props.doneAction.bind(this)}
-              >Done</button>
-            </div>
-          </div>
-          <div className='h5p-editing-dialog-body'>
-            { this.props.children }
+  return (
+    <div className='h5p-editing-overlay'>
+      <div className='h5p-editing-dialog'>
+        <div className='h5p-editing-dialog-header'>
+          <div className={titleClasses.join(' ')}
+          >{props.title || ''}</div>
+          <div className='h5p-editing-dialog-button-row'>
+            <button
+              className='remove-button'
+              onClick={props.removeAction.bind(this)}
+            >Remove</button>
+            <button
+              className='done-button'
+              onClick={props.doneAction.bind(this)}
+            >Done</button>
           </div>
         </div>
+        <div className='h5p-editing-dialog-body'>
+          { props.children }
+        </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+EditingDialog.propTypes = {
+  titleClasses: PropTypes.arrayOf(PropTypes.string),
+  title: PropTypes.string,
+  removeAction: PropTypes.func.isRequired,
+  doneAction: PropTypes.func.isRequired,
+  children: PropTypes.node,
+};
+
+export default EditingDialog;

@@ -1,11 +1,25 @@
 import {getLibraries} from "../context/H5PContext";
 
+/**
+ * Get scenes field from Three Image semantics structure
+ *
+ * @param field
+ * @returns {Object}
+ */
 export const getSceneField = (field) => {
   return H5PEditor.findSemanticsField(
     'scenes',
     field
   );
 };
+
+/**
+ * Get interactions field within a scene from the Three Image semantics
+ * structure
+ *
+ * @param field
+ * @returns {Object}
+ */
 export const getInteractionsField = (field) => {
   const sceneFields = getSceneField(field);
 
@@ -15,6 +29,13 @@ export const getInteractionsField = (field) => {
   );
 };
 
+/**
+ * Get library data for a single library
+ *
+ * @param field
+ * @param library
+ * @returns {Promise<*>}
+ */
 export const getLibraryDataFromFields = async (field, library) => {
   const libraries = await getLibraries(field);
   return libraries.find(lib => {
@@ -22,6 +43,12 @@ export const getLibraryDataFromFields = async (field, library) => {
   });
 };
 
+/**
+ * Checks if children are valid and sets error messages for invalid fields.
+ *
+ * @param children
+ * @returns {boolean}
+ */
 export const isChildrenValid = (children) => {
   let isInputsValid = true;
 

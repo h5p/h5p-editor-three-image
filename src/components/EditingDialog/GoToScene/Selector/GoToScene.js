@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {H5PContext} from "../../../../context/H5PContext";
 import './GoToScene.scss';
 import GoToSceneSelector from "./GoToSceneSelector";
@@ -46,3 +47,11 @@ export default class GoToScene extends Component {
 }
 
 GoToScene.contextType = H5PContext;
+
+GoToScene.propTypes = {
+  currentScene: PropTypes.number.isRequired,
+  markedScene: PropTypes.number,
+  hasInputError: PropTypes.func.bool,
+  setNextSceneId: PropTypes.func.isRequired,
+  newScene: PropTypes.func.isRequired,
+};

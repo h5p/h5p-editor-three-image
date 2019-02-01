@@ -1,5 +1,13 @@
 import {getInteractionsField, isChildrenValid} from "../editorForms";
 
+/**
+ * Create interaction form and append it to wrapper
+ *
+ * @param field
+ * @param params
+ * @param wrapper
+ * @param parent
+ */
 export const createInteractionForm = (field, params, wrapper, parent) => {
   const hiddenFormFields = [
     'interactionpos',
@@ -36,6 +44,13 @@ export const createInteractionForm = (field, params, wrapper, parent) => {
   });
 };
 
+/**
+ * Set interaction position parameter
+ *
+ * @param params
+ * @param interactionPosition
+ * @returns {*}
+ */
 export const sanitizeInteractionParams = (params, interactionPosition) => {
   if (interactionPosition) {
     params.interactionpos = interactionPosition;
@@ -43,6 +58,13 @@ export const sanitizeInteractionParams = (params, interactionPosition) => {
 
   return params;
 };
+
+/**
+ * Checks if interaction form is valid and marks invalid fields with an error
+ *
+ * @param children
+ * @returns {boolean} True if all children are valid
+ */
 export const validateInteractionForm = (children) => {
   H5PEditor.Html.removeWysiwyg();
   return isChildrenValid(children);

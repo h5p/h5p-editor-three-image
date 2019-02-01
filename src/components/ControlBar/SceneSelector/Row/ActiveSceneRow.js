@@ -1,8 +1,9 @@
 import React from 'react';
 import './ActiveSceneRow.scss';
 import {SceneTypes} from "../../../Scene/Scene";
+import {sceneType} from "../../../../types";
 
-export const ActiveSceneRow = (props) => {
+const ActiveSceneRow = (props) => {
   if (!props.scene) {
     return (
       <div>No scenes</div>
@@ -20,4 +21,10 @@ export const ActiveSceneRow = (props) => {
       <div className='h5p-scene-name'>{props.scene.scenename}</div>
     </div>
   );
+};
+
+export default ActiveSceneRow;
+
+ActiveSceneRow.propTypes = {
+  scene: sceneType.isRequired,
 };

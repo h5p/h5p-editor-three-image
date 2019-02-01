@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './InteractionsBar.scss';
 import {getLibraries, H5PContext} from "../../context/H5PContext";
 
@@ -52,3 +53,8 @@ export default class InteractionsBar extends React.Component {
 }
 
 InteractionsBar.contextType = H5PContext;
+
+InteractionsBar.propTypes = {
+  isShowing: PropTypes.bool,
+  createInteraction: PropTypes.func.isRequired,
+};

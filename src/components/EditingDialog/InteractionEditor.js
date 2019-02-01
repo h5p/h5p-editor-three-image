@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import EditingDialog from "./EditingDialog";
 import {H5PContext} from '../../context/H5PContext';
 import './InteractionEditor.scss';
@@ -13,6 +14,7 @@ import {
 } from "../../h5phelpers/forms/interactionForm";
 import GoToSceneWrapper from "./GoToScene/GoToSceneWrapper";
 import {sanitizeSceneForm, validateSceneForm} from "../../h5phelpers/forms/sceneForm";
+import {editingSceneType, libraryType, scenePreviewType} from "../../types";
 
 export const InteractionEditingType = {
   NOT_EDITING: null,
@@ -199,3 +201,12 @@ export default class InteractionEditor extends React.Component {
 }
 
 InteractionEditor.contextType = H5PContext;
+
+InteractionEditor.propTypes = {
+  currentScene: PropTypes.number.isRequired,
+  library: libraryType,
+  scenePreview: scenePreviewType,
+  editingInteraction: editingSceneType,
+  doneAction: PropTypes.func.isRequired,
+  removeAction: PropTypes.func.isRequired,
+};

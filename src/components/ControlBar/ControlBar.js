@@ -47,7 +47,7 @@ export default class ControlBar extends Component {
         >+ New scene</button>
         {
           is360Scene &&
-          <div className="button-wrapper">
+          <div className={ 'button-wrapper' + (this.props.isInStartingPosition ? '' : ' not-disabled') }>
             <button
               className='set-starting-position-button'
               onClick={ this.props.onSetStartingPosition }

@@ -73,6 +73,7 @@
   opacity: 0.8;
   font-size: 0.875em;
   cursor: pointer;
+  transition: border-color 100ms, opacity 100ms;
 
   &:hover,
   &:focus {

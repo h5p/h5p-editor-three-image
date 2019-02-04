@@ -26,6 +26,24 @@
     background: -moz-linear-gradient(top, #fff 0, #f2f2f2 100%);
     background: -ms-linear-gradient(top, #fff 0, #f2f2f2 100%);
     background: -o-linear-gradient(top, #fff 0, #f2f2f2 100%);
+
+    &:hover .tooltip {
+      display: block;
+    }
+
+    .tooltip {
+      display: none;
+      background: black;
+      color: white;
+      white-space: nowrap;
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      transform: translateY(100%);
+      z-index: 1;
+      padding: 0.2em 0.5em;
+      font-size: 0.8em;
+    }
   }
 
   button:before {

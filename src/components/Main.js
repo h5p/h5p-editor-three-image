@@ -10,6 +10,7 @@ import {H5PContext} from "../context/H5PContext";
 import {deleteScene, getSceneFromId, setScenePositionFromCamera, updateScene} from "../h5phelpers/sceneParams";
 import {updatePosition} from "../h5phelpers/libraryParams";
 import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
+import {addSceneRenderingQualityListener} from "../h5phelpers/editorForms";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -27,6 +28,14 @@ export default class Main extends React.Component {
       isSceneSelectorExpanded: false,
       currentCameraPosition: null
     };
+  }
+  
+  componentDidMount() {
+    addSceneRenderingQualityListener(this.context.parent,() => {
+      this.setState({
+        isSceneUpdated: false,
+      });
+    });
   }
 
   editScene(sceneId = SceneEditingType.NEW_SCENE) {

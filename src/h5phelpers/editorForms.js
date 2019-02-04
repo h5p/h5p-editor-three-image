@@ -77,3 +77,25 @@ export const isChildrenValid = (children) => {
 
   return isInputsValid;
 };
+
+const addSceneRenderingQualityChangeListener = (parent, callback) => {
+  const behaviour = parent.children.find(child => {
+    return child.field.name === 'behaviour';
+  });
+
+  const sceneRendering = behaviour.children.find(child => {
+    return child.field.name === 'sceneRenderingQuality';
+  });
+
+  sceneRendering.changes.push(callback);
+};
+
+export const addSceneRenderingQualityListener = (parent, callback) => {
+  if (parent.children.length === 0) {
+    parent.ready(() => {
+      addSceneRenderingQualityChangeListener(parent, callback);
+    });
+    return;
+  }
+  addSceneRenderingQualityChangeListener(parent, callback);
+};

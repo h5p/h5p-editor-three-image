@@ -55,7 +55,7 @@ export default class Scene extends React.Component {
 
     this.preview = initializeThreeSixtyPreview(
       this.previewRef.current,
-      this.context.params
+      this.context.parent.params
     );
 
     this.setAsActiveScene();

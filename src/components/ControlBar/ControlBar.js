@@ -47,10 +47,17 @@ export default class ControlBar extends Component {
         >+ New scene</button>
         {
           is360Scene &&
-          <button
-            className='h5p-set-starting-position-button'
-            onClick={this.props.setStartPosition}
-          >Set starting position</button>
+          <div className={ 'button-wrapper' + (this.props.isInStartingPosition ? '' : ' not-disabled') }>
+            <button
+              className='set-starting-position-button'
+              onClick={ this.props.onSetStartingPosition }
+              aria-describedby='set-starting-position-tooltip'
+              disabled={ this.props.isInStartingPosition }
+            >Set starting position</button>
+            <div className="tooltip" id="set-starting-position-tooltip">
+              <div className="text-wrapper">Set current camera angle as a starting point for this scene</div>
+            </div>
+          </div>
         }
       </div>
     );
@@ -65,7 +72,7 @@ ControlBar.propTypes = {
   isSceneSelectorExpanded: PropTypes.bool.isRequired,
   toggleExpandSceneSelector: PropTypes.func.isRequired,
   newScene: PropTypes.func.isRequired,
-  setStartPosition: PropTypes.func.isRequired,
+  onSetStartingPosition: PropTypes.func.isRequired,
   changeScene: PropTypes.func.isRequired,
   setStartScene: PropTypes.func.isRequired,
   editScene: PropTypes.func.isRequired,

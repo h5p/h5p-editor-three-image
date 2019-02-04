@@ -26,6 +26,7 @@ export default class Main extends React.Component {
       startScene: this.props.initialScene,
       isSceneUpdated: false,
       isSceneSelectorExpanded: false,
+      currentCameraPosition: null
     };
   }
   
@@ -229,14 +230,19 @@ export default class Main extends React.Component {
     });
   }
 
-  setStartPosition() {
+  /**
+   * Handle updating the camera start position when a button is pressed.
+   */
+  handleSetStartingPosition = () => {
+    const camera = this.scenePreview.getCamera().camera;
     setScenePositionFromCamera(
       this.context.params.scenes,
       this.state.currentScene,
-      this.scenePreview.getCamera().camera
+      camera
     );
-
-    // TODO: Disable button when in the same position as start camera
+    this.setState({
+      currentCameraPosition: camera.yaw + ',' + camera.pitch,
+    });
   }
 
   setScenePreview(scene) {
@@ -252,6 +258,11 @@ export default class Main extends React.Component {
 
     this.scenePreview.off('movestop');
     this.scenePreview.on('movestop', e => {
+      const camera = this.scenePreview.getCamera().camera;
+      this.setState({
+        currentCameraPosition: camera.yaw + ',' + camera.pitch,
+      });
+
       if (!e.data || e.data.elementIndex === undefined) {
         // Not moving an interaction
         return;
@@ -291,6 +302,7 @@ export default class Main extends React.Component {
 
   render() {
     const hasScenes = this.context.params.scenes.length > 0;
+    const scene = getSceneFromId(this.context.params.scenes, this.state.currentScene);
 
     return (
       <div>
@@ -315,7 +327,8 @@ export default class Main extends React.Component {
           changeScene={this.changeScene.bind(this)}
           setStartScene={this.setStartScene.bind(this)}
           startScene={this.state.startScene}
-          setStartPosition={this.setStartPosition.bind(this)}
+          onSetStartingPosition={ this.handleSetStartingPosition }
+          isInStartingPosition={ this.state.currentCameraPosition === null || scene.cameraStartPosition === this.state.currentCameraPosition }
           isSceneSelectorExpanded={this.state.isSceneSelectorExpanded}
           toggleExpandSceneSelector={this.toggleExpandSceneSelector.bind(this)}
         />

@@ -67,8 +67,8 @@ export default class ControlBar extends Component {
 ControlBar.contextType = H5PContext;
 
 ControlBar.propTypes = {
-  currentScene: PropTypes.number.isRequired,
-  startScene: PropTypes.number.isRequired,
+  currentScene: PropTypes.number,
+  startScene: PropTypes.number,
   isSceneSelectorExpanded: PropTypes.bool.isRequired,
   toggleExpandSceneSelector: PropTypes.func.isRequired,
   newScene: PropTypes.func.isRequired,

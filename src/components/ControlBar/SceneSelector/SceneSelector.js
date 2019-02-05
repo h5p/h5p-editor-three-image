@@ -54,7 +54,7 @@ export default class SceneSelector extends React.Component {
 SceneSelector.contextType = H5PContext;
 
 SceneSelector.propTypes = {
-  currentScene: PropTypes.number.isRequired,
+  currentScene: PropTypes.number,
   isExpanded: PropTypes.bool,
   toggleExpand: PropTypes.func.isRequired,
   children: PropTypes.node,

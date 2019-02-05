@@ -24,7 +24,7 @@ const ActiveSceneRow = (props) => {
 };
 
 ActiveSceneRow.propTypes = {
-  scene: sceneType.isRequired,
+  scene: sceneType,
 };
 
 export default ActiveSceneRow;

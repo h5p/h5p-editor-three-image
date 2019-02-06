@@ -304,6 +304,9 @@ export default class Main extends React.Component {
     const hasScenes = this.context.params.scenes.length > 0;
     const scene = getSceneFromId(this.context.params.scenes, this.state.currentScene);
 
+    const isInStartingPosition = this.state.currentCameraPosition === null
+      || scene.cameraStartPosition === this.state.currentCameraPosition;
+
     return (
       <div>
         <div className='scene-editor'>
@@ -328,7 +331,7 @@ export default class Main extends React.Component {
           setStartScene={this.setStartScene.bind(this)}
           startScene={this.state.startScene}
           onSetStartingPosition={ this.handleSetStartingPosition }
-          isInStartingPosition={ this.state.currentCameraPosition === null || scene.cameraStartPosition === this.state.currentCameraPosition }
+          isInStartingPosition={ isInStartingPosition }
           isSceneSelectorExpanded={this.state.isSceneSelectorExpanded}
           toggleExpandSceneSelector={this.toggleExpandSceneSelector.bind(this)}
         />

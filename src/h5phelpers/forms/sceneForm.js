@@ -59,7 +59,10 @@ export const validateSceneForm = (children) => {
  */
 export const sanitizeSceneForm = (params, isThreeSixty, cameraPos) => {
   if (!params.cameraStartPosition) {
-    params.cameraStartPosition = '0,0';
+    params.cameraStartPosition = [
+      -(Math.PI * (2/3)),
+      0
+    ].join(',');
   }
 
   if (!params.interactions) {

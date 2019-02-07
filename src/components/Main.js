@@ -8,7 +8,7 @@ import './Main.scss';
 import InteractionEditor, {InteractionEditingType} from "./EditingDialog/InteractionEditor";
 import {H5PContext} from "../context/H5PContext";
 import {deleteScene, getSceneFromId, setScenePositionFromCamera, updateScene} from "../h5phelpers/sceneParams";
-import {updatePosition} from "../h5phelpers/libraryParams";
+import {isGoToScene, updatePosition} from "../h5phelpers/libraryParams";
 import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
 import {addSceneRenderingQualityListener} from "../h5phelpers/editorForms";
 
@@ -142,18 +142,23 @@ export default class Main extends React.Component {
     });
   }
 
-  removeInteraction() {
+  removeInteraction(interactionIndex = null) {
     showConfirmationDialog({
       headerText: 'Deleting interaction',
       dialogText: 'Are you sure you wish to delete this interaction ?',
       cancelText: 'Cancel',
       confirmText: 'Confirm',
-    }, this.confirmRemoveInteraction.bind(this));
+    }, this.confirmRemoveInteraction.bind(this, interactionIndex));
   }
 
-  confirmRemoveInteraction() {
+  confirmRemoveInteraction(interactionIndex = null) {
+    let editingInteraction = interactionIndex;
+    if (editingInteraction === null) {
+      editingInteraction = this.state.editingInteraction;
+    }
+
     // No interactions has been added yet
-    if (this.state.editingInteraction === SceneEditingType.NEW_SCENE) {
+    if (editingInteraction === SceneEditingType.NEW_SCENE) {
       this.setState({
         editingInteraction: SceneEditingType.NOT_EDITING,
       });
@@ -162,7 +167,7 @@ export default class Main extends React.Component {
 
     const scenes = this.context.params.scenes;
     const scene = getSceneFromId(scenes, this.state.currentScene);
-    scene.interactions.splice(this.state.editingInteraction, 1);
+    scene.interactions.splice(editingInteraction, 1);
 
     this.setState({
       editingInteraction: SceneEditingType.NOT_EDITING,
@@ -189,12 +194,16 @@ export default class Main extends React.Component {
     const isEditing = this.state.editingInteraction
       !== InteractionEditingType.NEW_INTERACTION;
 
+    let interactionIndex = null;
     if (isEditing) {
       scene.interactions[this.state.editingInteraction] = params;
+      interactionIndex = this.state.editingInteraction;
     }
     else {
       scene.interactions.push(params);
+      interactionIndex = scene.interactions.length - 1;
     }
+    this.scenePreview.trigger('focusInteraction', interactionIndex);
 
     this.setState({
       editingInteraction: InteractionEditingType.NOT_EDITING,
@@ -245,15 +254,52 @@ export default class Main extends React.Component {
     });
   }
 
+  getInteractionFromIndex(index) {
+    const scenes = this.context.params.scenes;
+    const scene = getSceneFromId(scenes, this.state.currentScene);
+    return scene.interactions[index];
+  }
+
   setScenePreview(scene) {
     this.scenePreview = scene;
 
     this.scenePreview.off('doubleClickedInteraction');
     this.scenePreview.on('doubleClickedInteraction', (e) => {
       const interactionIndex = e.data;
+      const interaction = this.getInteractionFromIndex(interactionIndex);
+      if (isGoToScene(interaction)) {
+        const nextSceneId = parseInt(interaction.action.params.nextSceneId);
+        this.changeScene(nextSceneId);
+        return;
+      }
+
       this.setState({
         editingInteraction: interactionIndex,
       });
+    });
+
+    this.scenePreview.off('goToScene');
+    this.scenePreview.on('goToScene', (e) => {
+      const interaction = this.getInteractionFromIndex(e.data);
+      if (!isGoToScene(interaction)) {
+        return;
+      }
+
+      const nextSceneId = parseInt(interaction.action.params.nextSceneId);
+      this.changeScene(nextSceneId);
+    });
+
+    this.scenePreview.off('editInteraction');
+    this.scenePreview.on('editInteraction', (e) => {
+      const interactionIndex = e.data;
+      this.setState({
+        editingInteraction: interactionIndex,
+      });
+    });
+
+    this.scenePreview.off('deleteInteraction');
+    this.scenePreview.on('deleteInteraction', (e) => {
+      this.removeInteraction(e.data);
     });
 
     this.scenePreview.off('movestop');

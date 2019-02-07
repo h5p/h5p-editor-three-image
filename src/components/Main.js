@@ -29,7 +29,7 @@ export default class Main extends React.Component {
       currentCameraPosition: null
     };
   }
-  
+
   componentDidMount() {
     addSceneRenderingQualityListener(this.context.parent,() => {
       this.setState({
@@ -300,6 +300,10 @@ export default class Main extends React.Component {
     });
   }
 
+  handleCloseSceneOverlay = () => {
+    this.toggleExpandSceneSelector(false);
+  }
+
   render() {
     const hasScenes = this.context.params.scenes.length > 0;
     const scene = getSceneFromId(this.context.params.scenes, this.state.currentScene);
@@ -320,6 +324,7 @@ export default class Main extends React.Component {
             setScenePreview={this.setScenePreview.bind(this)}
             currentScene={this.state.currentScene}
             hasOverlay={this.state.isSceneSelectorExpanded}
+            onCloseOverlay={ this.handleCloseSceneOverlay }
           />
         </div>
         <ControlBar

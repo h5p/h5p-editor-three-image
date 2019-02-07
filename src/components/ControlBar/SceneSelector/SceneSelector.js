@@ -28,6 +28,7 @@ export default class SceneSelector extends React.Component {
     return (
       <div className='scene-selector-wrapper'>
         <div
+          id='scene-selector'
           className={sceneSelectorClasses.join(' ')}
           onClick={this.props.toggleExpand.bind(this, undefined)}
         >

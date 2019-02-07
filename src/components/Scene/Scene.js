@@ -78,10 +78,15 @@ export default class Scene extends React.Component {
           hasNoScenes &&
           <NoScene/>
         }
-        <div className='scene-container' ref={this.previewRef} />
+        <div className='scene-container' ref={this.previewRef} aria-hidden={ this.props.hasOverlay } />
         {
           this.props.hasOverlay &&
-          <div className='scene-overlay' />
+          <button
+            className='scene-overlay'
+            aria-label={ this.context.t('closeSceneSelector') }
+            aria-controls={ 'scene-selector' }
+            onClick={ this.props.onCloseOverlay }
+          />
         }
       </div>
     );

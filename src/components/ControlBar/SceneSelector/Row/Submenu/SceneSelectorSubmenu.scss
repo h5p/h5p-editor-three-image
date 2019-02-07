@@ -55,7 +55,7 @@
   }
 
   .jump:before {
-    content: $openScene;
+    content: $goToScene;
   }
 
   .edit:before {
@@ -66,7 +66,7 @@
     content: $delete;
     color: #d63129;
   }
-  
+
   .delete {
     border-color: #fcdbd4;
 

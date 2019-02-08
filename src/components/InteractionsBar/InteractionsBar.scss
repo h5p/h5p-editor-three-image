@@ -72,6 +72,7 @@
     content: $video;
   }
 
+  .h5p-singlechoiceset:before,
   .h5p-summary:before {
     font-family: "H5PFontIcons";
     content: $summary;
@@ -80,5 +81,9 @@
     left: 50%;
     top: 48%;
     transform: translate(-50%, -50%);
+  }
+
+  .h5p-singlechoiceset:before {
+    content: $singleChoiceSet;
   }
 }

@@ -44,4 +44,9 @@
     font-family: "H5PFontIcons";
     content: $summary;
   }
+
+  .h5p-singlechoiceset:before {
+    font-family: "H5PFontIcons";
+    content: $singleChoiceSet;
+  }
 }

@@ -15,7 +15,7 @@ const SceneSelectorSubmenu = (props) => (
       className='jump'
       onClick={props.onJump.bind(this)}
     >
-      <div className='tooltip'>Open scene</div>
+      <div className='tooltip'>Go to scene</div>
     </button>
     <button
       className='edit'

@@ -398,7 +398,7 @@ export default class Main extends React.Component {
         {
           this.state.editingInteraction !== InteractionEditingType.NOT_EDITING &&
           <InteractionEditor
-            removeAction={this.removeInteraction.bind(this)}
+            removeAction={this.removeInteraction.bind(this, this.state.editingInteraction)}
             doneAction={this.editInteraction.bind(this)}
             scenePreview={this.scenePreview}
             currentScene={this.state.currentScene}

@@ -72,6 +72,7 @@
     content: $video;
   }
 
+  .h5p-imageslider:before,
   .h5p-singlechoiceset:before,
   .h5p-summary:before {
     font-family: "H5PFontIcons";
@@ -85,5 +86,9 @@
 
   .h5p-singlechoiceset:before {
     content: $singleChoiceSet;
+  }
+
+  .h5p-imageslider:before {
+    content: $imageSlider;
   }
 }

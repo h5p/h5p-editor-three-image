@@ -355,7 +355,7 @@ export default class Main extends React.Component {
     const scene = getSceneFromId(this.context.params.scenes, this.state.currentScene);
 
     const isInStartingPosition = this.state.currentCameraPosition === null
-      || scene.cameraStartPosition === this.state.currentCameraPosition;
+      || !scene || scene.cameraStartPosition === this.state.currentCameraPosition;
 
     return (
       <div>

@@ -27,8 +27,19 @@
     background: -ms-linear-gradient(top, #fff 0, #f2f2f2 100%);
     background: -o-linear-gradient(top, #fff 0, #f2f2f2 100%);
 
-    &:hover .tooltip {
-      display: block;
+    &:hover {
+      border-color: #999999;
+      transition: 0.1s;
+      background: #f2f2f2;
+
+      .tooltip {
+        display: block;
+      }
+    }
+    &:active {
+      border-color: #999999;
+      transition: 0.1s;
+      background: #dddddd;
     }
 
     .tooltip {
@@ -43,6 +54,7 @@
       z-index: 1;
       padding: 0.2em 0.5em;
       font-size: 0.8em;
+      border-radius: 4px;
     }
   }
 

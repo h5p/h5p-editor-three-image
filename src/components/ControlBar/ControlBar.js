@@ -28,7 +28,7 @@ export default class ControlBar extends Component {
             scenes={this.context.params.scenes}
             startScene={this.props.startScene}
             markedScene={this.props.currentScene}
-            onTitleClick={this.props.changeScene}
+            onSceneClick={this.props.changeScene}
           >
             {(isStartScene, sceneId) => (
               <SceneSelectorSubmenu

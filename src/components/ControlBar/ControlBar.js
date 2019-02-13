@@ -41,24 +41,26 @@ export default class ControlBar extends Component {
             )}
           </SceneList>
         </SceneSelector>
-        <button
-          className='h5p-new-scene-button'
-          onClick={this.props.newScene.bind(this, SceneEditingType.NEW_SCENE)}
-        >+ New scene</button>
-        {
-          is360Scene &&
-          <div className={ 'button-wrapper' + (this.props.isInStartingPosition ? '' : ' not-disabled') }>
-            <button
-              className='set-starting-position-button'
-              onClick={ this.props.onSetStartingPosition }
-              aria-describedby='set-starting-position-tooltip'
-              disabled={ this.props.isInStartingPosition }
-            >Set starting position</button>
-            <div className="tooltip" id="set-starting-position-tooltip">
-              <div className="text-wrapper">Set current camera angle as a starting point for this scene</div>
+        <div className='buttons-wrapper'>
+          <button
+            className='h5p-new-scene-button'
+            onClick={this.props.newScene.bind(this, SceneEditingType.NEW_SCENE)}
+          >+ New scene</button>
+          {
+            is360Scene &&
+            <div className={ 'button-wrapper' + (this.props.isInStartingPosition ? '' : ' not-disabled') }>
+              <button
+                className='set-starting-position-button'
+                onClick={ this.props.onSetStartingPosition }
+                aria-describedby='set-starting-position-tooltip'
+                disabled={ this.props.isInStartingPosition }
+              >Set starting position</button>
+              <div className="tooltip" id="set-starting-position-tooltip">
+                <div className="text-wrapper">Set current camera angle as a starting point for this scene</div>
+              </div>
             </div>
-          </div>
-        }
+          }
+        </div>
       </div>
     );
   }

@@ -14,6 +14,7 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     this.parent = parent;
     this.field = field;
     this.setValue = setValue;
+    this.wrapper = null;
 
     /**
      * Help fetch the correct translations.
@@ -32,6 +33,7 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     this.appendTo = function ($container) {
       const wrapper = document.createElement('div');
       wrapper.classList.add('h5p-editor-three-image-wrapper');
+      this.wrapper = wrapper;
 
       $container[0].appendChild(wrapper);
 
@@ -50,6 +52,21 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
       );
     };
 
+    this.resize = () => {
+      if (!this.wrapper) {
+        return;
+      }
+
+      const mobileThreshold = 815;
+      const wrapperSize = this.wrapper.getBoundingClientRect();
+      if (wrapperSize.width < mobileThreshold) {
+        this.wrapper.classList.add('mobile');
+      }
+      else {
+        this.wrapper.classList.remove('mobile');
+      }
+    };
+
     this.ready = (ready) => {
       if (this.passReadies) {
         parent.ready(ready);
@@ -62,6 +79,9 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     this.validate = function () {
       return true;
     };
+
+    H5P.$window.on('resize', this.resize.bind(this));
+    this.resize();
   }
 
   return ThreeImage;

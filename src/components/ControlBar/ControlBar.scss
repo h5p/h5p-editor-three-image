@@ -1,4 +1,5 @@
 .h5p-new-scene-button {
+  display: inline-flex;
   padding: 0.5em 1em;
 
   font-size: 1em;
@@ -17,6 +18,7 @@
 }
 
 .button-wrapper {
+  display: inline-flex;
   position: absolute;
   right: 20px;
 
@@ -65,6 +67,12 @@
   }
 }
 
+.buttons-wrapper {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+
 .set-starting-position-button {
   padding: 0.5em 1em;
   border: 0.125em solid transparent;
@@ -86,5 +94,15 @@
   &[disabled] {
     opacity: 0.5;
     cursor: default;
+  }
+}
+
+.h5p-editor-three-image-wrapper.mobile {
+  .h5p-control-bar {
+    display: block;
+  }
+
+  .buttons-wrapper {
+    margin-top: 0.75em;
   }
 }

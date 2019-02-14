@@ -58,6 +58,11 @@ export default class Scene extends React.Component {
       this.context.parent.params
     );
 
+    H5P.$window.on('resize', () => {
+      this.preview.trigger('resize');
+    });
+
+
     this.setAsActiveScene();
 
     this.setState({

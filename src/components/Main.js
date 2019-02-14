@@ -305,11 +305,17 @@ export default class Main extends React.Component {
     this.scenePreview.off('movestop');
     this.scenePreview.on('movestop', e => {
       if (e.data.target) {
+        const currentScene = getSceneFromId(
+          this.scenePreview.threeJsScenes,
+          this.state.currentScene
+        );
+        const index = currentScene.scene.indexOf(e.data.target);
+
         // This is an element
         updatePosition(
           this.context.params.scenes,
           this.state.currentScene,
-          this.scenePreview.threeJsScenes[this.state.currentScene].scene.indexOf(e.data.target),
+          index,
           e.data
         );
       }

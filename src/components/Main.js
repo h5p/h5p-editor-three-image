@@ -304,23 +304,21 @@ export default class Main extends React.Component {
 
     this.scenePreview.off('movestop');
     this.scenePreview.on('movestop', e => {
-      const camera = this.scenePreview.getCamera().camera;
-      this.setState({
-        currentCameraPosition: camera.yaw + ',' + camera.pitch,
-      });
-
-      if (!e.data || e.data.elementIndex === undefined) {
-        // Not moving an interaction
-        return;
+      if (e.data.target) {
+        // This is an element
+        updatePosition(
+          this.context.params.scenes,
+          this.state.currentScene,
+          this.scenePreview.threeJsScenes[this.state.currentScene].scene.indexOf(e.data.target),
+          e.data
+        );
       }
-
-      const interactionIndex = e.data.elementIndex;
-      updatePosition(
-        this.context.params.scenes,
-        this.state.currentScene,
-        interactionIndex,
-        e.data
-      );
+      else {
+        // This is the camera
+        this.setState({
+          currentCameraPosition: e.data.yaw + ',' + e.data.pitch,
+        });
+      }
     });
 
     this.scenePreview.on('changedScene', e => {

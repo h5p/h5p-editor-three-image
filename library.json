@@ -10,7 +10,7 @@
   "machineName": "H5PEditor.ThreeImage",
   "preloadedJs": [
     {
-      "path": "dist/dist.js"
+      "path": "dist/editor-three-image.js"
     }
   ],
   "preloadedDependencies": [

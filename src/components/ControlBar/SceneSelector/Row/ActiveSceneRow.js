@@ -18,7 +18,7 @@ const ActiveSceneRow = (props) => {
   return (
     <div className={rowClasses.join(' ')}>
       <div className='h5p-scene-denotation'>Current scene:</div>
-      <div className='h5p-scene-name'>{props.scene.scenename}</div>
+      <div className='h5p-scene-name' dangerouslySetInnerHTML={ {__html: props.scene.scenename} }></div>
     </div>
   );
 };

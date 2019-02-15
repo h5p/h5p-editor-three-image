@@ -78,7 +78,8 @@ export default class SceneRow extends Component {
           <div
             className='h5p-scene-name'
             onClick={this.onTitleClick.bind(this)}
-          >{this.props.scene.scenename}</div>
+            dangerouslySetInnerHTML={ {__html: this.props.scene.scenename} }
+          ></div>
           {
             this.props.isStartScene &&
             <div className='starting-scene'>Starting scene</div>

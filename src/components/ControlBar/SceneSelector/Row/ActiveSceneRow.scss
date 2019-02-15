@@ -20,13 +20,13 @@
 
   .h5p-scene-denotation {
     display: inline-block;
+    white-space: nowrap;
   }
 
   .h5p-scene-name {
     display: inline-block;
     margin-left: 0.5em;
     font-weight: bold;
-    flex: 1;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

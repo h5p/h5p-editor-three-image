@@ -304,7 +304,7 @@ export default class Main extends React.Component {
 
     this.scenePreview.off('movestop');
     this.scenePreview.on('movestop', e => {
-      if (e.data.target) {
+      if (e.data && e.data.target) {
         const currentScene = getSceneFromId(
           this.scenePreview.threeJsScenes,
           this.state.currentScene

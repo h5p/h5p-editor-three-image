@@ -1,8 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 
-var nodeEnv = process.env.NODE_ENV || 'development';
-var isDev = (nodeEnv !== 'production');
 var config = {
   entry: {
     dist: './src/app.js'
@@ -32,10 +30,10 @@ var config = {
   }
 };
 
-if (isDev) {
-  config.mode = 'development';
-  config.devtool = 'inline-source-map';
-  // config.devtool = 'cheap-module-eval-source-map';
-}
+module.exports = (env, argv) => {
+  if (argv.mode === 'development') {
+    config.devtool = 'inline-source-map';
+  }
 
-module.exports = config;
+  return config;
+}

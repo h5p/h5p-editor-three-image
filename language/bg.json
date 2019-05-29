@@ -1,7 +1,7 @@
 ﻿{
   "libraryStrings": {
     "noScenesTitle": "Няма сцени",
-    "noScenesDescription": "Кликни върху бутона \"Нова сцена\" отдолу, за да добавите първата сцена",
-    "closeSceneSelector": "Затвори селектора на сцени"
+    "noScenesDescription": "Кликнете върху бутона \"Нова сцена\" отдолу, за да добавите първата сцена",
+    "closeSceneSelector": "Затворете селектора на сцени"
   }
 }

@@ -309,11 +309,7 @@ export default class Main extends React.Component {
       }
 
       if (e.data.target) {
-        const currentScene = getSceneFromId(
-          this.scenePreview.threeJsScenes,
-          this.state.currentScene
-        );
-        const index = currentScene.scene.indexOf(e.data.target);
+        const index = this.scenePreview.threeSixty.indexOf(e.data.target);
 
         // This is an element
         updatePosition(

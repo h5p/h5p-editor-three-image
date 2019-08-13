@@ -12,12 +12,18 @@
   background: white;
   position: absolute;
   left: 50%;
-  top: 1.5em;
+  top: 4em;
   transform: translateX(-50%);
   width: calc(100% - 3em);
-  max-height: calc(100% - 3em);
+  max-width: 918px;
+  max-height: calc(100% - 6em);
   display: flex;
   flex-direction: column;
+}
+
+.h5peditor-semi-fullscreen .h5p-editing-dialog {
+  top: 1.5em;
+  max-height: calc(100% - 3em);
 }
 
 .h5p-editing-dialog-header {

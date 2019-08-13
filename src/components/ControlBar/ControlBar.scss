@@ -14,13 +14,12 @@
 .h5p-control-bar {
   display: flex;
   margin-top: 0.75em;
-  padding: 0 20px;
 }
 
 .button-wrapper {
   display: inline-flex;
   position: absolute;
-  right: 20px;
+  right: 0;
 
   .tooltip {
     padding: 0.25em 1em;
@@ -71,6 +70,7 @@
   display: flex;
   flex: 1;
   justify-content: space-between;
+  position: relative;
 }
 
 .set-starting-position-button {

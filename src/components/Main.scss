@@ -10,20 +10,14 @@
 }
 
 .h5p-threeimage-editor {
-
-  .tree .h5p-editor-three-image-wrapper,
-  .h5peditor-form {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .h5peditor-form > div:not(.tree),
-  .tree > .field {
-    padding: 0 20px;
-  }
-
   .scene-editor {
     position: relative;
+    /*****
+    Might be added to get the inital design (no spacing on the sides). But
+    probably needs to be removed in fullscreen.
+    left: -1.25em;
+    width: calc(100% + 2.5em);
+    ******/
   }
 
   .scene-wrapper.no-scenes .scene-container {

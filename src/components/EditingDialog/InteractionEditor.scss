@@ -10,7 +10,9 @@
   }
 
   .semantics-wrapper.go-to-scene {
-    display: none;
+    .library {
+      display: none;
+    }
   }
 }
 

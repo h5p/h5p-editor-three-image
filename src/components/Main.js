@@ -10,7 +10,7 @@ import {H5PContext} from "../context/H5PContext";
 import {deleteScene, getSceneFromId, setScenePositionFromCamera, updateScene} from "../h5phelpers/sceneParams";
 import {isGoToScene, updatePosition} from "../h5phelpers/libraryParams";
 import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
-import {addSceneRenderingQualityListener} from "../h5phelpers/editorForms";
+import {addBehavioralListeners} from "../h5phelpers/editorForms";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
-    addSceneRenderingQualityListener(this.context.parent,() => {
+    addBehavioralListeners(this.context.parent,() => {
       this.setState({
         isSceneUpdated: false,
       });

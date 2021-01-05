@@ -83,8 +83,8 @@ export default class Main extends React.Component {
   deleteScene(sceneId) {
     const isNewScene = sceneId === SceneEditingType.NEW_SCENE;
     const deleteSceneText = isNewScene
-      ? 'Are you sure you wish to delete this scene ?'
-      : 'Deleting this scene will also delete all interactions within the scene and any navigational hotspots pointing to this scene. Are you sure you wish to delete this scene ?';
+      ? this.context.t('deleteScene')
+      : this.context.t('deleteSceneAndObjects');
 
     // Confirm deletion
     showConfirmationDialog({

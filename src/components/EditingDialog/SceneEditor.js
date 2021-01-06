@@ -71,10 +71,10 @@ export default class SceneEditor extends React.Component {
     }
 
     showConfirmationDialog({
-      headerText: 'Scene type changed',
-      dialogText: 'Changing the scene type will cause all interactions to be repositioned randomly. Are you sure you wish to proceed ?',
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
+      headerText: this.context.t('changeSceneTitle'),
+      dialogText: this.context.t('changeSceneBody'),
+      cancelText: this.context.t('cancel'),
+      confirmText: this.context.t('confirm'),
     }, this.confirmDone.bind(this));
 
   }
@@ -95,7 +95,7 @@ export default class SceneEditor extends React.Component {
   render() {
     return (
       <EditingDialog
-        title='Scene'
+        title={this.context.t('scene')}
         titleClasses={['scene']}
         removeAction={this.props.removeAction}
         doneAction={this.handleDone.bind(this)}

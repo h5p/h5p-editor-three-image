@@ -83,15 +83,15 @@ export default class Main extends React.Component {
   deleteScene(sceneId) {
     const isNewScene = sceneId === SceneEditingType.NEW_SCENE;
     const deleteSceneText = isNewScene
-      ? this.context.t('deleteScene')
-      : this.context.t('deleteSceneAndObjects');
+      ? this.context.t('deleteSceneText')
+      : this.context.t('deleteSceneTextWithObjects');
 
     // Confirm deletion
     showConfirmationDialog({
-      headerText: 'Deleting scene',
+      headerText: this.context.t('deleteSceneTitle'),
       dialogText: deleteSceneText,
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
+      cancelText: this.context.t('cancel'),
+      confirmText: this.context.t('confirm'),
     }, this.confirmedDeleteScene.bind(this, sceneId));
   }
 
@@ -144,10 +144,10 @@ export default class Main extends React.Component {
 
   removeInteraction(interactionIndex = null) {
     showConfirmationDialog({
-      headerText: 'Deleting interaction',
-      dialogText: 'Are you sure you wish to delete this interaction ?',
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
+      headerText: this.context.t('deleteInteractionTitle'),
+      dialogText: this.context.t('deleteInteractionText'),
+      cancelText: this.context.t('cancel'),
+      confirmText: this.context.t('confirm'),
     }, this.confirmRemoveInteraction.bind(this, interactionIndex));
   }
 

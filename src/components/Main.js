@@ -31,7 +31,7 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
-    addBehavioralListeners(this.context.parent,() => {
+    addBehavioralListeners(this.context.parent, () => {
       this.setState({
         isSceneUpdated: false,
       });

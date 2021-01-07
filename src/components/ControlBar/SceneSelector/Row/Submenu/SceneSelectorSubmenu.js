@@ -10,7 +10,7 @@ export default class SceneSelectorSubmenu extends React.Component {
     return (e) => {
       e.stopPropagation();
       this.props[type]();
-    }
+    };
   }
 
   render() {

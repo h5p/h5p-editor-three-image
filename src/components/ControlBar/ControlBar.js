@@ -37,6 +37,10 @@ export default class ControlBar extends Component {
                 onJump={this.props.changeScene.bind(this, sceneId)}
                 onEdit={this.props.editScene.bind(this, sceneId)}
                 onDelete={this.props.deleteScene.bind(this, sceneId)}
+                setStartingScene={this.context.t('setStartingScene')}
+                goToScene={this.context.t('goToScene')}
+                edit={this.context.t('edit')}
+                delete={this.context.t('delete')}
               />
             )}
           </SceneList>

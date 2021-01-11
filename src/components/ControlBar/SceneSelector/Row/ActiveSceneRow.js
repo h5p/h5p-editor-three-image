@@ -2,36 +2,29 @@ import React from 'react';
 import {sceneType} from "../../../../types/types";
 import './ActiveSceneRow.scss';
 import {SceneTypes} from "../../../Scene/Scene";
-import {H5PContext} from "../../../../context/H5PContext";
 
-export default class ActiveSceneRow extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
-  render() {
-    if (!this.props.scene) {
-      return (
-        <div>{this.context.t('noScenesTitle')}</div>
-      );
-    }
-  
-    const rowClasses = ['active-scene'];
-    if (this.props.scene.sceneType === SceneTypes.THREE_SIXTY_SCENE) {
-      rowClasses.push('three-sixty');
-    }
-  
+const ActiveSceneRow = (props) => {
+  if (!props.scene) {
     return (
-      <div className={rowClasses.join(' ')}>
-        <div className='h5p-scene-denotation'>{this.context.t('currentScene')}:</div>
-        <div className='h5p-scene-name' dangerouslySetInnerHTML={ {__html: this.props.scene.scenename} }></div>
-      </div>
+      <div>{props.noScenesTitle}</div>
     );
   }
-}
+  const rowClasses = ['active-scene'];
+  if (props.scene.sceneType === SceneTypes.THREE_SIXTY_SCENE) {
+    rowClasses.push('three-sixty');
+  }
 
-ActiveSceneRow.contextType = H5PContext;
+  return (
+    <div className={rowClasses.join(' ')}>
+      <div className='h5p-scene-denotation'>{props.currentScene}:</div>
+      <div className='h5p-scene-name' dangerouslySetInnerHTML={ {__html: props.scene.scenename} }></div>
+    </div>
+  );
+};
 
 ActiveSceneRow.propTypes = {
   scene: sceneType,
 };
+
+export default ActiveSceneRow;

@@ -1,52 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './SceneSelectorSubmenu.scss';
-import {H5PContext} from "../../../../../context/H5PContext";
 
+const SceneSelectorSubmenu = (props) => {
 
-export default class SceneSelectorSubmenu extends React.Component {
+  /**
+   * TODO: Use separate <Button> component for mapping instead.
+   */
 
-  handleClick = (type) => {
+  const handleClick = (type) => {
     return (e) => {
       e.stopPropagation();
-      this.props[type]();
-    };
+      props[type]();
+    }
   }
 
-  render() {
-    return (
-      <div className='scene-selector-submenu'>
-        <button
-          className='set-start-scene'
-          disabled={this.props.isStartScene}
-          onClick={ this.handleClick('setStartScene') }
-        >
-          <div className='tooltip'>{this.context.t('setStartingScene')}</div>
-        </button>
-        <button
-          className='jump'
-          onClick={ this.handleClick('onJump') }
-        >
-          <div className='tooltip'>{this.context.t('goToScene')}</div>
-        </button>
-        <button
-          className='edit'
-          onClick={ this.handleClick('onEdit') }
-        >
-          <div className='tooltip'>{this.context.t('edit')}</div>
-        </button>
-        <button
-          className='delete'
-          onClick={ this.handleClick('onDelete') }
-        >
-          <div className='tooltip'>{this.context.t('delete')}</div>
-        </button>
-      </div>
-    );
-  }
-}
-
-SceneSelectorSubmenu.contextType = H5PContext;
+  return (
+    <div className='scene-selector-submenu'>
+      <button
+        className='set-start-scene'
+        disabled={props.isStartScene}
+        onClick={ handleClick('setStartScene') }
+      >
+        <div className='tooltip'>{props.setStartingScene}</div>
+      </button>
+      <button
+        className='jump'
+        onClick={ handleClick('onJump') }
+      >
+        <div className='tooltip'>{props.goToScene}</div>
+      </button>
+      <button
+        className='edit'
+        onClick={ handleClick('onEdit') }
+      >
+        <div className='tooltip'>{props.edit}</div>
+      </button>
+      <button
+        className='delete'
+        onClick={ handleClick('onDelete') }
+      >
+        <div className='tooltip'>{props.delete}</div>
+      </button>
+    </div>
+  );
+};
 
 SceneSelectorSubmenu.propTypes = {
   isStartScene: PropTypes.bool.isRequired,
@@ -55,3 +53,5 @@ SceneSelectorSubmenu.propTypes = {
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };
+
+export default SceneSelectorSubmenu;

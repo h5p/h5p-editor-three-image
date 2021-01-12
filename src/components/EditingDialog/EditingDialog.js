@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import './EditingDialog.scss';
-import { H5PContext } from '../../context/H5PContext';
 
 const EditingDialog = (props) => {
   const titleClasses = [

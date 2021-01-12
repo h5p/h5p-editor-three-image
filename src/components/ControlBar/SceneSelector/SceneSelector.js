@@ -35,7 +35,7 @@ export default class SceneSelector extends React.Component {
           <div className='h5p-select-content'>
             <ActiveSceneRow
               noSceneTitle={this.context.t('noSceneTitle')}
-              currentScene={this.context.t('currentScene')}
+              currentSceneLabel={this.context.t('currentScene')}
               scene={activeScene}
               simpleView={true}
             />
@@ -45,7 +45,7 @@ export default class SceneSelector extends React.Component {
         </div>
         {
           this.props.isExpanded &&
-          <ExpandedSceneSelector chooseScene={this.context.t('chooseScene')}>
+          <ExpandedSceneSelector chooseSceneLabel={this.context.t('chooseScene')}>
             {this.props.children}
           </ExpandedSceneSelector>
         }

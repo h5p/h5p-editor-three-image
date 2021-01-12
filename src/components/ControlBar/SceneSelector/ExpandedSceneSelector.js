@@ -5,7 +5,7 @@ import './ExpandedSceneSelector.scss';
 const ExpandedSceneSelector = (props) => (
   <div className='expanded-scene-selector'>
     <div className='header'>
-      <div className='title'>{props.chooseScene}</div>
+      <div className='title'>{props.chooseSceneLabel}</div>
     </div>
     {props.children}
   </div>
@@ -13,6 +13,7 @@ const ExpandedSceneSelector = (props) => (
 
 ExpandedSceneSelector.propTypes = {
   children: PropTypes.node,
+  chooseSceneLabel: PropTypes.string.isRequired
 };
 
 export default ExpandedSceneSelector;

@@ -2,6 +2,7 @@ import React from 'react';
 import {sceneType} from "../../../../types/types";
 import './ActiveSceneRow.scss';
 import {SceneTypes} from "../../../Scene/Scene";
+import PropTypes from 'prop-types';
 
 
 const ActiveSceneRow = (props) => {
@@ -17,7 +18,7 @@ const ActiveSceneRow = (props) => {
 
   return (
     <div className={rowClasses.join(' ')}>
-      <div className='h5p-scene-denotation'>{props.currentScene}:</div>
+      <div className='h5p-scene-denotation'>{props.currentSceneLabel}:</div>
       <div className='h5p-scene-name' dangerouslySetInnerHTML={ {__html: props.scene.scenename} }></div>
     </div>
   );
@@ -25,6 +26,8 @@ const ActiveSceneRow = (props) => {
 
 ActiveSceneRow.propTypes = {
   scene: sceneType,
+  noScenesTitle: PropTypes.string.isRequired,
+  currentSceneLabel: PropTypes.string.isRequired
 };
 
 export default ActiveSceneRow;

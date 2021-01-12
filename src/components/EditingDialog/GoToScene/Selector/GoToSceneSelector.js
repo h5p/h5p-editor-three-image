@@ -7,12 +7,12 @@ const GoToSceneSelector = (props) => (
   <div className='go-to-scene-selector'>
     <div
       className='go-to-scene-selector-title'
-    >{props.pickAnExistingScene}:</div>
-    <div className='error-message'>{props.selectASceneError}</div>
+    >{props.pickAnExistingSceneLabel}:</div>
+    <div className='error-message'>{props.selectASceneErrorLabel}</div>
     <SceneList
-      scenes={this.props.scenes}
-      markedScene={this.props.markedScene}
-      onSceneClick={this.props.setNextSceneId.bind(this)}
+      scenes={props.scenes}
+      markedScene={props.markedScene}
+      onSceneClick={props.setNextSceneId.bind(this)}
       isShowingCheck={true}
     />
   </div>
@@ -22,6 +22,8 @@ GoToSceneSelector.propTypes = {
   scenes: PropTypes.arrayOf(PropTypes.object).isRequired,
   markedScene: PropTypes.number,
   setNextSceneId: PropTypes.func.isRequired,
+  pickAnExistingSceneLabel: PropTypes.string.isRequired,
+  selectASceneErrorLabel: PropTypes.string.isRequired
 };
 
 export default GoToSceneSelector;

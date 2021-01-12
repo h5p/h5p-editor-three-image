@@ -187,8 +187,8 @@ export default class InteractionEditor extends React.Component {
         titleClasses={[className]}
         removeAction={this.props.removeAction}
         doneAction={this.handleDone.bind(this)}
-        done={this.context.t('done')}
-        remove={this.context.t('remove')}
+        doneLabel={this.context.t('done')}
+        removeLabel={this.context.t('remove')}
       >
         <div className={semanticsClasses.join(' ')} ref={this.semanticsRef}/>
         {

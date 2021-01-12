@@ -22,25 +22,25 @@ const SceneSelectorSubmenu = (props) => {
         disabled={props.isStartScene}
         onClick={ handleClick('setStartScene') }
       >
-        <div className='tooltip'>{props.setStartingScene}</div>
+        <div className='tooltip'>{props.setStartingSceneLabel}</div>
       </button>
       <button
         className='jump'
         onClick={ handleClick('onJump') }
       >
-        <div className='tooltip'>{props.goToScene}</div>
+        <div className='tooltip'>{props.goToSceneLabel}</div>
       </button>
       <button
         className='edit'
         onClick={ handleClick('onEdit') }
       >
-        <div className='tooltip'>{props.edit}</div>
+        <div className='tooltip'>{props.editLabel}</div>
       </button>
       <button
         className='delete'
         onClick={ handleClick('onDelete') }
       >
-        <div className='tooltip'>{props.delete}</div>
+        <div className='tooltip'>{props.deleteLabel}</div>
       </button>
     </div>
   );
@@ -52,6 +52,10 @@ SceneSelectorSubmenu.propTypes = {
   onJump: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  setStartingSceneLabel: PropTypes.string.isRequired,
+  goToSceneLabel: PropTypes.string.isRequired,
+  editLabel: PropTypes.string.isRequired,
+  deleteLabel: PropTypes.string.isRequired
 };
 
 export default SceneSelectorSubmenu;

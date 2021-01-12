@@ -26,6 +26,8 @@ export default class GoToScene extends Component {
               scenes={scenes}
               markedScene={this.props.markedScene}
               setNextSceneId={this.props.setNextSceneId.bind(this)}
+              selectASceneError={this.context.t('selectASceneError')}
+              pickAnExistingScene={this.context.t('pickAnExistingScene')}
             />
             <div className='selector-separator'>{this.context.t('or')}</div>
           </div>

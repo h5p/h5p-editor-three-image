@@ -99,6 +99,8 @@ export default class SceneEditor extends React.Component {
         titleClasses={['scene']}
         removeAction={this.props.removeAction}
         doneAction={this.handleDone.bind(this)}
+        done={this.context.t('done')}
+        remove={this.context.t('remove')}
       >
         <div ref={this.semanticsRef}/>
       </EditingDialog>

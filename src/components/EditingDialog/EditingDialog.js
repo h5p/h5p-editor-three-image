@@ -18,15 +18,15 @@ const EditingDialog = (props) => {
             <button
               className='remove-button'
               onClick={props.removeAction.bind(this)}
-            >Remove</button>
+            >{props.removeLabel}</button>
             <button
               className='done-button'
               onClick={props.doneAction.bind(this)}
-            >Done</button>
+            >{props.doneLabel}</button>
           </div>
         </div>
         <div className='h5p-editing-dialog-body'>
-          { props.children }
+          {props.children}
         </div>
       </div>
     </div>
@@ -39,6 +39,9 @@ EditingDialog.propTypes = {
   removeAction: PropTypes.func.isRequired,
   doneAction: PropTypes.func.isRequired,
   children: PropTypes.node,
+  removeLabel: PropTypes.string.isRequired,
+  doneLabel: PropTypes.string.isRequired
+
 };
 
 export default EditingDialog;

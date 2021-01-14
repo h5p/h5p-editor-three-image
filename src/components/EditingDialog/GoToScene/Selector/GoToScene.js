@@ -26,20 +26,22 @@ export default class GoToScene extends Component {
               scenes={scenes}
               markedScene={this.props.markedScene}
               setNextSceneId={this.props.setNextSceneId.bind(this)}
+              selectASceneErrorLabel={this.context.t('selectASceneError')}
+              pickAnExistingSceneLabel={this.context.t('pickAnExistingScene')}
             />
-            <div className='selector-separator'>or</div>
+            <div className='selector-separator'>{this.context.t('or')}</div>
           </div>
         }
         <div className='create-new-scene-wrapper'>
-          <div className='new-scene-title'>Create a new scene to go to:</div>
+          <div className='new-scene-title'>{this.context.t('createASceneToGoTo')}:</div>
           {
             this.props.hasInputError && !scenes.length &&
-            <div className='error-message'>Please create a new scene to proceed</div>
+            <div className='error-message'>{this.context.t('createSceneError')}</div>
           }
           <button
             className='h5p-new-scene-button'
             onClick={this.props.newScene.bind(this)}
-          >+ New scene</button>
+          >+ {this.context.t('newScene')}</button>
         </div>
       </div>
     );

@@ -27,7 +27,7 @@ export default class InteractionsBar extends React.Component {
     }
 
     if (!this.state.isInitialized) {
-      return <div>Loading...</div>;
+      return <div>{this.context.t('loading')}...</div>;
     }
 
     return (

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {SceneTypes} from "../../../Scene/Scene";
 import './SceneRow.scss';
 import {getImageSource} from "../../../../context/H5PContext";
+import {H5PContext} from "../../../../context/H5PContext";
 
 export default class SceneRow extends Component {
   constructor(props) {
@@ -82,7 +83,7 @@ export default class SceneRow extends Component {
           ></div>
           {
             this.props.isStartScene &&
-            <div className='starting-scene'>Starting scene</div>
+            <div className='starting-scene'>{this.context.t('startingScene')}</div>
           }
         </div>
         {this.props.children}
@@ -90,6 +91,8 @@ export default class SceneRow extends Component {
     );
   }
 }
+
+SceneRow.contextType = H5PContext;
 
 SceneRow.propTypes = {
   scene: PropTypes.shape({

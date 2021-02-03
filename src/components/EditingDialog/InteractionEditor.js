@@ -83,7 +83,7 @@ export default class InteractionEditor extends React.Component {
     this.context.parent.children = this.parentChildren;
 
     // Update state when library has loaded
-    const libraryWidget = this.children[0];
+    const libraryWidget = this.children[1];
     const libraryLoadedCallback = () => {
       this.setState({
         isInitialized: true,
@@ -187,6 +187,8 @@ export default class InteractionEditor extends React.Component {
         titleClasses={[className]}
         removeAction={this.props.removeAction}
         doneAction={this.handleDone.bind(this)}
+        doneLabel={this.context.t('done')}
+        removeLabel={this.context.t('remove')}
       >
         <div className={semanticsClasses.join(' ')} ref={this.semanticsRef}/>
         {
@@ -194,7 +196,7 @@ export default class InteractionEditor extends React.Component {
           <GoToSceneWrapper
             selectedScene={this.removeInputErrors.bind(this)}
             hasInputError={this.state.hasInputError}
-            nextSceneIdWidget={this.children[0].children[0]}
+            nextSceneIdWidget={this.children[1].children[0]}
             currentScene={this.props.currentScene}
             params={this.params}
             setScene={this.setScene.bind(this)}

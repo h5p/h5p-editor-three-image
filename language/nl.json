@@ -1,8 +1,8 @@
 {
   "libraryStrings": {
-    "noScenesTitle": "No scenes",
-    "noScenesDescription": "Click the \"New scene\" button below to add the first scene",
-    "closeSceneSelector": "Close the scene selector",
+    "noScenesTitle": "Geen scènes",
+    "noScenesDescription": "Klik de \"Nieuwe scène\" knop hieronder om de eerste scène toe te voegen",
+    "closeSceneSelector": "Sluit de scène selector",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "remove": "Remove",

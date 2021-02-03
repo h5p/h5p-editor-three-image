@@ -78,7 +78,7 @@ export const isChildrenValid = (children) => {
   return isInputsValid;
 };
 
-const addSceneRenderingQualityChangeListener = (parent, callback) => {
+const addBehavioralChangeListeners = (parent, callback) => {
   const behaviour = parent.children.find(child => {
     return child.field.name === 'behaviour';
   });
@@ -87,15 +87,23 @@ const addSceneRenderingQualityChangeListener = (parent, callback) => {
     return child.field.name === 'sceneRenderingQuality';
   });
 
+  const label = behaviour.children.find(child => {
+    return child.field.name === 'label';
+  });
+
+  for (let i = 0 ; i < label.children.length ; i++) {
+    label.children[i].changes.push(callback);
+  }
+  
   sceneRendering.changes.push(callback);
 };
 
-export const addSceneRenderingQualityListener = (parent, callback) => {
+export const addBehavioralListeners = (parent, callback) => {
   if (parent.children.length === 0) {
     parent.ready(() => {
-      addSceneRenderingQualityChangeListener(parent, callback);
+      addBehavioralChangeListeners(parent, callback);
     });
     return;
   }
-  addSceneRenderingQualityChangeListener(parent, callback);
+  addBehavioralChangeListeners(parent, callback);
 };

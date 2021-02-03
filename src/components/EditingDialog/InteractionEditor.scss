@@ -9,8 +9,20 @@
     display: none;
   }
 
-  .semantics-wrapper.go-to-scene {
-    display: none;
+  .semantics-wrapper{
+    &.go-to-scene {
+      .library {
+        display: none;
+      }
+    }
+    .library .h5p-audio-editor .field-name {
+      &-playerMode,
+      &-fitToWrapper,
+      &-controls,
+      &-autoplay {
+        display: none;
+      }
+    }
   }
 }
 

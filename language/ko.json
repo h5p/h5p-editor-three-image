@@ -1,8 +1,8 @@
 {
   "libraryStrings": {
-    "noScenesTitle": "No scenes",
-    "noScenesDescription": "Click the \"New scene\" button below to add the first scene",
-    "closeSceneSelector": "Close the scene selector",
+    "noScenesTitle": "장면 없음",
+    "noScenesDescription": "아래의 \"New scene\" (새 장면) 버튼을 클릭해서 첫 장면을 추가",
+    "closeSceneSelector": "장면선택기 닫기",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "remove": "Remove",

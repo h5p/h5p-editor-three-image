@@ -1,8 +1,8 @@
 {
   "libraryStrings": {
-    "noScenesTitle": "No scenes",
-    "noScenesDescription": "Click the \"New scene\" button below to add the first scene",
-    "closeSceneSelector": "Close the scene selector",
+    "noScenesTitle": "Dim golygfeydd",
+    "noScenesDescription": "Pwyswch y botwm \"Golygfa newydd\" isod i ychwanegu'r olygfa gyntaf",
+    "closeSceneSelector": "Cau'r detholydd golygfa",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "remove": "Remove",

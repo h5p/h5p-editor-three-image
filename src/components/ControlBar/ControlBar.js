@@ -37,6 +37,10 @@ export default class ControlBar extends Component {
                 onJump={this.props.changeScene.bind(this, sceneId)}
                 onEdit={this.props.editScene.bind(this, sceneId)}
                 onDelete={this.props.deleteScene.bind(this, sceneId)}
+                setStartingSceneLabel={this.context.t('setStartingScene')}
+                goToSceneLabel={this.context.t('goToScene')}
+                editLabel={this.context.t('edit')}
+                deleteLabel={this.context.t('delete')}
               />
             )}
           </SceneList>
@@ -45,7 +49,7 @@ export default class ControlBar extends Component {
           <button
             className='h5p-new-scene-button'
             onClick={this.props.newScene.bind(this, SceneEditingType.NEW_SCENE)}
-          >+ New scene</button>
+          >+ {this.context.t('newScene')}</button>
           {
             is360Scene &&
             <div className={ 'button-wrapper' + (this.props.isInStartingPosition ? '' : ' not-disabled') }>
@@ -54,9 +58,9 @@ export default class ControlBar extends Component {
                 onClick={ this.props.onSetStartingPosition }
                 aria-describedby='set-starting-position-tooltip'
                 disabled={ this.props.isInStartingPosition }
-              >Set starting position</button>
+              >{this.context.t('setCameraStart')}</button>
               <div className="tooltip" id="set-starting-position-tooltip">
-                <div className="text-wrapper">Set current camera angle as a starting point for this scene</div>
+                <div className="text-wrapper">{this.context.t('setCameraStartTooltip')}</div>
               </div>
             </div>
           }

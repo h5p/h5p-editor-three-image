@@ -10,7 +10,7 @@ import {H5PContext} from "../context/H5PContext";
 import {deleteScene, getSceneFromId, setScenePositionFromCamera, updateScene} from "../h5phelpers/sceneParams";
 import {isGoToScene, updatePosition} from "../h5phelpers/libraryParams";
 import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
-import {addSceneRenderingQualityListener} from "../h5phelpers/editorForms";
+import {addBehavioralListeners} from "../h5phelpers/editorForms";
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
-    addSceneRenderingQualityListener(this.context.parent,() => {
+    addBehavioralListeners(this.context.parent, () => {
       this.setState({
         isSceneUpdated: false,
       });
@@ -83,15 +83,15 @@ export default class Main extends React.Component {
   deleteScene(sceneId) {
     const isNewScene = sceneId === SceneEditingType.NEW_SCENE;
     const deleteSceneText = isNewScene
-      ? 'Are you sure you wish to delete this scene ?'
-      : 'Deleting this scene will also delete all interactions within the scene and any navigational hotspots pointing to this scene. Are you sure you wish to delete this scene ?';
+      ? this.context.t('deleteSceneText')
+      : this.context.t('deleteSceneTextWithObjects');
 
     // Confirm deletion
     showConfirmationDialog({
-      headerText: 'Deleting scene',
+      headerText: this.context.t('deleteSceneTitle'),
       dialogText: deleteSceneText,
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
+      cancelText: this.context.t('cancel'),
+      confirmText: this.context.t('confirm'),
     }, this.confirmedDeleteScene.bind(this, sceneId));
   }
 
@@ -144,10 +144,10 @@ export default class Main extends React.Component {
 
   removeInteraction(interactionIndex = null) {
     showConfirmationDialog({
-      headerText: 'Deleting interaction',
-      dialogText: 'Are you sure you wish to delete this interaction ?',
-      cancelText: 'Cancel',
-      confirmText: 'Confirm',
+      headerText: this.context.t('deleteInteractionTitle'),
+      dialogText: this.context.t('deleteInteractionText'),
+      cancelText: this.context.t('cancel'),
+      confirmText: this.context.t('confirm'),
     }, this.confirmRemoveInteraction.bind(this, interactionIndex));
   }
 

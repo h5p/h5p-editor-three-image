@@ -2,14 +2,15 @@ import React from 'react';
 import {sceneType} from "../../../../types/types";
 import './ActiveSceneRow.scss';
 import {SceneTypes} from "../../../Scene/Scene";
+import PropTypes from 'prop-types';
+
 
 const ActiveSceneRow = (props) => {
   if (!props.scene) {
     return (
-      <div>No scenes</div>
+      <div>{props.noSceneTitle}</div>
     );
   }
-
   const rowClasses = ['active-scene'];
   if (props.scene.sceneType === SceneTypes.THREE_SIXTY_SCENE) {
     rowClasses.push('three-sixty');
@@ -17,7 +18,7 @@ const ActiveSceneRow = (props) => {
 
   return (
     <div className={rowClasses.join(' ')}>
-      <div className='h5p-scene-denotation'>Current scene:</div>
+      <div className='h5p-scene-denotation'>{props.currentSceneLabel}:</div>
       <div className='h5p-scene-name' dangerouslySetInnerHTML={ {__html: props.scene.scenename} }></div>
     </div>
   );
@@ -25,6 +26,8 @@ const ActiveSceneRow = (props) => {
 
 ActiveSceneRow.propTypes = {
   scene: sceneType,
+  noSceneTitle: PropTypes.string.isRequired,
+  currentSceneLabel: PropTypes.string.isRequired
 };
 
 export default ActiveSceneRow;

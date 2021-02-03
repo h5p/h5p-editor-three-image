@@ -34,7 +34,7 @@ export default class SceneSelector extends React.Component {
         >
           <div className='h5p-select-content'>
             <ActiveSceneRow
-              noSceneTitle={this.context.t('noSceneTitle')}
+              noScenesTitle={this.context.t('noScenesTitle')}
               currentSceneLabel={this.context.t('currentScene')}
               scene={activeScene}
               simpleView={true}

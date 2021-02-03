@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const ActiveSceneRow = (props) => {
   if (!props.scene) {
     return (
-      <div>{props.noSceneTitle}</div>
+      <div>{props.noScenesTitle}</div>
     );
   }
   const rowClasses = ['active-scene'];
@@ -26,7 +26,7 @@ const ActiveSceneRow = (props) => {
 
 ActiveSceneRow.propTypes = {
   scene: sceneType,
-  noSceneTitle: PropTypes.string.isRequired,
+  noScenesTitle: PropTypes.string.isRequired,
   currentSceneLabel: PropTypes.string.isRequired
 };
 

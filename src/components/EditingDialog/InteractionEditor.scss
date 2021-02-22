@@ -11,6 +11,8 @@
 
   .semantics-wrapper{
     &.go-to-scene {
+      margin-top: 0;
+      
       .library {
         display: none;
       }

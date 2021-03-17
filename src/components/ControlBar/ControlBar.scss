@@ -14,6 +14,10 @@
 .h5p-control-bar {
   display: flex;
   margin-top: 0.75em;
+
+  .h5p-new-scene-button {
+    line-height: 1.6;
+  }
 }
 
 .button-wrapper {

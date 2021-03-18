@@ -55,7 +55,12 @@ export default class Scene extends React.Component {
 
     this.preview = initializeThreeSixtyPreview(
       this.previewRef.current,
-      this.context.parent.params
+      this.context.parent.params,
+      {
+        edit: this.context.t('edit'),
+        delete: this.context.t('delete'),
+        goToScene: this.context.t('goToScene'),
+      }
     );
 
     H5P.$window.on('resize', () => {

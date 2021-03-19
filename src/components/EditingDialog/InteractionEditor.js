@@ -83,7 +83,7 @@ export default class InteractionEditor extends React.Component {
     this.context.parent.children = this.parentChildren;
 
     // Update state when library has loaded
-    const libraryWidget = this.children[1];
+    this.libraryWidget = this.children[2];
     const libraryLoadedCallback = () => {
       this.setState({
         isInitialized: true,
@@ -91,11 +91,11 @@ export default class InteractionEditor extends React.Component {
     };
 
     // Check if children has been loaded, since ready() doesn't work for library
-    if (libraryWidget.children && libraryWidget.children.length) {
+    if (this.libraryWidget.children && this.libraryWidget.children.length) {
       libraryLoadedCallback();
     }
     else {
-      libraryWidget.change(libraryLoadedCallback.bind(this));
+      this.libraryWidget.change(libraryLoadedCallback.bind(this));
     }
 
     const uberName = this.params.action.library;
@@ -180,7 +180,6 @@ export default class InteractionEditor extends React.Component {
       semanticsClasses.push('go-to-scene');
     }
 
-
     return (
       <EditingDialog
         title={title}
@@ -196,7 +195,7 @@ export default class InteractionEditor extends React.Component {
           <GoToSceneWrapper
             selectedScene={this.removeInputErrors.bind(this)}
             hasInputError={this.state.hasInputError}
-            nextSceneIdWidget={this.children[1].children[0]}
+            nextSceneIdWidget={this.libraryWidget.children[0]}
             currentScene={this.props.currentScene}
             params={this.params}
             setScene={this.setScene.bind(this)}

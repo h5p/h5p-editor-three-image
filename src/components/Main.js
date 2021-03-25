@@ -203,7 +203,7 @@ export default class Main extends React.Component {
       scene.interactions.push(params);
       interactionIndex = scene.interactions.length - 1;
     }
-    this.scenePreview.trigger('focusInteraction', interactionIndex);
+    this.scenePreview.trigger('focusInteraction', [interactionIndex, isEditing]);
 
     this.setState({
       editingInteraction: InteractionEditingType.NOT_EDITING,

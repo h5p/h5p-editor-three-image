@@ -209,7 +209,7 @@ export default class Main extends React.Component {
       editingInteraction: InteractionEditingType.NOT_EDITING,
       isSceneUpdated: false,
     });
-    this.scenePreview.trigger('updateEditStateIneraction');
+    this.scenePreview.trigger('updateEditStateInteraction');
   }
 
   changeScene(sceneId) {

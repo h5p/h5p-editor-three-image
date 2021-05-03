@@ -5,7 +5,7 @@
  * @param params
  * @returns {*|*}
  */
-export const initializeThreeSixtyPreview = (container, params) => {
+export const initializeThreeSixtyPreview = (container, params, l10n) => {
   const library = Object.keys(H5PEditor.libraryLoaded)
     .filter((library) => {
       return library.split(' ')[0] === 'H5P.ThreeImage';
@@ -21,6 +21,7 @@ export const initializeThreeSixtyPreview = (container, params) => {
     undefined,
     {
       isEditor: true,
+      l10n
     }
   );
 };

@@ -34,14 +34,33 @@ export const createInteractionForm = (field, params, wrapper, parent) => {
     '.h5peditor-copypaste-wrap',
   ];
 
-  // Remove semantics that we don't want to show
-  hiddenSemanticsSelectors.forEach(selector => {
-    const foundElement = wrapper.querySelector(`.field.library > ${selector}`);
+  //TODO: Find a nicer way for this
+  const interactionDataWrapper = wrapper.querySelector('.field.field-name-label');
+  const hiddenInteractionDataSelectors = [
+    '.field-name-showAsOpenSceneContent',
+  ];
+  if(!params.action.library.includes("H5P.AdvancedText") && !params.action.library.includes("H5P.Image")) {
+    // Remove semantics that we don't want to show
+    hiddenInteractionDataSelectors.forEach(selector => {
+      const foundElement = wrapper.querySelector(`.field.field-name-label ${selector}`);
+      console.log(foundElement.parentNode)
+      if (foundElement) {
+        foundElement.parentNode.removeChild(foundElement);
+      }
+    });
+  }
 
-    if (foundElement) {
-      libraryWrapper.removeChild(foundElement);
-    }
-  });
+  // Remove semantics that we don't want to show
+    hiddenSemanticsSelectors.forEach(selector => {
+      const foundElement = wrapper.querySelector(`.field.library > ${selector}`);
+      console.log(foundElement)
+      if (foundElement) {
+        libraryWrapper.removeChild(foundElement);
+      }
+    });
+
+
+
 };
 
 /**

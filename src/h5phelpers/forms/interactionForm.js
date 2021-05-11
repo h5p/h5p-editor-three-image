@@ -25,6 +25,22 @@ export const createInteractionForm = (field, params, wrapper, parent) => {
     parent
   );
 
+  /**
+   *
+   * @param wrapperElem - the parent element of the elements to be removed
+   * @param selectors - the list of class names to remove from wrapper
+   * @param selectorString - can be used for further specifying which elements to remove
+   */
+  const removeElements = (wrapperElem, selectors, selectorString) => {
+    selectors.forEach(selector => {
+      const foundElement = wrapperElem.querySelector(`${selectorString} ${selector}`);
+
+      if (foundElement) {
+        foundElement.parentNode.removeChild(foundElement);
+      }
+    });
+  }
+
   const libraryWrapper = wrapper.querySelector('.field.library');
 
   const hiddenSemanticsSelectors = [
@@ -34,32 +50,20 @@ export const createInteractionForm = (field, params, wrapper, parent) => {
     '.h5peditor-copypaste-wrap',
   ];
 
-  //TODO: Find a nicer way for this
   const interactionDataWrapper = wrapper.querySelector('.field.field-name-label');
   const hiddenInteractionDataSelectors = [
     '.field-name-showAsOpenSceneContent',
   ];
-  if(!params.action.library.includes("H5P.AdvancedText") && !params.action.library.includes("H5P.Image")) {
-    // Remove semantics that we don't want to show
-    hiddenInteractionDataSelectors.forEach(selector => {
-      const foundElement = wrapper.querySelector(`.field.field-name-label ${selector}`);
-      console.log(foundElement.parentNode)
-      if (foundElement) {
-        foundElement.parentNode.removeChild(foundElement);
-      }
-    });
+
+  //Remove fields in that we don't want to show when library is not AdvancedText
+  //TODO: Find a nicer way for this
+  if(!params.action.library.includes("H5P.AdvancedText") &&
+    params.action.library.includes("H5P.Image")) {
+    removeElements(interactionDataWrapper, hiddenInteractionDataSelectors, '')
   }
 
   // Remove semantics that we don't want to show
-    hiddenSemanticsSelectors.forEach(selector => {
-      const foundElement = wrapper.querySelector(`.field.library > ${selector}`);
-      console.log(foundElement)
-      if (foundElement) {
-        libraryWrapper.removeChild(foundElement);
-      }
-    });
-
-
+  removeElements(libraryWrapper, hiddenSemanticsSelectors, ".field.library > ")
 
 };
 

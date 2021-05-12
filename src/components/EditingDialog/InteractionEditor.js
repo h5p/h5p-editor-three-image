@@ -1,3 +1,6 @@
+// @ts-check
+/// <reference path="../../../index.d.ts" />
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import EditingDialog from "./EditingDialog";
@@ -32,6 +35,11 @@ export default class InteractionEditor extends React.Component {
     };
   }
 
+  /**
+   * 
+   * @param {number} interactionIndex 
+   * @returns {Interaction}
+   */
   getInteractionParams(interactionIndex = null) {
     const isNewScene = interactionIndex === InteractionEditingType.NEW_INTERACTION;
 

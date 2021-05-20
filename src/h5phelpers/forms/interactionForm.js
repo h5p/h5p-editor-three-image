@@ -54,6 +54,21 @@ export const createInteractionForm = (field, params, wrapper, parent) => {
   const hiddenInteractionDataSelectors = [
     '.field-name-showAsOpenSceneContent',
   ];
+  /*
+const hotSpotField = interactionDataWrapper.querySelector('.field-name-showAsHotspot')
+const openSceneContentToggle = interactionDataWrapper.querySelector('#field-showasopenscenecontent-39')
+
+  if(openSceneContentToggle.checked) {
+    hotSpotField.style.display = "none"
+  }
+  console.log(openSceneContentToggle)
+  openSceneContentToggle.addEventListener("change", (e) => {
+    if(e.target.checked) {
+      hotSpotField.style.display = "none"
+    } else {
+      hotSpotField.style.display = "initial"
+    }
+  })*/
 
   //Remove fields in that we don't want to show when library is not AdvancedText
   //TODO: Find a nicer way for this

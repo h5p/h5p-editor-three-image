@@ -1,5 +1,4 @@
 // @ts-check
-/// <reference path="../../index.d.ts" />
 
 import {SceneEditingType} from "../components/EditingDialog/SceneEditor";
 import {isGoToScene} from "./libraryParams";

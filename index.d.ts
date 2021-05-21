@@ -3,7 +3,7 @@ declare type Scene = {
   interactions: Interaction[];
   cameraStartPosition: string;
   sceneType: "360" | "static" | null;
-}
+};
 
 declare type Interaction = {
   interactionpos: string;
@@ -18,6 +18,6 @@ declare type Interaction = {
 declare type CameraPosition = {
   yaw: number;
   pitch: number;
-}
+};
 
 declare const H5P: any;

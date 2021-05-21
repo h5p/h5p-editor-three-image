@@ -1,5 +1,4 @@
 // @ts-check
-/// <reference path="../../../index.d.ts" />
 
 import React from 'react';
 import PropTypes from 'prop-types';

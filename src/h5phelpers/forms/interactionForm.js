@@ -70,7 +70,11 @@ export const createInteractionForm = (field, params, wrapper, parent) => {
   removeElements(libraryWrapper, hiddenSemanticsSelectors, ".field.library > ")
 
 };
-
+/**
+ *
+ * @param checkBox - the checkbox input to listen for onChange
+ * @param elementToHide - an element to hide when 'checkBox' is toggled to true
+ */
 const hideElementsOnChecked = (checkBox, elementToHide) =>  {
   //If the element is already checked when the form is created, hide it
   if(checkBox.checked) {

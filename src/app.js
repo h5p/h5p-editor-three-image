@@ -25,8 +25,8 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
      * @return {string}
      */
     this.t = function t(...args) {
-      const args = ['H5PEditor.ThreeImage', ...args];
-      return H5PEditor.t.apply(window, args);
+      const translations = ['H5PEditor.ThreeImage', ...args];
+      return H5PEditor.t.apply(window, translations);
     };
 
     this.appendTo = function ($container) {

@@ -21,14 +21,11 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     /**
      * Help fetch the correct translations.
      *
-     * @params {...args}
+     * @param {string[]} args
      * @return {string}
      */
-    this.t = function t() {
-      const args = ['H5PEditor.ThreeImage'];
-      for (let i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
-      }
+    this.t = function t(...args) {
+      const args = ['H5PEditor.ThreeImage', ...args];
       return H5PEditor.t.apply(window, args);
     };
 

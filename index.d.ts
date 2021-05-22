@@ -10,7 +10,7 @@ declare type Interaction = {
   action: {
     library: string;
     params: {
-      nextSceneId?: number;
+      nextSceneId?: number | string;
     };
   };
 };
@@ -19,5 +19,16 @@ declare type CameraPosition = {
   yaw: number;
   pitch: number;
 };
+
+declare type Library = {
+  uberName: string;
+}
+
+declare type ScenePreview = {
+  getCamera: () => {
+    camera: CameraPosition;
+    fov: number;
+  }
+}
 
 declare const H5P: any;

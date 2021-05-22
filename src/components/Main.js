@@ -1,3 +1,5 @@
+// @ts-check
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import Scene, {SceneTypes} from "./Scene/Scene";
@@ -13,8 +15,13 @@ import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
 import {addBehavioralListeners} from "../h5phelpers/editorForms";
 
 export default class Main extends React.Component {
+  /**
+   * @param {Object} props
+   * @param {number} props.initialScene
+   */
   constructor(props) {
     super(props);
+    this.props = props;
 
     this.scenePreview = null;
 
@@ -269,6 +276,7 @@ export default class Main extends React.Component {
       const interactionIndex = e.data;
       const interaction = this.getInteractionFromIndex(interactionIndex);
       if (isGoToScene(interaction)) {
+        // @ts-expect-error
         const nextSceneId = parseInt(interaction.action.params.nextSceneId);
         this.changeScene(nextSceneId);
         return;
@@ -286,6 +294,7 @@ export default class Main extends React.Component {
         return;
       }
 
+      // @ts-expect-error
       const nextSceneId = parseInt(interaction.action.params.nextSceneId);
       this.changeScene(nextSceneId);
     });

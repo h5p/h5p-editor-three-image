@@ -23,6 +23,15 @@ export const InteractionEditingType = {
 };
 
 export default class InteractionEditor extends React.Component {
+  /**
+   * @param {Object} props
+   * @param {number} props.currentScene
+   * @param {Library} props.library
+   * @param {ScenePreview} props.scenePreview
+   * @param {number} props.editingInteraction
+   * @param {(params: Object, editingScene?: number, skipChangingScene?: boolean) => void} props.doneAction
+   * @param {() => void} props.removeAction
+   */
   constructor(props) {
     super(props);
     this.semanticsRef = React.createRef();
@@ -32,10 +41,11 @@ export default class InteractionEditor extends React.Component {
       isInitialized: false,
       hasInputError: false,
     };
+
+    this.props = props;
   }
 
   /**
-   * 
    * @param {number} interactionIndex 
    * @returns {Interaction}
    */

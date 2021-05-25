@@ -1,3 +1,5 @@
+/// <reference path="../index.d.ts" />
+
 import "@babel/polyfill";
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -19,15 +21,12 @@ H5PEditor.widgets.threeImage = H5PEditor.ThreeImage = (function () {
     /**
      * Help fetch the correct translations.
      *
-     * @params {...args}
+     * @param {string[]} args
      * @return {string}
      */
-    this.t = function t() {
-      const args = ['H5PEditor.ThreeImage'];
-      for (let i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
-      }
-      return H5PEditor.t.apply(window, args);
+    this.t = function t(...args) {
+      const translations = ['H5PEditor.ThreeImage', ...args];
+      return H5PEditor.t.apply(window, translations);
     };
 
     this.appendTo = function ($container) {

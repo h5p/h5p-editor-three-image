@@ -1,3 +1,5 @@
+// @ts-check
+
 import {getSceneFromId} from "./sceneParams";
 
 export const Libraries = {
@@ -9,8 +11,8 @@ export const Libraries = {
 /**
  * Get default params for a library
  *
- * @param uberName
- * @returns {{interactionpos: string, action: {library: *, params: {}}}}
+ * @param {string} uberName
+ * @returns {Interaction}
  */
 export const getDefaultLibraryParams = (uberName) => {
   return {
@@ -25,10 +27,10 @@ export const getDefaultLibraryParams = (uberName) => {
 /**
  * Updates position of interaction in parameters
  *
- * @param scenes
- * @param sceneId
- * @param interactionIndex
- * @param pos
+ * @param {Scene[]} scenes
+ * @param {number} sceneId
+ * @param {number} interactionIndex
+ * @param {CameraPosition} pos
  */
 export const updatePosition = (scenes, sceneId, interactionIndex, pos) => {
   const scene = getSceneFromId(scenes, sceneId);
@@ -44,7 +46,7 @@ export const updatePosition = (scenes, sceneId, interactionIndex, pos) => {
 /**
  * Checks if an interaction is a GoToScene library
  *
- * @param interaction
+ * @param {Interaction} interaction
  * @returns {boolean}
  */
 export const isGoToScene = (interaction) => {

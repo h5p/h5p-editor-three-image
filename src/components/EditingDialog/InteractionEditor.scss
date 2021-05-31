@@ -56,6 +56,8 @@
 
   .h5p-imageslider:before,
   .h5p-singlechoiceset:before,
+  .h5p-multichoice:before,
+  .h5p-blanks:before,
   .h5p-summary:before {
     font-family: "H5PFontIcons";
     content: $summary;
@@ -65,7 +67,15 @@
     content: $singleChoiceSet;
   }
 
+  .h5p-multichoice:before {
+    content: $multiChoice;
+  }
+
   .h5p-imageslider:before {
     content: $imageSlider;
+  }
+
+  .h5p-blanks:before {
+    content: $blanks;
   }
 }

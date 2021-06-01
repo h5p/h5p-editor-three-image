@@ -13,6 +13,15 @@ declare type Interaction = {
       nextSceneId?: number | string;
     };
   };
+  label?: {
+    hotSpotSizeValues: string;
+    isHotspotTabbable: boolean;
+    labelPosition: string;
+    showAsHotspot: boolean;
+    showAsOpenSceneContent: boolean;
+    showHotspotOnHover: boolean;
+    showLabel: string;
+  };
 };
 
 declare type CameraPosition = {

@@ -14,6 +14,18 @@ import {isGoToScene, updatePosition} from "../h5phelpers/libraryParams";
 import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
 import {addBehavioralListeners} from "../h5phelpers/editorForms";
 
+/** 
+ *  @typedef State 
+ *  @property {number} editingScene
+ *  @property {Library} editingLibrary;
+ *  @property {number} editingInteraction;
+ *  @property {number} currentScene;
+ *  @property {number} startScene;
+ *  @property {boolean} isSceneUpdated;
+ *  @property {boolean} isSceneSelectorExpanded;
+ *  @property {string} currentCameraPosition;
+ */
+
 export default class Main extends React.Component {
   /**
    * @param {Object} props
@@ -25,6 +37,7 @@ export default class Main extends React.Component {
 
     this.scenePreview = null;
 
+    /** @type {State} */
     this.state = {
       editingScene: SceneEditingType.NOT_EDITING,
       editingLibrary: null,

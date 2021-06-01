@@ -37,10 +37,7 @@ export const updatePosition = (scenes, sceneId, interactionIndex, pos) => {
   const interaction = scene.interactions[interactionIndex];
 
   // Update interaction pos
-  interaction.interactionpos = [
-    pos.yaw,
-    pos.pitch
-  ].join(',');
+  interaction.interactionpos = `${pos.yaw},${pos.pitch}`;
 };
 
 /**

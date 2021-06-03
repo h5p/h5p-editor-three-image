@@ -16,6 +16,7 @@ export const Libraries = {
  */
 export const getDefaultLibraryParams = (uberName) => {
   return {
+    id: H5P.createUUID(),
     interactionpos: '', // Filled in on saving interaction
     action: {
       library: uberName,
@@ -25,18 +26,25 @@ export const getDefaultLibraryParams = (uberName) => {
 };
 
 /**
- * Updates position of interaction in parameters
- *
+ * @param {HTMLElement} element 
  * @param {Scene[]} scenes
  * @param {number} sceneId
- * @param {number} interactionIndex
+ * @returns {Interaction}
+ */
+export const getInteractionFromElement = (element, scenes, sceneId) => {
+  const interactionId = element.dataset.interactionId;
+
+  const scene = getSceneFromId(scenes, sceneId);
+  return scene.interactions.find(interaction => interaction.id === interactionId);
+}
+
+/**
+ * Updates position of interaction
+ *
+ * @param {Interaction} interaction
  * @param {CameraPosition} pos
  */
-export const updatePosition = (scenes, sceneId, interactionIndex, pos) => {
-  const scene = getSceneFromId(scenes, sceneId);
-  const interaction = scene.interactions[interactionIndex];
-
-  // Update interaction pos
+export const updatePosition = (interaction, pos) => {
   interaction.interactionpos = `${pos.yaw},${pos.pitch}`;
 };
 

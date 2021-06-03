@@ -6,6 +6,7 @@ declare type Scene = {
 };
 
 declare type Interaction = {
+  id?: string;
   interactionpos: string;
   action: {
     library: string;

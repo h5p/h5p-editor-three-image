@@ -10,7 +10,7 @@ import './Main.scss';
 import InteractionEditor, {InteractionEditingType} from "./EditingDialog/InteractionEditor";
 import {H5PContext} from "../context/H5PContext";
 import {deleteScene, getSceneFromId, setScenePositionFromCamera, updateScene} from "../h5phelpers/sceneParams";
-import {isGoToScene, updatePosition} from "../h5phelpers/libraryParams";
+import {getInteractionFromElement, isGoToScene, updatePosition} from "../h5phelpers/libraryParams";
 import {showConfirmationDialog} from "../h5phelpers/h5pComponents";
 import {addBehavioralListeners} from "../h5phelpers/editorForms";
 
@@ -326,26 +326,39 @@ export default class Main extends React.Component {
     });
 
     this.scenePreview.off('movestop');
-    this.scenePreview.on('movestop', e => {
-      if (!e.data) {
+
+    this.scenePreview.on('movestop', 
+      /**
+       * @param {{
+       *  data: {
+       *    target: HTMLElement;
+       *    yaw: number;
+       *    pitch: number;
+       *  }
+       * }} event
+       */
+      event => {
+      if (!event.data) {
         return;
       }
-
-      if (e.data.target) {
-        const index = this.scenePreview.threeSixty.indexOf(e.data.target);
-
-        // This is an element
-        updatePosition(
+      
+      const isElementMovement = Boolean(event.data.target);
+      if (isElementMovement) {
+        const interaction = getInteractionFromElement(
+          event.data.target, 
           this.context.params.scenes,
-          this.state.currentScene,
-          index,
-          e.data
+          this.state.currentScene
+        );
+
+        updatePosition(
+          interaction,
+          event.data
         );
       }
       else {
-        // This is the camera
+        // The event was triggered by camera movement
         this.setState({
-          currentCameraPosition: e.data.yaw + ',' + e.data.pitch,
+          currentCameraPosition: `${event.data.yaw},${event.data.pitch}`,
         });
       }
     });

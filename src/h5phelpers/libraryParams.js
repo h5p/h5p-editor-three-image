@@ -16,6 +16,7 @@ export const Libraries = {
  */
 export const getDefaultLibraryParams = (uberName) => {
   return {
+    id: H5P.createUUID(),
     interactionpos: '', // Filled in on saving interaction
     action: {
       library: uberName,

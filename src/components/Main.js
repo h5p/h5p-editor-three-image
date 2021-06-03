@@ -350,10 +350,7 @@ export default class Main extends React.Component {
           this.state.currentScene
         );
 
-        updatePosition(
-          interaction,
-          event.data
-        );
+        updatePosition(interaction, event.data);
       }
       else {
         // The event was triggered by camera movement

@@ -12,9 +12,7 @@ const ActiveSceneRow = (props) => {
     );
   }
   const rowClasses = ['active-scene'];
-  const { sceneType } = props.scene;
-  const is3dScene = sceneType === SceneTypes.THREE_SIXTY_SCENE || sceneType === SceneTypes.PANORAMA_SCENE
-  if (is3dScene) {
+  if (props.scene.sceneType === SceneTypes.THREE_SIXTY_SCENE) {
     rowClasses.push('three-sixty');
   }
 

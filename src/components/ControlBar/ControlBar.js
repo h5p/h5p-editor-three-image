@@ -13,9 +13,7 @@ export default class ControlBar extends Component {
   render() {
     const scenes = this.context.params.scenes;
     const scene = getSceneFromId(scenes, this.props.currentScene);
-    const is360Scene = scene
-      ? scene.sceneType === SceneTypes.THREE_SIXTY_SCENE
-      : false;
+    const is360Scene = scene && (scene.sceneType === SceneTypes.THREE_SIXTY_SCENE || scene.sceneType === SceneTypes.PANORAMA_SCENE);
 
     return (
       <div className='h5p-control-bar'>

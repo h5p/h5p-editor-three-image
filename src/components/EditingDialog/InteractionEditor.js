@@ -160,12 +160,12 @@ export default class InteractionEditor extends React.Component {
       return false;
     }
 
-    const { sceneType } = this.scene.params;
-    const is3dScene = sceneType === SceneTypes.THREE_SIXTY_SCENE || sceneType === SceneTypes.PANORAMA_SCENE;
+    const isThreeSixtyScene = this.scene.params.sceneType
+      === SceneTypes.THREE_SIXTY_SCENE;
 
     sanitizeSceneForm(
       this.scene.params,
-      is3dScene,
+      isThreeSixtyScene,
       this.scene.params.cameraStartPosition
     );
     return true;

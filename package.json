@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "watch": "webpack --mode development --watch"
+    "watch": "webpack --mode development --watch",
+    "validate-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -16,12 +17,15 @@
     "@babel/plugin-transform-spread": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
+    "@types/react": "^16.7.0",
+    "@types/react-dom": "^16.9.13",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.0",
     "node-sass": "^4.14.1",
     "resolve-url-loader": "^3.1.2",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "typescript": "^4.2.4",
     "url-loader": "^1.1.2",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.3.11"

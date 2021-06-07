@@ -1,3 +1,5 @@
+// @ts-check
+
 import {getSceneFromId} from "./sceneParams";
 
 export const Libraries = {
@@ -9,11 +11,12 @@ export const Libraries = {
 /**
  * Get default params for a library
  *
- * @param uberName
- * @returns {{interactionpos: string, action: {library: *, params: {}}}}
+ * @param {string} uberName
+ * @returns {Interaction}
  */
 export const getDefaultLibraryParams = (uberName) => {
   return {
+    id: H5P.createUUID(),
     interactionpos: '', // Filled in on saving interaction
     action: {
       library: uberName,
@@ -23,28 +26,32 @@ export const getDefaultLibraryParams = (uberName) => {
 };
 
 /**
- * Updates position of interaction in parameters
- *
- * @param scenes
- * @param sceneId
- * @param interactionIndex
- * @param pos
+ * @param {HTMLElement} element 
+ * @param {Scene[]} scenes
+ * @param {number} sceneId
+ * @returns {Interaction}
  */
-export const updatePosition = (scenes, sceneId, interactionIndex, pos) => {
-  const scene = getSceneFromId(scenes, sceneId);
-  const interaction = scene.interactions[interactionIndex];
+export const getInteractionFromElement = (element, scenes, sceneId) => {
+  const interactionId = element.dataset.interactionId;
 
-  // Update interaction pos
-  interaction.interactionpos = [
-    pos.yaw,
-    pos.pitch
-  ].join(',');
+  const scene = getSceneFromId(scenes, sceneId);
+  return scene.interactions.find(interaction => interaction.id === interactionId);
+}
+
+/**
+ * Updates position of interaction
+ *
+ * @param {Interaction} interaction
+ * @param {CameraPosition} pos
+ */
+export const updatePosition = (interaction, pos) => {
+  interaction.interactionpos = `${pos.yaw},${pos.pitch}`;
 };
 
 /**
  * Checks if an interaction is a GoToScene library
  *
- * @param interaction
+ * @param {Interaction} interaction
  * @returns {boolean}
  */
 export const isGoToScene = (interaction) => {

@@ -1,3 +1,5 @@
+// @ts-check
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import EditingDialog from "./EditingDialog";
@@ -6,7 +8,7 @@ import './InteractionEditor.scss';
 import {SceneTypes} from "../Scene/Scene";
 import {getDefaultLibraryParams, isGoToScene} from "../../h5phelpers/libraryParams";
 import {getSceneFromId} from "../../h5phelpers/sceneParams";
-import {getLibraryDataFromFields} from "../../h5phelpers/editorForms";
+import {getInteractionsField, getLibraryDataFromFields} from "../../h5phelpers/editorForms";
 import {
   createInteractionForm,
   sanitizeInteractionParams,
@@ -21,6 +23,15 @@ export const InteractionEditingType = {
 };
 
 export default class InteractionEditor extends React.Component {
+  /**
+   * @param {Object} props
+   * @param {number} props.currentScene
+   * @param {Library} props.library
+   * @param {ScenePreview} props.scenePreview
+   * @param {number} props.editingInteraction
+   * @param {(params: Object, editingScene?: number, skipChangingScene?: boolean) => void} props.doneAction
+   * @param {() => void} props.removeAction
+   */
   constructor(props) {
     super(props);
     this.semanticsRef = React.createRef();
@@ -30,8 +41,14 @@ export default class InteractionEditor extends React.Component {
       isInitialized: false,
       hasInputError: false,
     };
+
+    this.props = props;
   }
 
+  /**
+   * @param {number} interactionIndex 
+   * @returns {Interaction}
+   */
   getInteractionParams(interactionIndex = null) {
     const isNewScene = interactionIndex === InteractionEditingType.NEW_INTERACTION;
 

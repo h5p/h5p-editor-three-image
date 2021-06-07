@@ -40,7 +40,10 @@ export default class SceneRow extends Component {
   render() {
 
     const rowClasses = ['h5p-scene-row'];
-    if (this.props.scene.sceneType === SceneTypes.THREE_SIXTY_SCENE) {
+    
+    const { sceneType } = this.props.scene;
+    const is3dScene = sceneType === SceneTypes.THREE_SIXTY_SCENE || sceneType === SceneTypes.PANORAMA_SCENE;
+    if (is3dScene) {
       rowClasses.push('three-sixty');
     }
 

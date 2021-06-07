@@ -7,6 +7,7 @@ import {initializeThreeSixtyPreview} from "../../h5phelpers/h5pComponents";
 
 export const SceneTypes = {
   THREE_SIXTY_SCENE: '360',
+  PANORAMA_SCENE: 'panorama',
   STATIC_SCENE: 'static',
   NO_SCENE: null,
 };

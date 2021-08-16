@@ -30,6 +30,6 @@
     "deleteInteractionText": "Weet je zeker dat je deze interactie wilt verwijderen?",
     "deleteSceneTitle": "Scene aan het verwijderen",
     "deleteSceneText": "Weet je zeker dat je deze scene wilt verwijderen?",
-    "deleteSceneTextWithObjects": "Door deze scene te verwidjeren, verwijder je ook de interacties binnen de scene en alle navigatie hotspots die naar deze scene verwijzen. Weet je zeker dat je deze scene wilt verwijderen?"
+    "deleteSceneTextWithObjects": "Door deze scene te verwijderen, verwijder je ook de interacties binnen de scene en alle navigatie hotspots die naar deze scene verwijzen. Weet je zeker dat je deze scene wilt verwijderen?"
   }
 }

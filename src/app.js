@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import Main from "./components/Main";
 import {H5PContext} from './context/H5PContext';
 
-H5PEditor.widgets.threeImage = H5PEditor.NDLAThreeImage = (function () {
+H5PEditor.widgets.NDLAthreeImage = H5PEditor.NDLAThreeImage = (function () {
 
   function ThreeImage(parent, field, params, setValue) {
     this.params = params || {};

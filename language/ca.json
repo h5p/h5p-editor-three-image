@@ -26,7 +26,7 @@
     "pickAnExistingScene": "Pick an existing scene to go to",
     "selectASceneError": "Please select a scene",
     "setCameraStartTooltip": "Set current camera angle as a starting point for this scene",
-    "deleteInteractionTitle": "Deleting interaction",
+    "deleteInteractionTitle": "S'està suprimint la interacció",
     "deleteInteractionText": "Are you sure you wish to delete this interaction?",
     "deleteSceneTitle": "Deleting scene",
     "deleteSceneText": "Are you sure you wish to delete this scene?",

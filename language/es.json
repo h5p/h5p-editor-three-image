@@ -30,6 +30,6 @@
     "deleteInteractionText": "¿Está seguro de querer eliminar esta interacción?",
     "deleteSceneTitle": "Eliminando escena",
     "deleteSceneText": "¿Está seguro de querer eliminar esta escena?",
-    "deleteSceneTextWithObjects": "Eliminar esta escena también eliminará todas las interacciones dentro de la escena y cualquier punto caliente de navegación que apunte a esta escena. ¿Está seguro de querer eliminar esta escena?"
+    "deleteSceneTextWithObjects": "Eliminar esta escena también eliminará todas las interacciones dentro de la escena y cualquier punto caliente (hotspot) de navegación que apunte a esta escena. ¿Está seguro de querer eliminar esta escena?"
   }
 }

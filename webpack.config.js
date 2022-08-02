@@ -2,7 +2,7 @@ var path = require('path');
 const nodeEnv = process.env.NODE_ENV || 'development';
 const libraryName = process.env.npm_package_name;
 
-const config = {
+module.exports = {
   mode: nodeEnv,
   context: path.resolve(__dirname, 'src'),
   entry: {
@@ -18,6 +18,7 @@ const config = {
       {
         test: /\.js$/,
         include: path.resolve(__dirname, 'src'),
+        exclude: /node_modules/,
         use: 'babel-loader',
       },
       {
@@ -40,6 +41,3 @@ const config = {
     ]
   }
 };
-
-
-module.exports = config;

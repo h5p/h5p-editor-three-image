@@ -21,7 +21,7 @@
     "core-js": "^3.23.3",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
-    "node-sass": "^7.0.1",
+    "node-sass": "^7.0.3",
     "resolve-url-loader": "^5.0.0",
     "sass-loader": "^13.0.2",
     "style-loader": "^3.3.1",

@@ -4,11 +4,13 @@ import {SceneTypes} from "../../../Scene/Scene";
 import './SceneRow.scss';
 import {getImageSource} from "../../../../context/H5PContext";
 import {H5PContext} from "../../../../context/H5PContext";
+import placeholderPath from '../../../../assets/placeholder.png?url';
 
 export default class SceneRow extends Component {
   constructor(props) {
     super(props);
 
+    this.sceneSrc = props.scene.scenesrc?.path ? { ...props.scene.scenesrc } : { path: placeholderPath };
     this.imageRef = React.createRef();
 
     this.state = {
@@ -69,8 +71,8 @@ export default class SceneRow extends Component {
         <div className='thumbnail-wrapper'>
           <img
             className={imageClasses.join(' ')}
-            src={getImageSource(this.props.scene.scenesrc.path)}
-            alt={this.props.scene.scenesrc.alt}
+            src={getImageSource(this.sceneSrc.path)}
+            alt={this.sceneSrc.alt}
             onLoad={this.onImageLoad.bind(this)}
             ref={this.imageRef}
           />
@@ -99,9 +101,9 @@ SceneRow.propTypes = {
     sceneType: PropTypes.oneOf(Object.values(SceneTypes)).isRequired,
     scenename: PropTypes.string.isRequired,
     scenesrc: PropTypes.shape({
-      path: PropTypes.string.isRequired,
+      path: PropTypes.string,
       alt: PropTypes.string
-    }).isRequired
+    })
   }),
   isMarkedScene: PropTypes.bool,
   isShowingCheck: PropTypes.bool,

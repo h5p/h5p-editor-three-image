@@ -6,9 +6,9 @@ export const sceneType = PropTypes.shape({
   sceneType: PropTypes.oneOf(Object.values(SceneTypes)).isRequired,
   scenename: PropTypes.string.isRequired,
   scenesrc: PropTypes.shape({
-    path: PropTypes.string.isRequired,
+    path: PropTypes.string,
     alt: PropTypes.string
-  }).isRequired
+  })
 });
 
 export const editingSceneType = PropTypes.oneOfType([

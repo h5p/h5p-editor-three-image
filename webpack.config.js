@@ -31,12 +31,17 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg|gif)$/,
+        test: /\.(woff|woff2|eot|ttf|svg|gif)$/,
         include: path.resolve(__dirname, 'src'),
         loader: 'url-loader',
         options: {
           limit: 100000
         }
+      },
+      {
+        test: /\.png$/,
+        include: path.resolve(__dirname, 'src'),
+        loader: 'file-loader'
       }
     ]
   }
